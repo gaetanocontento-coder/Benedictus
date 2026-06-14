@@ -1,19 +1,6 @@
 import { useAuth } from "@/lib/auth";
 import { useLocation, Link } from "wouter";
-import { useEffect } from "react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Users,
@@ -23,9 +10,14 @@ import {
   FileText,
   Lightbulb,
   LogOut,
-  UserCircle,
+  Search,
+  Bell,
+  Settings,
   Store,
   Wand2,
+  Menu,
+  X,
+  UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -66,6 +58,7 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const isPublicRoute = PUBLIC_PATHS.some((p) => location.startsWith(p));
 
@@ -74,6 +67,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       setLocation("/login");
     }
   }, [user, location, setLocation, isPublicRoute]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location]);
 
   if (isPublicRoute) {
     return <PublicLayout>{children}</PublicLayout>;
@@ -89,72 +86,123 @@ export function Layout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <SidebarProvider>
-      <div className="flex h-screen overflow-hidden bg-background w-full">
-        <Sidebar>
-          <SidebarHeader className="border-b p-4">
-            <div className="flex items-center gap-2 font-serif text-xl tracking-tight">
-              <div className="h-6 w-6 bg-primary rounded-sm" />
-              INTESSUTO
+    <div className="min-h-screen bg-slate-950 text-slate-200 flex flex-col">
+      {/* Top Navigation */}
+      <header className="h-14 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between px-4 md:px-6 shrink-0">
+        {/* Left: logo + nav */}
+        <div className="flex items-center gap-6">
+          <Link href="/dashboard" className="flex items-center gap-2 shrink-0">
+            <div className="w-7 h-7 rounded bg-amber-600 flex items-center justify-center font-bold text-white text-sm shadow shadow-amber-900/40">
+              I
             </div>
-          </SidebarHeader>
+            <span className="font-semibold text-base tracking-tight text-white hidden sm:block">Intessuto</span>
+          </Link>
 
-          <SidebarContent className="p-2">
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {navItems.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={location.startsWith(item.url)}>
-                        <Link href={item.url} className="flex items-center gap-3">
-                          <item.icon className="h-4 w-4" />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const active = location.startsWith(item.url);
+              return (
+                <Link
+                  key={item.url}
+                  href={item.url}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                    active
+                      ? "text-amber-400 bg-amber-500/10"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                  }`}
+                >
+                  <item.icon className="h-3.5 w-3.5 shrink-0" />
+                  {item.title}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
 
-          <SidebarFooter className="border-t p-4">
-            <div className="flex flex-col gap-3">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold px-1">Pagine pubbliche</p>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1 text-xs justify-start gap-1.5" asChild>
-                  <Link href="/shop"><Store className="h-3.5 w-3.5" /> Catalogo</Link>
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1 text-xs justify-start gap-1.5" asChild>
-                  <Link href="/configuratore"><Wand2 className="h-3.5 w-3.5" /> Config.</Link>
-                </Button>
-              </div>
-              <div className="flex items-center gap-3 pt-1">
-                <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                  <UserCircle className="h-5 w-5" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium leading-none">{user.nome}</span>
-                  <span className="text-xs text-muted-foreground capitalize">{user.ruolo}</span>
-                </div>
-              </div>
-              <Button variant="outline" className="w-full justify-start gap-2" onClick={handleLogout}>
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
+        {/* Right: actions + user */}
+        <div className="flex items-center gap-1 text-slate-400">
+          <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors">
+            <Search size={16} />
+          </button>
+          <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors relative">
+            <Bell size={16} />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
+          </button>
+          <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors">
+            <Settings size={16} />
+          </button>
+
+          <div className="hidden md:flex items-center gap-2.5 ml-2 pl-3 border-l border-slate-800">
+            <div className="h-7 w-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center">
+              <UserCircle className="h-4 w-4 text-slate-400" />
             </div>
-          </SidebarFooter>
-        </Sidebar>
-
-        <main className="flex-1 flex flex-col h-screen overflow-hidden">
-          <header className="h-14 border-b flex items-center px-4 bg-card shrink-0">
-            <SidebarTrigger />
-          </header>
-          <div className="flex-1 overflow-auto p-8">
-            <div className="max-w-7xl mx-auto">{children}</div>
+            <div className="flex flex-col leading-none">
+              <span className="text-xs font-medium text-white">{user.nome}</span>
+              <span className="text-[10px] text-slate-500 capitalize">{user.ruolo}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center w-7 h-7 rounded-md hover:text-rose-400 hover:bg-rose-500/10 transition-colors ml-1"
+              title="Logout"
+            >
+              <LogOut size={14} />
+            </button>
           </div>
-        </main>
-      </div>
-    </SidebarProvider>
+
+          {/* Mobile menu toggle */}
+          <button
+            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors ml-1"
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 top-14 z-10 bg-slate-950/95 backdrop-blur-sm flex flex-col p-4 gap-1 overflow-y-auto">
+          {navItems.map((item) => {
+            const active = location.startsWith(item.url);
+            return (
+              <Link
+                key={item.url}
+                href={item.url}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  active
+                    ? "text-amber-400 bg-amber-500/10"
+                    : "text-slate-300 hover:text-white hover:bg-slate-800"
+                }`}
+              >
+                <item.icon className="h-4 w-4 shrink-0" />
+                {item.title}
+              </Link>
+            );
+          })}
+          <div className="border-t border-slate-800 mt-3 pt-3 px-2">
+            <div className="flex items-center gap-3 mb-3">
+              <UserCircle className="h-5 w-5 text-slate-400" />
+              <div>
+                <div className="text-sm font-medium text-white">{user.nome}</div>
+                <div className="text-xs text-slate-500 capitalize">{user.ruolo}</div>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-sm text-rose-400 hover:text-rose-300 transition-colors"
+            >
+              <LogOut size={14} /> Logout
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Page Content */}
+      <main className="flex-1 overflow-auto">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-8">
+          {children}
+        </div>
+      </main>
+    </div>
   );
 }

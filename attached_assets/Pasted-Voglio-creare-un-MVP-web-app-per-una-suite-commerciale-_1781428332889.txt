@@ -1,0 +1,94 @@
+Voglio creare un MVP web app per una suite commerciale e marketing destinata a un’azienda che vende tessuti, pellami e materiali per arredamento.
+
+L’obiettivo dell’MVP è mostrare al cliente una piattaforma funzionante, non definitiva, ma credibile, che migliori le performance commerciali e digitali dell’azienda.
+
+Gli utenti previsti sono:
+- amministratore aziendale
+- commerciale
+- marketing manager
+
+Crea una web app responsive con interfaccia moderna, elegante e B2B premium.
+
+La piattaforma deve chiamarsi “Intessuto Performance Suite”.
+
+Funzioni principali della prima versione:
+
+1. Dashboard generale
+- numero lead ricevuti
+- lead da lavorare
+- preventivi inviati
+- clienti attivi
+- richieste campioni
+- tasso di conversione simulato
+- andamento mensile con grafico
+
+2. Area lead
+- elenco lead
+- nome azienda
+- referente
+- email
+- telefono
+- fonte del lead: sito, Meta Ads, LinkedIn, fiera, showroom
+- interesse: tessuti, pelle, outdoor, contract, custom
+- stato: nuovo, contattato, campione inviato, preventivo inviato, chiuso, perso
+- commerciale assegnato
+- note
+
+3. Scheda cliente
+- dati anagrafici
+- storico richieste
+- materiali di interesse
+- livello di priorità
+- prossima azione consigliata
+
+4. Catalogo intelligente materiali
+- elenco materiali
+- categoria
+- colore
+- utilizzo consigliato
+- fascia prezzo
+- disponibilità
+- bottone “richiedi campione”
+- bottone “aggiungi a proposta”
+
+5. Richieste campioni
+- cliente
+- materiale richiesto
+- data richiesta
+- stato spedizione
+- note operative
+
+6. Simulatore proposta commerciale
+- selezione cliente
+- selezione materiali
+- quantità
+- prezzo indicativo
+- generazione riepilogo proposta
+- stato proposta
+
+7. Sezione insight
+- suggerimenti automatici testuali su quali lead seguire prima
+- evidenza dei materiali più richiesti
+- evidenza delle fonti lead più performanti
+
+Per ora usa dati demo realistici, senza integrazioni esterne.
+
+Usa un database locale o integrato in Replit per salvare lead, clienti, materiali, richieste campioni e proposte.
+
+Crea anche una pagina login demo con tre ruoli:
+- admin
+- commerciale
+- marketing
+
+Non serve autenticazione reale complessa nella prima versione: basta una simulazione credibile.
+
+Stile grafico:
+- pulito
+- premium
+- industriale
+- colori neutri
+- dashboard elegante
+- molto leggibile
+- adatto a una presentazione commerciale davanti al cliente
+
+Prima di sviluppare, proponimi la struttura tecnica e le schermate previste. Poi procedi con la build.

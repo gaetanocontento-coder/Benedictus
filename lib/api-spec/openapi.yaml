@@ -3,20 +3,36 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Intessuto Performance Suite API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: dashboard
+    description: Dashboard statistics
+  - name: leads
+    description: Lead management
+  - name: clienti
+    description: Customer management
+  - name: materiali
+    description: Material catalog
+  - name: campioni
+    description: Sample requests
+  - name: proposte
+    description: Commercial proposals
+  - name: insights
+    description: Business insights
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +40,517 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Demo login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Invalid credentials
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [dashboard]
+      summary: Get dashboard KPI stats
+      responses:
+        "200":
+          description: Dashboard statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /dashboard/andamento:
+    get:
+      operationId: getDashboardAndamento
+      tags: [dashboard]
+      summary: Get monthly trend data for chart
+      responses:
+        "200":
+          description: Monthly trend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AndamentoMensile"
+
+  /leads:
+    get:
+      operationId: listLeads
+      tags: [leads]
+      summary: List all leads
+      parameters:
+        - name: stato
+          in: query
+          schema:
+            type: string
+        - name: fonte
+          in: query
+          schema:
+            type: string
+        - name: interesse
+          in: query
+          schema:
+            type: string
+        - name: commerciale
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of leads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lead"
+    post:
+      operationId: createLead
+      tags: [leads]
+      summary: Create a lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+
+  /leads/{id}:
+    get:
+      operationId: getLead
+      tags: [leads]
+      summary: Get a lead by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lead found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateLead
+      tags: [leads]
+      summary: Update a lead
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+    delete:
+      operationId: deleteLead
+      tags: [leads]
+      summary: Delete a lead
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /leads/stats/per-stato:
+    get:
+      operationId: getLeadsPerStato
+      tags: [leads]
+      summary: Get lead counts grouped by stato
+      responses:
+        "200":
+          description: Leads per stato
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeadStatoCount"
+
+  /clienti:
+    get:
+      operationId: listClienti
+      tags: [clienti]
+      summary: List all customers
+      responses:
+        "200":
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cliente"
+    post:
+      operationId: createCliente
+      tags: [clienti]
+      summary: Create a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+
+  /clienti/{id}:
+    get:
+      operationId: getCliente
+      tags: [clienti]
+      summary: Get a customer by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateCliente
+      tags: [clienti]
+      summary: Update a customer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+
+  /materiali:
+    get:
+      operationId: listMateriali
+      tags: [materiali]
+      summary: List all materials
+      parameters:
+        - name: categoria
+          in: query
+          schema:
+            type: string
+        - name: disponibile
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of materials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Materiale"
+    post:
+      operationId: createMateriale
+      tags: [materiali]
+      summary: Create a material
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaterialeInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Materiale"
+
+  /materiali/{id}:
+    get:
+      operationId: getMateriale
+      tags: [materiali]
+      summary: Get a material by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Material found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Materiale"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateMateriale
+      tags: [materiali]
+      summary: Update a material
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaterialeUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Materiale"
+
+  /materiali/stats/top-richiesti:
+    get:
+      operationId: getTopMateriali
+      tags: [materiali]
+      summary: Get most requested materials
+      responses:
+        "200":
+          description: Top requested materials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MaterialeRichiesto"
+
+  /campioni:
+    get:
+      operationId: listCampioni
+      tags: [campioni]
+      summary: List all sample requests
+      parameters:
+        - name: stato
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of sample requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RichiestaCampione"
+    post:
+      operationId: createCampione
+      tags: [campioni]
+      summary: Create a sample request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RichiestaCampioneInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RichiestaCampione"
+
+  /campioni/{id}:
+    patch:
+      operationId: updateCampione
+      tags: [campioni]
+      summary: Update a sample request
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RichiestaCampioneUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RichiestaCampione"
+
+  /proposte:
+    get:
+      operationId: listProposte
+      tags: [proposte]
+      summary: List all proposals
+      responses:
+        "200":
+          description: List of proposals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Proposta"
+    post:
+      operationId: createProposta
+      tags: [proposte]
+      summary: Create a proposal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PropostaInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Proposta"
+
+  /proposte/{id}:
+    get:
+      operationId: getProposta
+      tags: [proposte]
+      summary: Get a proposal by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Proposal found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Proposta"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateProposta
+      tags: [proposte]
+      summary: Update a proposal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PropostaUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Proposta"
+
+  /insights:
+    get:
+      operationId: getInsights
+      tags: [insights]
+      summary: Get business insights and suggestions
+      responses:
+        "200":
+          description: Business insights
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Insights"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +561,454 @@ components:
       required:
         - status
 
+    LoginInput:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    AuthUser:
+      type: object
+      required: [id, nome, ruolo, email]
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+        ruolo:
+          type: string
+          enum: [admin, commerciale, marketing]
+
+    DashboardStats:
+      type: object
+      required: [totaleLead, leadDaLavorare, preventiviInviati, clientiAttivi, richiesteCampioni, tassoConversione]
+      properties:
+        totaleLead:
+          type: integer
+        leadDaLavorare:
+          type: integer
+        preventiviInviati:
+          type: integer
+        clientiAttivi:
+          type: integer
+        richiesteCampioni:
+          type: integer
+        tassoConversione:
+          type: number
+
+    AndamentoMensile:
+      type: object
+      required: [mese, lead, preventivi, clienti]
+      properties:
+        mese:
+          type: string
+        lead:
+          type: integer
+        preventivi:
+          type: integer
+        clienti:
+          type: integer
+
+    Lead:
+      type: object
+      required: [id, nomeAzienda, referente, email, telefono, fonte, interesse, stato, commercialeAssegnato, createdAt]
+      properties:
+        id:
+          type: integer
+        nomeAzienda:
+          type: string
+        referente:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        fonte:
+          type: string
+          enum: [sito, meta_ads, linkedin, fiera, showroom]
+        interesse:
+          type: string
+          enum: [tessuti, pelle, outdoor, contract, custom]
+        stato:
+          type: string
+          enum: [nuovo, contattato, campione_inviato, preventivo_inviato, chiuso, perso]
+        commercialeAssegnato:
+          type: string
+        note:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    LeadInput:
+      type: object
+      required: [nomeAzienda, referente, email, telefono, fonte, interesse, stato, commercialeAssegnato]
+      properties:
+        nomeAzienda:
+          type: string
+        referente:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        fonte:
+          type: string
+        interesse:
+          type: string
+        stato:
+          type: string
+        commercialeAssegnato:
+          type: string
+        note:
+          type: string
+
+    LeadUpdate:
+      type: object
+      properties:
+        nomeAzienda:
+          type: string
+        referente:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        fonte:
+          type: string
+        interesse:
+          type: string
+        stato:
+          type: string
+        commercialeAssegnato:
+          type: string
+        note:
+          type: string
+
+    LeadStatoCount:
+      type: object
+      required: [stato, count]
+      properties:
+        stato:
+          type: string
+        count:
+          type: integer
+
+    Cliente:
+      type: object
+      required: [id, nomeAzienda, referente, email, telefono, settore, priorita, prossimAzione, createdAt]
+      properties:
+        id:
+          type: integer
+        nomeAzienda:
+          type: string
+        referente:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        settore:
+          type: string
+        indirizzo:
+          type: ["string", "null"]
+        materialiInteresse:
+          type: array
+          items:
+            type: string
+        priorita:
+          type: string
+          enum: [alta, media, bassa]
+        prossimAzione:
+          type: ["string", "null"]
+        note:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    ClienteInput:
+      type: object
+      required: [nomeAzienda, referente, email, telefono, settore, priorita]
+      properties:
+        nomeAzienda:
+          type: string
+        referente:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        settore:
+          type: string
+        indirizzo:
+          type: string
+        materialiInteresse:
+          type: array
+          items:
+            type: string
+        priorita:
+          type: string
+        prossimAzione:
+          type: string
+        note:
+          type: string
+
+    ClienteUpdate:
+      type: object
+      properties:
+        nomeAzienda:
+          type: string
+        referente:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        settore:
+          type: string
+        indirizzo:
+          type: string
+        materialiInteresse:
+          type: array
+          items:
+            type: string
+        priorita:
+          type: string
+        prossimAzione:
+          type: string
+        note:
+          type: string
+
+    Materiale:
+      type: object
+      required: [id, nome, categoria, colore, utilizzoConsigliato, fasciaPrezzo, disponibile, createdAt]
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        categoria:
+          type: string
+          enum: [tessuto, pelle, outdoor, contract, custom]
+        colore:
+          type: string
+        utilizzoConsigliato:
+          type: string
+        fasciaPrezzo:
+          type: string
+          enum: [economy, standard, premium, luxury]
+        disponibile:
+          type: boolean
+        descrizione:
+          type: ["string", "null"]
+        richieste:
+          type: integer
+        createdAt:
+          type: string
+
+    MaterialeInput:
+      type: object
+      required: [nome, categoria, colore, utilizzoConsigliato, fasciaPrezzo, disponibile]
+      properties:
+        nome:
+          type: string
+        categoria:
+          type: string
+        colore:
+          type: string
+        utilizzoConsigliato:
+          type: string
+        fasciaPrezzo:
+          type: string
+        disponibile:
+          type: boolean
+        descrizione:
+          type: string
+
+    MaterialeUpdate:
+      type: object
+      properties:
+        nome:
+          type: string
+        categoria:
+          type: string
+        colore:
+          type: string
+        utilizzoConsigliato:
+          type: string
+        fasciaPrezzo:
+          type: string
+        disponibile:
+          type: boolean
+        descrizione:
+          type: string
+
+    MaterialeRichiesto:
+      type: object
+      required: [id, nome, categoria, richieste]
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        categoria:
+          type: string
+        richieste:
+          type: integer
+
+    RichiestaCampione:
+      type: object
+      required: [id, clienteId, clienteNome, materialeId, materialeNome, dataRichiesta, statoSpedizione, createdAt]
+      properties:
+        id:
+          type: integer
+        clienteId:
+          type: integer
+        clienteNome:
+          type: string
+        materialeId:
+          type: integer
+        materialeNome:
+          type: string
+        dataRichiesta:
+          type: string
+        statoSpedizione:
+          type: string
+          enum: [in_attesa, preparazione, spedito, consegnato]
+        note:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    RichiestaCampioneInput:
+      type: object
+      required: [clienteId, materialeId, dataRichiesta, statoSpedizione]
+      properties:
+        clienteId:
+          type: integer
+        materialeId:
+          type: integer
+        dataRichiesta:
+          type: string
+        statoSpedizione:
+          type: string
+        note:
+          type: string
+
+    RichiestaCampioneUpdate:
+      type: object
+      properties:
+        statoSpedizione:
+          type: string
+        note:
+          type: string
+
+    PropostaItem:
+      type: object
+      required: [materialeId, materialeNome, quantita, prezzoUnitario]
+      properties:
+        materialeId:
+          type: integer
+        materialeNome:
+          type: string
+        quantita:
+          type: number
+        prezzoUnitario:
+          type: number
+
+    Proposta:
+      type: object
+      required: [id, clienteId, clienteNome, items, totale, stato, createdAt]
+      properties:
+        id:
+          type: integer
+        clienteId:
+          type: integer
+        clienteNome:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PropostaItem"
+        totale:
+          type: number
+        stato:
+          type: string
+          enum: [bozza, inviata, accettata, rifiutata]
+        note:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    PropostaInput:
+      type: object
+      required: [clienteId, items, stato]
+      properties:
+        clienteId:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PropostaItem"
+        stato:
+          type: string
+        note:
+          type: string
+
+    PropostaUpdate:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PropostaItem"
+        stato:
+          type: string
+        note:
+          type: string
+
+    InsightLead:
+      type: object
+      required: [leadId, nomeAzienda, motivo, urgenza]
+      properties:
+        leadId:
+          type: integer
+        nomeAzienda:
+          type: string
+        motivo:
+          type: string
+        urgenza:
+          type: string
+          enum: [alta, media, bassa]
+
+    InsightFonteLead:
+      type: object
+      required: [fonte, count, percentuale]
+      properties:
+        fonte:
+          type: string
+        count:
+          type: integer
+        percentuale:
+          type: number
+
+    Insights:
+      type: object
+      required: [leadDaSeguire, materialiPiuRichiesti, fontiPerformanti]
+      properties:
+        leadDaSeguire:
+          type: array
+          items:
+            $ref: "#/components/schemas/InsightLead"
+        materialiPiuRichiesti:
+          type: array
+          items:
+            $ref: "#/components/schemas/MaterialeRichiesto"
+        fontiPerformanti:
+          type: array
+          items:
+            $ref: "#/components/schemas/InsightFonteLead"

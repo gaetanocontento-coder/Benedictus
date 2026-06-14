@@ -4,9 +4,9 @@ import { logger } from "../lib/logger";
 const router = Router();
 
 const DEMO_USERS = [
-  { id: 1, nome: "Marco Bianchi", email: "admin@intessuto.it", ruolo: "admin", username: "admin", password: "admin" },
-  { id: 2, nome: "Giulia Rossi", email: "commerciale@intessuto.it", ruolo: "commerciale", username: "commerciale", password: "commerciale" },
-  { id: 3, nome: "Luca Ferrari", email: "marketing@intessuto.it", ruolo: "marketing", username: "marketing", password: "marketing" },
+  { id: 1, nome: "Marco Bianchi", email: "admin@intessuto.it", ruolo: "admin", username: "admin@intessuto.it", password: "password123" },
+  { id: 2, nome: "Giulia Rossi", email: "commerciale@intessuto.it", ruolo: "commerciale", username: "commerciale@intessuto.it", password: "password123" },
+  { id: 3, nome: "Luca Ferrari", email: "marketing@intessuto.it", ruolo: "marketing", username: "marketing@intessuto.it", password: "password123" },
 ];
 
 let sessionUser: (typeof DEMO_USERS)[0] | null = null;

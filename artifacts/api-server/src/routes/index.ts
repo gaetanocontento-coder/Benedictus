@@ -8,10 +8,12 @@ import materialiRouter from "./materiali";
 import campioniRouter from "./campioni";
 import proposteRouter from "./proposte";
 import insightsRouter from "./insights";
+import publicRouter from "./public";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use("/public", publicRouter);
 router.use("/auth", authRouter);
 router.use("/dashboard", dashboardRouter);
 router.use("/leads", leadsRouter);

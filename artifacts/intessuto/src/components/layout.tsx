@@ -1,32 +1,35 @@
 import { useAuth } from "@/lib/auth";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { useEffect } from "react";
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarFooter, 
-  SidebarGroup, 
-  SidebarGroupContent, 
-  SidebarHeader, 
-  SidebarMenu, 
-  SidebarMenuButton, 
-  SidebarMenuItem, 
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Link } from "wouter";
-import { 
-  LayoutDashboard, 
-  Users, 
-  Building2, 
-  Package, 
-  TestTube2, 
-  FileText, 
-  Lightbulb, 
+import {
+  LayoutDashboard,
+  Users,
+  Building2,
+  Package,
+  TestTube2,
+  FileText,
+  Lightbulb,
   LogOut,
-  UserCircle
+  UserCircle,
+  Store,
+  Wand2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+const PUBLIC_PATHS = ["/shop", "/configuratore"];
 
 const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -38,15 +41,43 @@ const navItems = [
   { title: "Insight", url: "/insight", icon: Lightbulb },
 ];
 
+function PublicLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <header className="border-b bg-card px-6 py-3 flex items-center justify-between sticky top-0 z-10">
+        <Link href="/shop" className="flex items-center gap-2 font-serif text-xl tracking-tight hover:opacity-80 transition-opacity">
+          <div className="h-5 w-5 bg-primary rounded-sm" />
+          INTESSUTO
+        </Link>
+        <nav className="flex items-center gap-1">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/shop" className="flex items-center gap-1.5"><Store className="h-4 w-4" /> Catalogo</Link>
+          </Button>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/configuratore" className="flex items-center gap-1.5"><Wand2 className="h-4 w-4" /> Configuratore</Link>
+          </Button>
+        </nav>
+      </header>
+      <div className="flex-1">{children}</div>
+    </div>
+  );
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
 
+  const isPublicRoute = PUBLIC_PATHS.some((p) => location.startsWith(p));
+
   useEffect(() => {
-    if (!user && location !== "/login") {
+    if (!user && !isPublicRoute && location !== "/login") {
       setLocation("/login");
     }
-  }, [user, location, setLocation]);
+  }, [user, location, setLocation, isPublicRoute]);
+
+  if (isPublicRoute) {
+    return <PublicLayout>{children}</PublicLayout>;
+  }
 
   if (!user) {
     return <>{children}</>;
@@ -67,17 +98,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
               INTESSUTO
             </div>
           </SidebarHeader>
-          
+
           <SidebarContent className="p-2">
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {navItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton 
-                        asChild 
-                        isActive={location.startsWith(item.url)}
-                      >
+                      <SidebarMenuButton asChild isActive={location.startsWith(item.url)}>
                         <Link href={item.url} className="flex items-center gap-3">
                           <item.icon className="h-4 w-4" />
                           <span>{item.title}</span>
@@ -114,9 +142,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <SidebarTrigger />
           </header>
           <div className="flex-1 overflow-auto p-8">
-            <div className="max-w-7xl mx-auto">
-              {children}
-            </div>
+            <div className="max-w-7xl mx-auto">{children}</div>
           </div>
         </main>
       </div>

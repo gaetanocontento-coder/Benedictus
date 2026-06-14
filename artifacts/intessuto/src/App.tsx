@@ -7,6 +7,8 @@ import { Layout } from "@/components/layout";
 import NotFound from "@/pages/not-found";
 
 import Login from "@/pages/login";
+import Shop from "@/pages/shop/index";
+import Configuratore from "@/pages/configuratore/index";
 import Dashboard from "@/pages/dashboard";
 import Insight from "@/pages/insight";
 import Leads from "@/pages/leads/index";
@@ -27,20 +29,23 @@ function Router() {
     <Layout>
       <Switch>
         <Route path="/login" component={Login} />
+        <Route path="/shop" component={Shop} />
+        <Route path="/configuratore" component={Configuratore} />
+
         <Route path="/" component={Dashboard} />
         <Route path="/dashboard" component={Dashboard} />
-        
+
         <Route path="/leads" component={Leads} />
         <Route path="/leads/new" component={NewLead} />
         <Route path="/leads/:id" component={LeadDetail} />
-        
+
         <Route path="/clienti" component={Clienti} />
         <Route path="/clienti/:id" component={ClienteDetail} />
-        
+
         <Route path="/catalogo" component={Catalogo} />
-        
+
         <Route path="/campioni" component={Campioni} />
-        
+
         <Route path="/proposte" component={Proposte} />
         <Route path="/proposte/new" component={NewProposta} />
         <Route path="/proposte/:id" component={PropostaDetail} />

@@ -121,6 +121,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Right: actions + user */}
         <div className="flex items-center gap-1 text-slate-400">
+          {/* Public page shortcuts */}
+          <div className="hidden md:flex items-center gap-1 mr-2 pr-3 border-r border-slate-800">
+            <Link
+              href="/shop"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+            >
+              <Store size={13} /> Catalogo
+            </Link>
+            <Link
+              href="/configuratore"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+            >
+              <Wand2 size={13} /> Configuratore
+            </Link>
+          </div>
+
           <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors">
             <Search size={16} />
           </button>
@@ -179,8 +195,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             );
           })}
-          <div className="border-t border-slate-800 mt-3 pt-3 px-2">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="border-t border-slate-800 mt-3 pt-3 px-2 flex flex-col gap-3">
+            <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold px-2">Pagine pubbliche</p>
+            <div className="flex gap-2">
+              <Link href="/shop" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors flex-1">
+                <Store size={13} /> Catalogo
+              </Link>
+              <Link href="/configuratore" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors flex-1">
+                <Wand2 size={13} /> Configuratore
+              </Link>
+            </div>
+            <div className="flex items-center gap-3">
               <UserCircle className="h-5 w-5 text-slate-400" />
               <div>
                 <div className="text-sm font-medium text-white">{user.nome}</div>

@@ -55,6 +55,7 @@ export const LeadFonte = {
   linkedin: 'linkedin',
   fiera: 'fiera',
   showroom: 'showroom',
+  agente: 'agente',
 } as const;
 
 export type LeadInteresse = typeof LeadInteresse[keyof typeof LeadInteresse];
@@ -209,6 +210,12 @@ export interface Materiale {
   /** @nullable */
   descrizione?: string | null;
   richieste?: number;
+  tecnologie?: string[];
+  certificazioni?: string[];
+  /** @nullable */
+  stagione?: string | null;
+  /** @nullable */
+  collezione?: string | null;
   createdAt: string;
 }
 
@@ -220,6 +227,10 @@ export interface MaterialeInput {
   fasciaPrezzo: string;
   disponibile: boolean;
   descrizione?: string;
+  tecnologie?: string[];
+  certificazioni?: string[];
+  stagione?: string;
+  collezione?: string;
 }
 
 export interface MaterialeUpdate {
@@ -230,6 +241,10 @@ export interface MaterialeUpdate {
   fasciaPrezzo?: string;
   disponibile?: boolean;
   descrizione?: string;
+  tecnologie?: string[];
+  certificazioni?: string[];
+  stagione?: string;
+  collezione?: string;
 }
 
 export interface MaterialeRichiesto {
@@ -339,10 +354,19 @@ export interface InsightFonteLead {
   percentuale: number;
 }
 
+export interface CampioneFollowUp {
+  id: number;
+  clienteNome: string;
+  materialeNome: string;
+  dataRichiesta: string;
+  giorniAttesa: number;
+}
+
 export interface Insights {
   leadDaSeguire: InsightLead[];
   materialiPiuRichiesti: MaterialeRichiesto[];
   fontiPerformanti: InsightFonteLead[];
+  campioniDaFollowUp: CampioneFollowUp[];
 }
 
 export type ListLeadsParams = {

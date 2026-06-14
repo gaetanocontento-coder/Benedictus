@@ -5,18 +5,51 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Package, Plus, SearchCheck } from "lucide-react";
+import { Search, Package, Plus, SearchCheck, Droplets, PawPrint, Flame, Sparkles, Leaf, ShieldCheck, BadgeCheck } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { Label } from "@/components/ui/label";
 
+const renderTechBadge = (tech: string) => {
+  const normalized = tech.toLowerCase();
+  if (normalized === "aquaclean") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-[10px] font-medium px-2 py-0.5 rounded"><Droplets className="h-3 w-3" /> Aquaclean</span>;
+  }
+  if (normalized === "pet-friendly") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-[10px] font-medium px-2 py-0.5 rounded"><PawPrint className="h-3 w-3" /> Pet Friendly</span>;
+  }
+  if (normalized === "ignifugo") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-orange-100 text-orange-800 text-[10px] font-medium px-2 py-0.5 rounded"><Flame className="h-3 w-3" /> Ignifugo Cl.1</span>;
+  }
+  if (normalized === "smacchiabile") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-teal-100 text-teal-800 text-[10px] font-medium px-2 py-0.5 rounded"><Sparkles className="h-3 w-3" /> Smacchiabile</span>;
+  }
+  return null;
+};
+
+const renderCertBadge = (cert: string) => {
+  const normalized = cert.toLowerCase();
+  if (normalized.includes("grs")) {
+    return <span key={cert} className="inline-flex items-center gap-1 border border-emerald-600 text-emerald-700 text-[10px] font-medium px-1.5 py-0.5 rounded"><Leaf className="h-3 w-3" /> GRS Certified</span>;
+  }
+  if (normalized.includes("safe-front")) {
+    return <span key={cert} className="inline-flex items-center gap-1 border border-slate-400 text-slate-600 text-[10px] font-medium px-1.5 py-0.5 rounded"><ShieldCheck className="h-3 w-3" /> SAFE-FRONT</span>;
+  }
+  if (normalized.includes("aquaclean")) {
+    return <span key={cert} className="inline-flex items-center gap-1 border border-blue-400 text-blue-600 text-[10px] font-medium px-1.5 py-0.5 rounded"><BadgeCheck className="h-3 w-3" /> Aquaclean Cert.</span>;
+  }
+  return <span key={cert} className="inline-flex items-center gap-1 border border-slate-300 text-slate-600 text-[10px] font-medium px-1.5 py-0.5 rounded">{cert}</span>;
+};
+
 export default function Catalogo() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoriaFilter, setCategoriaFilter] = useState<string>("all");
+  const [techFilter, setTechFilter] = useState<string>("all");
   const [selectedMaterialId, setSelectedMaterialId] = useState<number | null>(null);
   const [selectedClienteId, setSelectedClienteId] = useState<string>("");
+  const [agente, setAgente] = useState("");
   const [campioneDialogOpen, setCampioneDialogOpen] = useState(false);
 
   const { toast } = useToast();
@@ -33,10 +66,18 @@ export default function Catalogo() {
 
   const createCampione = useCreateCampione();
 
-  const filteredMateriali = materiali?.filter(mat => 
-    mat.nome.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    mat.colore.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredMateriali = materiali?.filter(mat => {
+    const matchesSearch = mat.nome.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          mat.colore.toLowerCase().includes(searchTerm.toLowerCase());
+                          
+    let matchesTech = true;
+    if (techFilter !== "all") {
+      const allTags = [...(mat.tecnologie || []), ...(mat.certificazioni || [])].map(t => t.toLowerCase());
+      matchesTech = allTags.some(t => t.includes(techFilter.toLowerCase()));
+    }
+    
+    return matchesSearch && matchesTech;
+  });
 
   const handleRichiediCampione = () => {
     if (!selectedMaterialId || !selectedClienteId) return;
@@ -47,7 +88,8 @@ export default function Catalogo() {
           clienteId: Number(selectedClienteId),
           materialeId: selectedMaterialId,
           dataRichiesta: new Date().toISOString(),
-          statoSpedizione: RichiestaCampioneStatoSpedizione.in_attesa
+          statoSpedizione: RichiestaCampioneStatoSpedizione.in_attesa,
+          note: agente.trim() ? `Agente: ${agente.trim()} — ` : undefined
         }
       },
       {
@@ -57,6 +99,7 @@ export default function Catalogo() {
           setCampioneDialogOpen(false);
           setSelectedMaterialId(null);
           setSelectedClienteId("");
+          setAgente("");
         }
       }
     );
@@ -91,7 +134,7 @@ export default function Catalogo() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="w-full sm:w-64">
+        <div className="w-full sm:w-56">
           <Select value={categoriaFilter} onValueChange={setCategoriaFilter}>
             <SelectTrigger>
               <SelectValue placeholder="Tutte le categorie" />
@@ -103,6 +146,21 @@ export default function Catalogo() {
                   {cat}
                 </SelectItem>
               ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="w-full sm:w-56">
+          <Select value={techFilter} onValueChange={setTechFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder="Tutte le tecnologie" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tutte le tecnologie</SelectItem>
+              <SelectItem value="aquaclean">Aquaclean</SelectItem>
+              <SelectItem value="greenfabrics">GreenFabrics (GRS)</SelectItem>
+              <SelectItem value="safe-front">SAFE-FRONT</SelectItem>
+              <SelectItem value="ignifugo">Ignifugo</SelectItem>
+              <SelectItem value="pet-friendly">Pet Friendly</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -136,6 +194,9 @@ export default function Catalogo() {
                 </Badge>
               </div>
               <CardHeader className="p-4 pb-2">
+                {mat.collezione && (
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">{mat.collezione}</p>
+                )}
                 <div className="flex justify-between items-start gap-2">
                   <CardTitle className="text-lg leading-tight">{mat.nome}</CardTitle>
                 </div>
@@ -145,6 +206,12 @@ export default function Catalogo() {
                     {mat.fasciaPrezzo}
                   </span>
                 </div>
+                {((mat.tecnologie && mat.tecnologie.length > 0) || (mat.certificazioni && mat.certificazioni.length > 0)) && (
+                  <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t">
+                    {mat.tecnologie?.map(renderTechBadge)}
+                    {mat.certificazioni?.map(renderCertBadge)}
+                  </div>
+                )}
               </CardHeader>
               <CardContent className="p-4 pt-2 flex-1">
                 <div className="text-sm text-muted-foreground mb-1">
@@ -198,6 +265,14 @@ export default function Catalogo() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Agente di zona (opzionale)</Label>
+              <Input 
+                placeholder="Es. Mario Rossi"
+                value={agente}
+                onChange={e => setAgente(e.target.value)}
+              />
             </div>
           </div>
           <DialogFooter>

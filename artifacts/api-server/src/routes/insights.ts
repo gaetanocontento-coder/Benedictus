@@ -1,13 +1,15 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
-import { leadsTable, materialiTable } from "@workspace/db";
+import { leadsTable, materialiTable, campioniTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 
 const router = Router();
 
 router.get("/", async (_req, res) => {
-  // leads to follow: new or "contattato" for > 7 days
-  const allLeads = await db.select().from(leadsTable);
+  const [allLeads, allCampioni] = await Promise.all([
+    db.select().from(leadsTable),
+    db.select().from(campioniTable),
+  ]);
 
   const leadDaSeguire = allLeads
     .filter(l => l.stato === "nuovo" || l.stato === "contattato" || l.stato === "campione_inviato")
@@ -28,7 +30,6 @@ router.get("/", async (_req, res) => {
     .orderBy(desc(materialiTable.richieste))
     .limit(5);
 
-  // fonte analysis
   const fonteMap: Record<string, number> = {};
   allLeads.forEach(l => { fonteMap[l.fonte] = (fonteMap[l.fonte] || 0) + 1; });
   const total = allLeads.length || 1;
@@ -36,7 +37,27 @@ router.get("/", async (_req, res) => {
     .sort(([, a], [, b]) => b - a)
     .map(([fonte, count]) => ({ fonte, count, percentuale: Math.round((count / total) * 100 * 10) / 10 }));
 
-  res.json({ leadDaSeguire, materialiPiuRichiesti: topMateriali, fontiPerformanti });
+  // campioni spediti da > 7 giorni senza feedback (ancora in stato "spedito")
+  const campioniDaFollowUp = allCampioni
+    .filter(c => {
+      if (c.statoSpedizione !== "spedito") return false;
+      const dataRichiesta = new Date(c.dataRichiesta);
+      const giorniAttesa = Math.floor((Date.now() - dataRichiesta.getTime()) / (1000 * 60 * 60 * 24));
+      return giorniAttesa >= 7;
+    })
+    .map(c => {
+      const giorniAttesa = Math.floor((Date.now() - new Date(c.dataRichiesta).getTime()) / (1000 * 60 * 60 * 24));
+      return {
+        id: c.id,
+        clienteNome: c.clienteNome,
+        materialeNome: c.materialeNome,
+        dataRichiesta: c.dataRichiesta,
+        giorniAttesa,
+      };
+    })
+    .sort((a, b) => b.giorniAttesa - a.giorniAttesa);
+
+  res.json({ leadDaSeguire, materialiPiuRichiesti: topMateriali, fontiPerformanti, campioniDaFollowUp });
 });
 
 export default router;

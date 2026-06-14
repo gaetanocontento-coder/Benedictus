@@ -14,4 +14,8 @@ export interface MaterialeUpdate {
   fasciaPrezzo?: string;
   disponibile?: boolean;
   descrizione?: string;
+  tecnologie?: string[];
+  certificazioni?: string[];
+  stagione?: string;
+  collezione?: string;
 }

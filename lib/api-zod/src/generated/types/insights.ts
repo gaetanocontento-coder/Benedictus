@@ -5,6 +5,7 @@
  * Intessuto Performance Suite API
  * OpenAPI spec version: 0.1.0
  */
+import type { CampioneFollowUp } from './campioneFollowUp';
 import type { InsightFonteLead } from './insightFonteLead';
 import type { InsightLead } from './insightLead';
 import type { MaterialeRichiesto } from './materialeRichiesto';
@@ -13,4 +14,5 @@ export interface Insights {
   leadDaSeguire: InsightLead[];
   materialiPiuRichiesti: MaterialeRichiesto[];
   fontiPerformanti: InsightFonteLead[];
+  campioniDaFollowUp: CampioneFollowUp[];
 }

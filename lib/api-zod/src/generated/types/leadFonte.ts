@@ -15,4 +15,5 @@ export const LeadFonte = {
   linkedin: 'linkedin',
   fiera: 'fiera',
   showroom: 'showroom',
+  agente: 'agente',
 } as const;

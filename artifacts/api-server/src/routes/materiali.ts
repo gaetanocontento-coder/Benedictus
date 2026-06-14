@@ -8,6 +8,8 @@ const router = Router();
 function parseMateriale(row: typeof materialiTable.$inferSelect) {
   return {
     ...row,
+    tecnologie: JSON.parse(row.tecnologie || "[]"),
+    certificazioni: JSON.parse(row.certificazioni || "[]"),
     createdAt: row.createdAt.toISOString(),
   };
 }
@@ -40,6 +42,10 @@ router.post("/", async (req, res) => {
     disponibile: body.disponibile ?? true,
     descrizione: body.descrizione || null,
     richieste: 0,
+    tecnologie: JSON.stringify(body.tecnologie || []),
+    certificazioni: JSON.stringify(body.certificazioni || []),
+    stagione: body.stagione || null,
+    collezione: body.collezione || null,
   }).returning();
   res.status(201).json(parseMateriale(row));
 });
@@ -62,6 +68,10 @@ router.patch("/:id", async (req, res) => {
   if (body.fasciaPrezzo !== undefined) update.fasciaPrezzo = body.fasciaPrezzo;
   if (body.disponibile !== undefined) update.disponibile = body.disponibile;
   if (body.descrizione !== undefined) update.descrizione = body.descrizione;
+  if (body.tecnologie !== undefined) update.tecnologie = JSON.stringify(body.tecnologie);
+  if (body.certificazioni !== undefined) update.certificazioni = JSON.stringify(body.certificazioni);
+  if (body.stagione !== undefined) update.stagione = body.stagione;
+  if (body.collezione !== undefined) update.collezione = body.collezione;
   const [row] = await db.update(materialiTable).set(update).where(eq(materialiTable.id, id)).returning();
   if (!row) { res.status(404).json({ error: "Not found" }); return; }
   res.json(parseMateriale(row));

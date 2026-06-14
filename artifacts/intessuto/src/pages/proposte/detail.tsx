@@ -1,14 +1,45 @@
 import { useParams, Link } from "wouter";
-import { useGetProposta, useUpdateProposta, getGetPropostaQueryKey, getListProposteQueryKey, PropostaStato } from "@workspace/api-client-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetProposta, useUpdateProposta, getGetPropostaQueryKey, getListProposteQueryKey, PropostaStato, useListMateriali, getListMaterialiQueryKey } from "@workspace/api-client-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Printer, Send } from "lucide-react";
+import { ArrowLeft, Printer, Droplets, PawPrint, Flame, Sparkles, Leaf, ShieldCheck, BadgeCheck } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+
+const renderTechBadge = (tech: string) => {
+  const normalized = tech.toLowerCase();
+  if (normalized === "aquaclean") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-[10px] font-medium px-2 py-0.5 rounded"><Droplets className="h-3 w-3" /> Aquaclean</span>;
+  }
+  if (normalized === "pet-friendly") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-[10px] font-medium px-2 py-0.5 rounded"><PawPrint className="h-3 w-3" /> Pet Friendly</span>;
+  }
+  if (normalized === "ignifugo") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-orange-100 text-orange-800 text-[10px] font-medium px-2 py-0.5 rounded"><Flame className="h-3 w-3" /> Ignifugo Cl.1</span>;
+  }
+  if (normalized === "smacchiabile") {
+    return <span key={tech} className="inline-flex items-center gap-1 bg-teal-100 text-teal-800 text-[10px] font-medium px-2 py-0.5 rounded"><Sparkles className="h-3 w-3" /> Smacchiabile</span>;
+  }
+  return null;
+};
+
+const renderCertBadge = (cert: string) => {
+  const normalized = cert.toLowerCase();
+  if (normalized.includes("grs")) {
+    return <span key={cert} className="inline-flex items-center gap-1 border border-emerald-600 text-emerald-700 text-[10px] font-medium px-1.5 py-0.5 rounded"><Leaf className="h-3 w-3" /> GRS Certified</span>;
+  }
+  if (normalized.includes("safe-front")) {
+    return <span key={cert} className="inline-flex items-center gap-1 border border-slate-400 text-slate-600 text-[10px] font-medium px-1.5 py-0.5 rounded"><ShieldCheck className="h-3 w-3" /> SAFE-FRONT</span>;
+  }
+  if (normalized.includes("aquaclean")) {
+    return <span key={cert} className="inline-flex items-center gap-1 border border-blue-400 text-blue-600 text-[10px] font-medium px-1.5 py-0.5 rounded"><BadgeCheck className="h-3 w-3" /> Aquaclean Cert.</span>;
+  }
+  return <span key={cert} className="inline-flex items-center gap-1 border border-slate-300 text-slate-600 text-[10px] font-medium px-1.5 py-0.5 rounded">{cert}</span>;
+};
 
 export default function PropostaDetail() {
   const params = useParams();
@@ -18,6 +49,10 @@ export default function PropostaDetail() {
 
   const { data: proposta, isLoading } = useGetProposta(id, {
     query: { enabled: !!id, queryKey: getGetPropostaQueryKey(id) }
+  });
+
+  const { data: materiali } = useListMateriali({}, { 
+    query: { queryKey: getListMaterialiQueryKey({}), enabled: !!proposta } 
   });
 
   const updateProposta = useUpdateProposta();
@@ -59,6 +94,8 @@ export default function PropostaDetail() {
   }
 
   if (!proposta) return <div>Proposta non trovata</div>;
+
+  const propostaMateriali = materiali?.filter(m => proposta.items.some(i => i.materialeId === m.id)) || [];
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -134,6 +171,46 @@ export default function PropostaDetail() {
           </Table>
         </CardContent>
       </Card>
+
+      {propostaMateriali.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Scheda Tecnica Materiali</CardTitle>
+            <CardDescription>Caratteristiche e certificazioni dei materiali inclusi</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {propostaMateriali.map(mat => (
+              <div key={mat.id} className="space-y-2 border-b last:border-0 pb-4 last:pb-0">
+                <div className="flex flex-col gap-1.5">
+                  <h4 className="font-bold text-base">{mat.nome}</h4>
+                  
+                  {((mat.tecnologie && mat.tecnologie.length > 0) || (mat.certificazioni && mat.certificazioni.length > 0)) && (
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {mat.tecnologie?.map(renderTechBadge)}
+                      {mat.certificazioni?.map(renderCertBadge)}
+                    </div>
+                  )}
+                  
+                  <div className="text-xs text-muted-foreground mt-2 space-y-1">
+                    {mat.tecnologie?.map(tech => {
+                      const t = tech.toLowerCase();
+                      if (t === "aquaclean") return <p key={tech}><strong>Aquaclean:</strong> lavabile con sola acqua, macchie rimovibili senza detergenti</p>;
+                      if (t === "ignifugo") return <p key={tech}><strong>Ignifugo Cl.1:</strong> conforme normative antincendio</p>;
+                      return null;
+                    })}
+                    {mat.certificazioni?.map(cert => {
+                      const c = cert.toLowerCase();
+                      if (c.includes("grs")) return <p key={cert}><strong>GRS:</strong> cotone 100% rigenerato certificato Global Recycled Standard</p>;
+                      if (c.includes("safe-front")) return <p key={cert}><strong>SAFE-FRONT:</strong> superficie antibatterica testata</p>;
+                      return null;
+                    })}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
       
       {proposta.note && (
         <Card>

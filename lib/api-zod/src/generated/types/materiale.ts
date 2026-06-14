@@ -19,5 +19,11 @@ export interface Materiale {
   /** @nullable */
   descrizione?: string | null;
   richieste?: number;
+  tecnologie?: string[];
+  certificazioni?: string[];
+  /** @nullable */
+  stagione?: string | null;
+  /** @nullable */
+  collezione?: string | null;
   createdAt: string;
 }

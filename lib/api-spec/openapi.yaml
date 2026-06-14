@@ -630,7 +630,7 @@ components:
           type: string
         fonte:
           type: string
-          enum: [sito, meta_ads, linkedin, fiera, showroom]
+          enum: [sito, meta_ads, linkedin, fiera, showroom, agente]
         interesse:
           type: string
           enum: [tessuti, pelle, outdoor, contract, custom]
@@ -807,6 +807,18 @@ components:
           type: ["string", "null"]
         richieste:
           type: integer
+        tecnologie:
+          type: array
+          items:
+            type: string
+        certificazioni:
+          type: array
+          items:
+            type: string
+        stagione:
+          type: ["string", "null"]
+        collezione:
+          type: ["string", "null"]
         createdAt:
           type: string
 
@@ -828,6 +840,18 @@ components:
           type: boolean
         descrizione:
           type: string
+        tecnologie:
+          type: array
+          items:
+            type: string
+        certificazioni:
+          type: array
+          items:
+            type: string
+        stagione:
+          type: string
+        collezione:
+          type: string
 
     MaterialeUpdate:
       type: object
@@ -845,6 +869,18 @@ components:
         disponibile:
           type: boolean
         descrizione:
+          type: string
+        tecnologie:
+          type: array
+          items:
+            type: string
+        certificazioni:
+          type: array
+          items:
+            type: string
+        stagione:
+          type: string
+        collezione:
           type: string
 
     MaterialeRichiesto:
@@ -996,9 +1032,24 @@ components:
         percentuale:
           type: number
 
+    CampioneFollowUp:
+      type: object
+      required: [id, clienteNome, materialeNome, dataRichiesta, giorniAttesa]
+      properties:
+        id:
+          type: integer
+        clienteNome:
+          type: string
+        materialeNome:
+          type: string
+        dataRichiesta:
+          type: string
+        giorniAttesa:
+          type: integer
+
     Insights:
       type: object
-      required: [leadDaSeguire, materialiPiuRichiesti, fontiPerformanti]
+      required: [leadDaSeguire, materialiPiuRichiesti, fontiPerformanti, campioniDaFollowUp]
       properties:
         leadDaSeguire:
           type: array
@@ -1012,3 +1063,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/InsightFonteLead"
+        campioniDaFollowUp:
+          type: array
+          items:
+            $ref: "#/components/schemas/CampioneFollowUp"

@@ -9,6 +9,7 @@
 export * from './andamentoMensile';
 export * from './authUser';
 export * from './authUserRuolo';
+export * from './campioneFollowUp';
 export * from './cliente';
 export * from './clienteInput';
 export * from './clientePriorita';

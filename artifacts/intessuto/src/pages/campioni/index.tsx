@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { Package } from "lucide-react";
+import { Package, AlertTriangle } from "lucide-react";
 
 export default function Campioni() {
   const [statoFilter, setStatoFilter] = useState<string>("all");
@@ -42,6 +42,14 @@ export default function Campioni() {
     }
   };
 
+  const campioniFollowUp = campioni?.filter((c) => {
+    if (c.statoSpedizione !== "spedito") return false;
+    const reqDate = new Date(c.dataRichiesta);
+    const diffTime = Math.abs(new Date().getTime() - reqDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 7;
+  }) || [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -66,6 +74,24 @@ export default function Campioni() {
           </Select>
         </div>
       </div>
+
+      {campioniFollowUp.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 rounded-md p-4 text-amber-900 shadow-sm">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-sm mb-1">
+                {campioniFollowUp.length} campioni in attesa di feedback <span className="font-normal opacity-80">— Inviati da oltre 7 giorni senza risposta.</span>
+              </p>
+              <ul className="text-xs space-y-1 mt-2 font-medium opacity-90">
+                {campioniFollowUp.map(c => (
+                  <li key={c.id}>• {c.clienteNome} — {c.materialeNome} <span className="opacity-70 font-normal">(inviato il {new Date(c.dataRichiesta).toLocaleDateString('it-IT')})</span></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="bg-card border rounded-xl overflow-hidden">
         <Table>

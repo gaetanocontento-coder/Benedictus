@@ -84,7 +84,7 @@ export const ListLeadsResponseItem = zod.object({
   "referente": zod.string(),
   "email": zod.string(),
   "telefono": zod.string(),
-  "fonte": zod.enum(['sito', 'meta_ads', 'linkedin', 'fiera', 'showroom']),
+  "fonte": zod.enum(['sito', 'meta_ads', 'linkedin', 'fiera', 'showroom', 'agente']),
   "interesse": zod.enum(['tessuti', 'pelle', 'outdoor', 'contract', 'custom']),
   "stato": zod.enum(['nuovo', 'contattato', 'campione_inviato', 'preventivo_inviato', 'chiuso', 'perso']),
   "commercialeAssegnato": zod.string(),
@@ -123,7 +123,7 @@ export const GetLeadResponse = zod.object({
   "referente": zod.string(),
   "email": zod.string(),
   "telefono": zod.string(),
-  "fonte": zod.enum(['sito', 'meta_ads', 'linkedin', 'fiera', 'showroom']),
+  "fonte": zod.enum(['sito', 'meta_ads', 'linkedin', 'fiera', 'showroom', 'agente']),
   "interesse": zod.enum(['tessuti', 'pelle', 'outdoor', 'contract', 'custom']),
   "stato": zod.enum(['nuovo', 'contattato', 'campione_inviato', 'preventivo_inviato', 'chiuso', 'perso']),
   "commercialeAssegnato": zod.string(),
@@ -157,7 +157,7 @@ export const UpdateLeadResponse = zod.object({
   "referente": zod.string(),
   "email": zod.string(),
   "telefono": zod.string(),
-  "fonte": zod.enum(['sito', 'meta_ads', 'linkedin', 'fiera', 'showroom']),
+  "fonte": zod.enum(['sito', 'meta_ads', 'linkedin', 'fiera', 'showroom', 'agente']),
   "interesse": zod.enum(['tessuti', 'pelle', 'outdoor', 'contract', 'custom']),
   "stato": zod.enum(['nuovo', 'contattato', 'campione_inviato', 'preventivo_inviato', 'chiuso', 'perso']),
   "commercialeAssegnato": zod.string(),
@@ -298,6 +298,10 @@ export const ListMaterialiResponseItem = zod.object({
   "disponibile": zod.boolean(),
   "descrizione": zod.string().nullish(),
   "richieste": zod.number().optional(),
+  "tecnologie": zod.array(zod.string()).optional(),
+  "certificazioni": zod.array(zod.string()).optional(),
+  "stagione": zod.string().nullish(),
+  "collezione": zod.string().nullish(),
   "createdAt": zod.string()
 })
 export const ListMaterialiResponse = zod.array(ListMaterialiResponseItem)
@@ -313,7 +317,11 @@ export const CreateMaterialeBody = zod.object({
   "utilizzoConsigliato": zod.string(),
   "fasciaPrezzo": zod.string(),
   "disponibile": zod.boolean(),
-  "descrizione": zod.string().optional()
+  "descrizione": zod.string().optional(),
+  "tecnologie": zod.array(zod.string()).optional(),
+  "certificazioni": zod.array(zod.string()).optional(),
+  "stagione": zod.string().optional(),
+  "collezione": zod.string().optional()
 })
 
 
@@ -334,6 +342,10 @@ export const GetMaterialeResponse = zod.object({
   "disponibile": zod.boolean(),
   "descrizione": zod.string().nullish(),
   "richieste": zod.number().optional(),
+  "tecnologie": zod.array(zod.string()).optional(),
+  "certificazioni": zod.array(zod.string()).optional(),
+  "stagione": zod.string().nullish(),
+  "collezione": zod.string().nullish(),
   "createdAt": zod.string()
 })
 
@@ -352,7 +364,11 @@ export const UpdateMaterialeBody = zod.object({
   "utilizzoConsigliato": zod.string().optional(),
   "fasciaPrezzo": zod.string().optional(),
   "disponibile": zod.boolean().optional(),
-  "descrizione": zod.string().optional()
+  "descrizione": zod.string().optional(),
+  "tecnologie": zod.array(zod.string()).optional(),
+  "certificazioni": zod.array(zod.string()).optional(),
+  "stagione": zod.string().optional(),
+  "collezione": zod.string().optional()
 })
 
 export const UpdateMaterialeResponse = zod.object({
@@ -365,6 +381,10 @@ export const UpdateMaterialeResponse = zod.object({
   "disponibile": zod.boolean(),
   "descrizione": zod.string().nullish(),
   "richieste": zod.number().optional(),
+  "tecnologie": zod.array(zod.string()).optional(),
+  "certificazioni": zod.array(zod.string()).optional(),
+  "stagione": zod.string().nullish(),
+  "collezione": zod.string().nullish(),
   "createdAt": zod.string()
 })
 
@@ -555,6 +575,13 @@ export const GetInsightsResponse = zod.object({
   "fonte": zod.string(),
   "count": zod.number(),
   "percentuale": zod.number()
+})),
+  "campioniDaFollowUp": zod.array(zod.object({
+  "id": zod.number(),
+  "clienteNome": zod.string(),
+  "materialeNome": zod.string(),
+  "dataRichiesta": zod.string(),
+  "giorniAttesa": zod.number()
 }))
 })
 

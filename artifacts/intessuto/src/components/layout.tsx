@@ -119,8 +119,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </SidebarContent>
 
           <SidebarFooter className="border-t p-4">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-3">
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold px-1">Pagine pubbliche</p>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" className="flex-1 text-xs justify-start gap-1.5" asChild>
+                  <Link href="/shop"><Store className="h-3.5 w-3.5" /> Catalogo</Link>
+                </Button>
+                <Button variant="outline" size="sm" className="flex-1 text-xs justify-start gap-1.5" asChild>
+                  <Link href="/configuratore"><Wand2 className="h-3.5 w-3.5" /> Config.</Link>
+                </Button>
+              </div>
+              <div className="flex items-center gap-3 pt-1">
                 <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
                   <UserCircle className="h-5 w-5" />
                 </div>

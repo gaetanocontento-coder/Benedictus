@@ -4,7 +4,8 @@ import { useAuth } from "@/lib/auth";
 import { useLogin } from "@workspace/api-client-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Presentation, Megaphone } from "lucide-react";
+import { Building2, Presentation, Megaphone, Store, Wand2 } from "lucide-react";
+import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 
 const roles = [
@@ -108,6 +109,18 @@ export default function Login() {
                   </CardHeader>
                 </Card>
               ))}
+            </div>
+
+            <div className="border-t pt-4">
+              <p className="text-xs text-muted-foreground mb-2">Pagine pubbliche (senza login)</p>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" className="flex-1 gap-2" asChild>
+                  <Link href="/shop"><Store className="h-4 w-4" /> Catalogo</Link>
+                </Button>
+                <Button variant="outline" size="sm" className="flex-1 gap-2" asChild>
+                  <Link href="/configuratore"><Wand2 className="h-4 w-4" /> Configuratore</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,26 @@
+import { Router, type IRouter } from "express";
+import authRouter from "./auth";
+import newsletterRouter from "./newsletter";
+import lectioRouter from "./lectio";
+import episodesRouter from "./episodes";
+import workshopsRouter from "./workshops";
+import contentRouter from "./content";
+import plansRouter from "./plans";
+import checkoutRouter from "./checkout";
+import statsRouter from "./stats";
+import adminRouter from "./admin";
+
+const router: IRouter = Router();
+
+router.use("/b/auth", authRouter);
+router.use("/b", newsletterRouter);
+router.use("/b", lectioRouter);
+router.use("/b", episodesRouter);
+router.use("/b", workshopsRouter);
+router.use("/b", contentRouter);
+router.use("/b", plansRouter);
+router.use("/b", checkoutRouter);
+router.use("/b", statsRouter);
+router.use("/b", adminRouter);
+
+export default router;

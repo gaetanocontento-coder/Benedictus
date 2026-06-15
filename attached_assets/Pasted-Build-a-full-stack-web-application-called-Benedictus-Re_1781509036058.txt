@@ -1,0 +1,166 @@
+Build a full-stack web application called "Benedictus — Regula Humanitatis" for an Italian platform that translates 1,500 years of Benedictine wisdom into a modern leadership and community-building methodology. The platform serves both B2C (individuals) and B2B (companies/institutions).
+
+---
+
+## TECH STACK
+- Frontend: React + Tailwind CSS
+- Backend: Node.js + Express
+- Database: PostgreSQL (with Prisma ORM)
+- Auth: JWT-based authentication with membership tiers
+- Payments: Stripe integration (subscription + one-time)
+- Email: Nodemailer or Resend for newsletter
+- Storage: Cloudinary or S3 for media assets
+
+---
+
+## VISUAL IDENTITY & TONE
+- Aesthetic: monastic, minimal, evocative — dark parchment tones (#1a1208, #f5e6c8), serif typography (e.g. Playfair Display for headings, Inter for body)
+- Latin year header "Anno Domini MCCCXXVII" as a recurring visual motif
+- Language: Italian (primary), English (secondary)
+- Tone: not instructional from above, but invitational — "cammino" not "corso", "custode" not "leader"
+
+---
+
+## PAGES & SECTIONS (from the document)
+
+### 1. Homepage
+- Hero with manifesto text: "Per 1500 anni, i monasteri hanno custodito la civiltà quando il mondo crollava. Oggi il mondo non crolla, ma l'umano sì."
+- CTA: "Inizia il Cammino" → leads to newsletter signup or registration
+- Three rhetorical questions (loneliness at work, emptiness despite success, fragmented community sense)
+- Section: "La Crisi Silenziosa della Leadership" with key stats (OMS burnout data, Great Resignation)
+
+### 2. Chi Siamo
+- Not an organization, but a community
+- The 4 transformative steps: DISARMARE → ASCOLTARE → CUSTODIRE → RIGENERARE
+
+### 3. La Chiamata
+- The "Perché Ora?" manifesto section
+- Market positioning: not competing in Leadership Development (€366B market), but creating a new category — "rigenerazione comunitaria"
+- Blue Ocean framing
+
+### 4. Il Manifesto
+- Long-form editorial page: rebuild communities, orient toward the common good
+
+### 5. La Regula
+- The Benedictine principles translated into modern equivalents:
+  * Ora et Labora → Anti-burnout design
+  * Capitolo → Participatory governance
+  * Stabilitas → Mutual commitment
+  * Abbas → Servant leadership
+  * Hospitalitas → Inclusion practices
+
+### 6. Lectio Humanitatis
+- Content archive: articles/reflections, 3 free/month for Pellegrino tier
+- Full access for paid tiers
+- Category tags: Ascolto, Comunità, Ritmo, Umiltà, Custodia
+
+### 7. Abbas — Podcast/Video
+- Video podcast page: embed player, episode list, episode descriptions
+- "La Voce dei Maestri" — wise voices from tradition speaking to the present
+- Episode format: Lectio + conversation + community reflections
+
+### 8. Percorso Formativo
+- The learning journey: 6 online modules (2 months each) + 3 residential weekends + final project + certification
+- Visual progress tracker (pilgrimage metaphor — stations/waypoints)
+- Cohort system (max 30 people)
+
+### 9. Cura dell'Anima
+- Digital library / resource shelf
+- Books, readings, curated resources
+
+### 10. Officina della Sapienza
+- Workshop/lab registration page
+- Collective work sessions — theory into practice
+- Calendar view of upcoming workshops
+
+### 11. Celluzza
+- Guided meditation / interiority section (audio/video)
+- Private, intimate UI (dim background, centered content, minimal chrome)
+
+### 12. Testimonianze
+- Stories of transformation
+- Quote cards + photo + short bio
+- "Il Voto del Custode" ritual section: display the full vow text, graduates who have taken it
+
+### 13. Restiamo in Contatto
+- Newsletter signup: name + email + optional "perché sei qui?" text field
+- Confirmation with welcoming message
+
+---
+
+## MEMBERSHIP SYSTEM (3 Tiers)
+
+### Tier 1 — Pellegrino (Free)
+- Weekly newsletter
+- Abbas podcast access
+- 3 Lectio Humanitatis/month
+- Read-only community access
+- Goal: 5,000+ subscribers in Year 1
+
+### Tier 2 — Monaco (Paid, monthly or annual)
+- Everything in Tier 1 +
+- Full Lectio archive
+- 2 live masterclasses/month
+- Active community (write + groups)
+- Celluzza guided meditation sessions
+- Digital resource library
+- Target: 200 members Year 1
+
+### Tier 3 — Abbas (Premium, monthly or annual)
+- Everything in Tier 2 +
+- 1 individual coaching session/quarter
+- Priority access to physical events
+- Alumni mentorship
+- Annual certification
+- Annual residential retreat included
+- Target: 50 members Year 1
+
+Implement Stripe subscriptions for Monaco and Abbas tiers. Free signup for Pellegrino. Gated content based on tier level.
+
+---
+
+## B2B MODULE (Corporate)
+- Dedicated landing page: "Leadership Contemplativa per Aziende"
+- Contact/inquiry form for custom programs
+- Deliverables listed: residential workshops, 6-month online follow-up, executive coaching, organizational culture toolkit
+- Corporate license pricing inquiry
+- Partnership types: University, Foundations, Public Administration, Sponsors
+
+---
+
+## DATABASE SCHEMA (key models)
+- User: id, email, name, tier (pellegrino/monaco/abbas), createdAt
+- Content (Lectio): id, title, body, category, publishedAt, requiredTier
+- Episode (Abbas Podcast): id, title, description, embedUrl, publishedAt
+- Workshop (Officina): id, title, date, location, maxParticipants, currentParticipants
+- Testimonial: id, quote, authorName, authorRole, photo
+- NewsletterSubscriber: id, email, name, whyHere, createdAt
+- CohortEnrollment: id, userId, cohortId, status, startDate
+
+---
+
+## ADMIN PANEL
+Simple protected admin area (/admin) to:
+- Publish/edit Lectio articles and podcast episodes
+- Manage workshop registrations
+- View subscriber list and export CSV
+- Manage testimonials
+
+---
+
+## ADDITIONAL FEATURES
+- "Il Voto del Custode" page: animated display of the vow text, public wall of graduates who have taken it
+- Responsive mobile-first design
+- SEO meta tags in Italian
+- Cookie consent banner (GDPR compliant)
+- Social sharing for Lectio articles
+
+---
+
+## FOLDER STRUCTURE
+/client — React frontend
+/server — Express API
+/prisma — Database schema and migrations
+/public — Static assets
+
+Start by scaffolding the project, setting up the database schema, and building the Homepage, the Membership system with auth, and the Lectio archive with gated access. Then proceed to the other sections.

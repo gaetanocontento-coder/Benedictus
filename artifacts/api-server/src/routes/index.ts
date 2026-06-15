@@ -9,6 +9,7 @@ import campioniRouter from "./campioni";
 import proposteRouter from "./proposte";
 import insightsRouter from "./insights";
 import publicRouter from "./public";
+import benedictusBRouter from "./benedictus";
 
 const router: IRouter = Router();
 
@@ -22,5 +23,6 @@ router.use("/materiali", materialiRouter);
 router.use("/campioni", campioniRouter);
 router.use("/proposte", proposteRouter);
 router.use("/insights", insightsRouter);
+router.use(benedictusBRouter);
 
 export default router;

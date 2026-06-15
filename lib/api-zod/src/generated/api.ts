@@ -586,3 +586,370 @@ export const GetInsightsResponse = zod.object({
 })
 
 
+/**
+ * @summary Register a new Benedictus user
+ */
+export const BRegisterBody = zod.object({
+  "email": zod.string(),
+  "name": zod.string(),
+  "password": zod.string()
+})
+
+
+/**
+ * @summary Login to Benedictus
+ */
+export const BLoginBody = zod.object({
+  "email": zod.string(),
+  "password": zod.string()
+})
+
+export const BLoginResponse = zod.object({
+  "id": zod.number(),
+  "email": zod.string(),
+  "name": zod.string(),
+  "tier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "stripeCustomerId": zod.string().nullish(),
+  "stripeSubscriptionId": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Get current Benedictus user
+ */
+export const BGetMeResponse = zod.object({
+  "id": zod.number(),
+  "email": zod.string(),
+  "name": zod.string(),
+  "tier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "stripeCustomerId": zod.string().nullish(),
+  "stripeSubscriptionId": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Logout current user
+ */
+export const BLogoutResponse = zod.object({
+  "success": zod.boolean()
+})
+
+
+/**
+ * @summary Subscribe to newsletter
+ */
+export const BSubscribeNewsletterBody = zod.object({
+  "email": zod.string(),
+  "name": zod.string(),
+  "whyHere": zod.string().optional()
+})
+
+
+/**
+ * @summary List Lectio Humanitatis articles
+ */
+export const BListLectioQueryParams = zod.object({
+  "category": zod.coerce.string().optional(),
+  "page": zod.coerce.number().optional(),
+  "limit": zod.coerce.number().optional()
+})
+
+export const BListLectioResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "excerpt": zod.string(),
+  "body": zod.string().nullish(),
+  "category": zod.enum(['ascolto', 'comunita', 'ritmo', 'umilta', 'custodia']),
+  "publishedAt": zod.string(),
+  "requiredTier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "readingMinutes": zod.number()
+})
+export const BListLectioResponse = zod.array(BListLectioResponseItem)
+
+
+/**
+ * @summary Get 3 most recent free articles
+ */
+export const BGetLectioRecentiResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "excerpt": zod.string(),
+  "body": zod.string().nullish(),
+  "category": zod.enum(['ascolto', 'comunita', 'ritmo', 'umilta', 'custodia']),
+  "publishedAt": zod.string(),
+  "requiredTier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "readingMinutes": zod.number()
+})
+export const BGetLectioRecentiResponse = zod.array(BGetLectioRecentiResponseItem)
+
+
+/**
+ * @summary Get a single Lectio article (gated by tier)
+ */
+export const BGetLectioParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const BGetLectioResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "excerpt": zod.string(),
+  "body": zod.string().nullish(),
+  "category": zod.enum(['ascolto', 'comunita', 'ritmo', 'umilta', 'custodia']),
+  "publishedAt": zod.string(),
+  "requiredTier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "readingMinutes": zod.number()
+})
+
+
+/**
+ * @summary List Abbas podcast episodes
+ */
+export const BListEpisodesResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "description": zod.string(),
+  "embedUrl": zod.string(),
+  "publishedAt": zod.string(),
+  "durationMinutes": zod.number()
+})
+export const BListEpisodesResponse = zod.array(BListEpisodesResponseItem)
+
+
+/**
+ * @summary Get the latest featured episode
+ */
+export const BGetFeaturedEpisodeResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "description": zod.string(),
+  "embedUrl": zod.string(),
+  "publishedAt": zod.string(),
+  "durationMinutes": zod.number()
+})
+
+
+/**
+ * @summary Get a single episode
+ */
+export const BGetEpisodeParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const BGetEpisodeResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "description": zod.string(),
+  "embedUrl": zod.string(),
+  "publishedAt": zod.string(),
+  "durationMinutes": zod.number()
+})
+
+
+/**
+ * @summary List upcoming workshops
+ */
+export const BListWorkshopsResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "description": zod.string(),
+  "date": zod.string(),
+  "location": zod.string(),
+  "maxParticipants": zod.number(),
+  "currentParticipants": zod.number(),
+  "isRegistered": zod.boolean().optional()
+})
+export const BListWorkshopsResponse = zod.array(BListWorkshopsResponseItem)
+
+
+/**
+ * @summary Register for a workshop
+ */
+export const BRegisterWorkshopParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const BRegisterWorkshopResponse = zod.object({
+  "success": zod.boolean()
+})
+
+
+/**
+ * @summary List community testimonials
+ */
+export const BListTestimonialsResponseItem = zod.object({
+  "id": zod.number(),
+  "quote": zod.string(),
+  "authorName": zod.string(),
+  "authorRole": zod.string(),
+  "photo": zod.string().nullish()
+})
+export const BListTestimonialsResponse = zod.array(BListTestimonialsResponseItem)
+
+
+/**
+ * @summary List Voto del Custode graduates
+ */
+export const BListGraduatesResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "votoDate": zod.string(),
+  "message": zod.string().nullish()
+})
+export const BListGraduatesResponse = zod.array(BListGraduatesResponseItem)
+
+
+/**
+ * @summary List membership plans with prices
+ */
+export const BListPlansResponseItem = zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "tier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "description": zod.string(),
+  "features": zod.array(zod.string()),
+  "monthlyPriceId": zod.string().nullish(),
+  "annualPriceId": zod.string().nullish(),
+  "monthlyPrice": zod.number().nullish(),
+  "annualPrice": zod.number().nullish()
+})
+export const BListPlansResponse = zod.array(BListPlansResponseItem)
+
+
+/**
+ * @summary Create Stripe checkout session
+ */
+export const BCreateCheckoutBody = zod.object({
+  "priceId": zod.string()
+})
+
+export const BCreateCheckoutResponse = zod.object({
+  "url": zod.string()
+})
+
+
+/**
+ * @summary Create Stripe billing portal session
+ */
+export const BCreatePortalResponse = zod.object({
+  "url": zod.string()
+})
+
+
+/**
+ * @summary Get current user subscription
+ */
+export const BGetSubscriptionResponse = zod.object({
+  "tier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "status": zod.string(),
+  "currentPeriodEnd": zod.string().nullish(),
+  "cancelAtPeriodEnd": zod.boolean().optional()
+})
+
+
+/**
+ * @summary Get community statistics
+ */
+export const BGetStatsResponse = zod.object({
+  "subscribers": zod.number(),
+  "monaciMembers": zod.number(),
+  "abbatiMembers": zod.number(),
+  "lectioCount": zod.number(),
+  "episodeCount": zod.number()
+})
+
+
+/**
+ * @summary List newsletter subscribers (admin)
+ */
+export const BListSubscribersResponseItem = zod.object({
+  "id": zod.number(),
+  "email": zod.string(),
+  "name": zod.string(),
+  "whyHere": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const BListSubscribersResponse = zod.array(BListSubscribersResponseItem)
+
+
+/**
+ * @summary Create a new Lectio article (admin)
+ */
+export const BCreateLectioBody = zod.object({
+  "title": zod.string(),
+  "excerpt": zod.string(),
+  "body": zod.string(),
+  "category": zod.string(),
+  "requiredTier": zod.string(),
+  "readingMinutes": zod.number()
+})
+
+
+/**
+ * @summary Update a Lectio article (admin)
+ */
+export const BUpdateLectioParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const BUpdateLectioBody = zod.object({
+  "title": zod.string().optional(),
+  "excerpt": zod.string().optional(),
+  "body": zod.string().optional(),
+  "category": zod.string().optional(),
+  "requiredTier": zod.string().optional(),
+  "readingMinutes": zod.number().optional()
+})
+
+export const BUpdateLectioResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "excerpt": zod.string(),
+  "body": zod.string().nullish(),
+  "category": zod.enum(['ascolto', 'comunita', 'ritmo', 'umilta', 'custodia']),
+  "publishedAt": zod.string(),
+  "requiredTier": zod.enum(['pellegrino', 'monaco', 'abbas']),
+  "readingMinutes": zod.number()
+})
+
+
+/**
+ * @summary Delete a Lectio article (admin)
+ */
+export const BDeleteLectioParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
+ * @summary Create a new podcast episode (admin)
+ */
+export const BCreateEpisodeBody = zod.object({
+  "title": zod.string(),
+  "description": zod.string(),
+  "embedUrl": zod.string(),
+  "durationMinutes": zod.number()
+})
+
+
+/**
+ * @summary Create a testimonial (admin)
+ */
+export const BCreateTestimonialBody = zod.object({
+  "quote": zod.string(),
+  "authorName": zod.string(),
+  "authorRole": zod.string(),
+  "photo": zod.string().optional()
+})
+
+
+/**
+ * @summary Delete a testimonial (admin)
+ */
+export const BDeleteTestimonialParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+

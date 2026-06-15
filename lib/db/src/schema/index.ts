@@ -3,3 +3,4 @@ export * from "./clienti";
 export * from "./materiali";
 export * from "./campioni";
 export * from "./proposte";
+export * from "./benedictus";

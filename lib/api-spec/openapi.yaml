@@ -26,6 +26,28 @@ tags:
     description: Commercial proposals
   - name: insights
     description: Business insights
+  - name: b-auth
+    description: Benedictus authentication
+  - name: b-newsletter
+    description: Newsletter subscriptions
+  - name: b-lectio
+    description: Lectio Humanitatis content
+  - name: b-episodes
+    description: Abbas podcast episodes
+  - name: b-workshops
+    description: Officina della Sapienza workshops
+  - name: b-testimonials
+    description: Community testimonials
+  - name: b-graduates
+    description: Voto del Custode graduates
+  - name: b-plans
+    description: Membership plans
+  - name: b-checkout
+    description: Stripe checkout and billing
+  - name: b-stats
+    description: Community statistics
+  - name: b-admin
+    description: Admin panel operations
 
 paths:
   /healthz:
@@ -551,6 +573,492 @@ paths:
               schema:
                 $ref: "#/components/schemas/Insights"
 
+  /b/auth/register:
+    post:
+      operationId: bRegister
+      tags: [b-auth]
+      summary: Register a new Benedictus user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BRegisterInput"
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BAuthUser"
+        "409":
+          description: Email already in use
+
+  /b/auth/login:
+    post:
+      operationId: bLogin
+      tags: [b-auth]
+      summary: Login to Benedictus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BLoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BAuthUser"
+        "401":
+          description: Invalid credentials
+
+  /b/auth/me:
+    get:
+      operationId: bGetMe
+      tags: [b-auth]
+      summary: Get current Benedictus user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BAuthUser"
+        "401":
+          description: Not authenticated
+
+  /b/auth/logout:
+    post:
+      operationId: bLogout
+      tags: [b-auth]
+      summary: Logout current user
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required: [success]
+
+  /b/newsletter:
+    post:
+      operationId: bSubscribeNewsletter
+      tags: [b-newsletter]
+      summary: Subscribe to newsletter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BNewsletterInput"
+      responses:
+        "201":
+          description: Subscribed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required: [success]
+
+  /b/lectio:
+    get:
+      operationId: bListLectio
+      tags: [b-lectio]
+      summary: List Lectio Humanitatis articles
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BLectio"
+
+  /b/lectio/recenti:
+    get:
+      operationId: bGetLectioRecenti
+      tags: [b-lectio]
+      summary: Get 3 most recent free articles
+      responses:
+        "200":
+          description: Recent free articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BLectio"
+
+  /b/lectio/{id}:
+    get:
+      operationId: bGetLectio
+      tags: [b-lectio]
+      summary: Get a single Lectio article (gated by tier)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Article found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BLectio"
+        "403":
+          description: Insufficient membership tier
+        "404":
+          description: Not found
+
+  /b/episodes:
+    get:
+      operationId: bListEpisodes
+      tags: [b-episodes]
+      summary: List Abbas podcast episodes
+      responses:
+        "200":
+          description: List of episodes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BEpisode"
+
+  /b/episodes/featured:
+    get:
+      operationId: bGetFeaturedEpisode
+      tags: [b-episodes]
+      summary: Get the latest featured episode
+      responses:
+        "200":
+          description: Featured episode
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BEpisode"
+
+  /b/episodes/{id}:
+    get:
+      operationId: bGetEpisode
+      tags: [b-episodes]
+      summary: Get a single episode
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Episode found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BEpisode"
+        "404":
+          description: Not found
+
+  /b/workshops:
+    get:
+      operationId: bListWorkshops
+      tags: [b-workshops]
+      summary: List upcoming workshops
+      responses:
+        "200":
+          description: List of workshops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BWorkshop"
+
+  /b/workshops/{id}/iscrivi:
+    post:
+      operationId: bRegisterWorkshop
+      tags: [b-workshops]
+      summary: Register for a workshop
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required: [success]
+
+  /b/testimonials:
+    get:
+      operationId: bListTestimonials
+      tags: [b-testimonials]
+      summary: List community testimonials
+      responses:
+        "200":
+          description: List of testimonials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BTestimonial"
+
+  /b/graduates:
+    get:
+      operationId: bListGraduates
+      tags: [b-graduates]
+      summary: List Voto del Custode graduates
+      responses:
+        "200":
+          description: List of graduates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BGraduate"
+
+  /b/plans:
+    get:
+      operationId: bListPlans
+      tags: [b-plans]
+      summary: List membership plans with prices
+      responses:
+        "200":
+          description: List of plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BPlan"
+
+  /b/checkout:
+    post:
+      operationId: bCreateCheckout
+      tags: [b-checkout]
+      summary: Create Stripe checkout session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BCheckoutInput"
+      responses:
+        "200":
+          description: Checkout session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                required: [url]
+
+  /b/checkout/portal:
+    post:
+      operationId: bCreatePortal
+      tags: [b-checkout]
+      summary: Create Stripe billing portal session
+      responses:
+        "200":
+          description: Portal session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                required: [url]
+
+  /b/subscription:
+    get:
+      operationId: bGetSubscription
+      tags: [b-checkout]
+      summary: Get current user subscription
+      responses:
+        "200":
+          description: Current subscription
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BSubscription"
+
+  /b/stats:
+    get:
+      operationId: bGetStats
+      tags: [b-stats]
+      summary: Get community statistics
+      responses:
+        "200":
+          description: Community statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BCommunityStats"
+
+  /b/admin/subscribers:
+    get:
+      operationId: bListSubscribers
+      tags: [b-admin]
+      summary: List newsletter subscribers (admin)
+      responses:
+        "200":
+          description: List of subscribers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BNewsletterSubscriber"
+
+  /b/admin/lectio:
+    post:
+      operationId: bCreateLectio
+      tags: [b-admin]
+      summary: Create a new Lectio article (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BLectioInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BLectio"
+
+  /b/admin/lectio/{id}:
+    patch:
+      operationId: bUpdateLectio
+      tags: [b-admin]
+      summary: Update a Lectio article (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BLectioUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BLectio"
+    delete:
+      operationId: bDeleteLectio
+      tags: [b-admin]
+      summary: Delete a Lectio article (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /b/admin/episodes:
+    post:
+      operationId: bCreateEpisode
+      tags: [b-admin]
+      summary: Create a new podcast episode (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BEpisodeInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BEpisode"
+
+  /b/admin/testimonials:
+    post:
+      operationId: bCreateTestimonial
+      tags: [b-admin]
+      summary: Create a testimonial (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BTestimonialInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BTestimonial"
+
+  /b/admin/testimonials/{id}:
+    delete:
+      operationId: bDeleteTestimonial
+      tags: [b-admin]
+      summary: Delete a testimonial (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
 components:
   schemas:
     HealthStatus:
@@ -1067,3 +1575,281 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CampioneFollowUp"
+
+    # ---- Benedictus schemas ----
+
+    BAuthUser:
+      type: object
+      required: [id, email, name, tier, createdAt]
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        tier:
+          type: string
+          enum: [pellegrino, monaco, abbas]
+        stripeCustomerId:
+          type: ["string", "null"]
+        stripeSubscriptionId:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    BRegisterInput:
+      type: object
+      required: [email, name, password]
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+
+    BLoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    BNewsletterInput:
+      type: object
+      required: [email, name]
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        whyHere:
+          type: string
+
+    BNewsletterSubscriber:
+      type: object
+      required: [id, email, name, createdAt]
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        whyHere:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    BLectio:
+      type: object
+      required: [id, title, excerpt, category, publishedAt, requiredTier, readingMinutes]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        excerpt:
+          type: string
+        body:
+          type: ["string", "null"]
+        category:
+          type: string
+          enum: [ascolto, comunita, ritmo, umilta, custodia]
+        publishedAt:
+          type: string
+        requiredTier:
+          type: string
+          enum: [pellegrino, monaco, abbas]
+        readingMinutes:
+          type: integer
+
+    BLectioInput:
+      type: object
+      required: [title, excerpt, body, category, requiredTier, readingMinutes]
+      properties:
+        title:
+          type: string
+        excerpt:
+          type: string
+        body:
+          type: string
+        category:
+          type: string
+        requiredTier:
+          type: string
+        readingMinutes:
+          type: integer
+
+    BLectioUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        excerpt:
+          type: string
+        body:
+          type: string
+        category:
+          type: string
+        requiredTier:
+          type: string
+        readingMinutes:
+          type: integer
+
+    BEpisode:
+      type: object
+      required: [id, title, description, embedUrl, publishedAt, durationMinutes]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        embedUrl:
+          type: string
+        publishedAt:
+          type: string
+        durationMinutes:
+          type: integer
+
+    BEpisodeInput:
+      type: object
+      required: [title, description, embedUrl, durationMinutes]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        embedUrl:
+          type: string
+        durationMinutes:
+          type: integer
+
+    BWorkshop:
+      type: object
+      required: [id, title, date, location, maxParticipants, currentParticipants, description]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+        location:
+          type: string
+        maxParticipants:
+          type: integer
+        currentParticipants:
+          type: integer
+        isRegistered:
+          type: boolean
+
+    BTestimonial:
+      type: object
+      required: [id, quote, authorName, authorRole]
+      properties:
+        id:
+          type: integer
+        quote:
+          type: string
+        authorName:
+          type: string
+        authorRole:
+          type: string
+        photo:
+          type: ["string", "null"]
+
+    BTestimonialInput:
+      type: object
+      required: [quote, authorName, authorRole]
+      properties:
+        quote:
+          type: string
+        authorName:
+          type: string
+        authorRole:
+          type: string
+        photo:
+          type: string
+
+    BGraduate:
+      type: object
+      required: [id, name, votoDate]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        votoDate:
+          type: string
+        message:
+          type: ["string", "null"]
+
+    BPlan:
+      type: object
+      required: [id, name, tier, description, features]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tier:
+          type: string
+          enum: [pellegrino, monaco, abbas]
+        description:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+        monthlyPriceId:
+          type: ["string", "null"]
+        annualPriceId:
+          type: ["string", "null"]
+        monthlyPrice:
+          type: ["integer", "null"]
+        annualPrice:
+          type: ["integer", "null"]
+
+    BCheckoutInput:
+      type: object
+      required: [priceId]
+      properties:
+        priceId:
+          type: string
+
+    BSubscription:
+      type: object
+      required: [tier, status]
+      properties:
+        tier:
+          type: string
+          enum: [pellegrino, monaco, abbas]
+        status:
+          type: string
+        currentPeriodEnd:
+          type: ["string", "null"]
+        cancelAtPeriodEnd:
+          type: boolean
+
+    BCommunityStats:
+      type: object
+      required: [subscribers, monaciMembers, abbatiMembers, lectioCount, episodeCount]
+      properties:
+        subscribers:
+          type: integer
+        monaciMembers:
+          type: integer
+        abbatiMembers:
+          type: integer
+        lectioCount:
+          type: integer
+        episodeCount:
+          type: integer

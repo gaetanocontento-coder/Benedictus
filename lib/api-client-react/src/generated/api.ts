@@ -22,6 +22,30 @@ import type {
 import type {
   AndamentoMensile,
   AuthUser,
+  BAuthUser,
+  BCheckoutInput,
+  BCommunityStats,
+  BCreateCheckout200,
+  BCreatePortal200,
+  BEpisode,
+  BEpisodeInput,
+  BGraduate,
+  BLectio,
+  BLectioInput,
+  BLectioUpdate,
+  BListLectioParams,
+  BLoginInput,
+  BLogout200,
+  BNewsletterInput,
+  BNewsletterSubscriber,
+  BPlan,
+  BRegisterInput,
+  BRegisterWorkshop200,
+  BSubscribeNewsletter201,
+  BSubscription,
+  BTestimonial,
+  BTestimonialInput,
+  BWorkshop,
   Cliente,
   ClienteInput,
   ClienteUpdate,
@@ -2168,4 +2192,2008 @@ export function useGetInsights<TData = Awaited<ReturnType<typeof getInsights>>, 
 
 
 
+
+export const getBRegisterUrl = () => {
+
+
+
+
+  return `/api/b/auth/register`
+}
+
+/**
+ * @summary Register a new Benedictus user
+ */
+export const bRegister = async (bRegisterInput: BRegisterInput, options?: RequestInit): Promise<BAuthUser> => {
+
+  return customFetch<BAuthUser>(getBRegisterUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bRegisterInput,)
+  }
+);}
+
+
+
+
+export const getBRegisterMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bRegister>>, TError,{data: BodyType<BRegisterInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bRegister>>, TError,{data: BodyType<BRegisterInput>}, TContext> => {
+
+const mutationKey = ['bRegister'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bRegister>>, {data: BodyType<BRegisterInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bRegister(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BRegisterMutationResult = NonNullable<Awaited<ReturnType<typeof bRegister>>>
+    export type BRegisterMutationBody = BodyType<BRegisterInput>
+    export type BRegisterMutationError = ErrorType<void>
+
+    /**
+ * @summary Register a new Benedictus user
+ */
+export const useBRegister = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bRegister>>, TError,{data: BodyType<BRegisterInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bRegister>>,
+        TError,
+        {data: BodyType<BRegisterInput>},
+        TContext
+      > => {
+      return useMutation(getBRegisterMutationOptions(options));
+    }
+
+export const getBLoginUrl = () => {
+
+
+
+
+  return `/api/b/auth/login`
+}
+
+/**
+ * @summary Login to Benedictus
+ */
+export const bLogin = async (bLoginInput: BLoginInput, options?: RequestInit): Promise<BAuthUser> => {
+
+  return customFetch<BAuthUser>(getBLoginUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bLoginInput,)
+  }
+);}
+
+
+
+
+export const getBLoginMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bLogin>>, TError,{data: BodyType<BLoginInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bLogin>>, TError,{data: BodyType<BLoginInput>}, TContext> => {
+
+const mutationKey = ['bLogin'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bLogin>>, {data: BodyType<BLoginInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bLogin(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BLoginMutationResult = NonNullable<Awaited<ReturnType<typeof bLogin>>>
+    export type BLoginMutationBody = BodyType<BLoginInput>
+    export type BLoginMutationError = ErrorType<void>
+
+    /**
+ * @summary Login to Benedictus
+ */
+export const useBLogin = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bLogin>>, TError,{data: BodyType<BLoginInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bLogin>>,
+        TError,
+        {data: BodyType<BLoginInput>},
+        TContext
+      > => {
+      return useMutation(getBLoginMutationOptions(options));
+    }
+
+export const getBGetMeUrl = () => {
+
+
+
+
+  return `/api/b/auth/me`
+}
+
+/**
+ * @summary Get current Benedictus user
+ */
+export const bGetMe = async ( options?: RequestInit): Promise<BAuthUser> => {
+
+  return customFetch<BAuthUser>(getBGetMeUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetMeQueryKey = () => {
+    return [
+    `/api/b/auth/me`
+    ] as const;
+    }
+
+
+export const getBGetMeQueryOptions = <TData = Awaited<ReturnType<typeof bGetMe>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetMe>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetMeQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetMe>>> = ({ signal }) => bGetMe({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetMe>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetMeQueryResult = NonNullable<Awaited<ReturnType<typeof bGetMe>>>
+export type BGetMeQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get current Benedictus user
+ */
+
+export function useBGetMe<TData = Awaited<ReturnType<typeof bGetMe>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetMe>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetMeQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBLogoutUrl = () => {
+
+
+
+
+  return `/api/b/auth/logout`
+}
+
+/**
+ * @summary Logout current user
+ */
+export const bLogout = async ( options?: RequestInit): Promise<BLogout200> => {
+
+  return customFetch<BLogout200>(getBLogoutUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getBLogoutMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bLogout>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bLogout>>, TError,void, TContext> => {
+
+const mutationKey = ['bLogout'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bLogout>>, void> = () => {
+
+
+          return  bLogout(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BLogoutMutationResult = NonNullable<Awaited<ReturnType<typeof bLogout>>>
+
+    export type BLogoutMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Logout current user
+ */
+export const useBLogout = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bLogout>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bLogout>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getBLogoutMutationOptions(options));
+    }
+
+export const getBSubscribeNewsletterUrl = () => {
+
+
+
+
+  return `/api/b/newsletter`
+}
+
+/**
+ * @summary Subscribe to newsletter
+ */
+export const bSubscribeNewsletter = async (bNewsletterInput: BNewsletterInput, options?: RequestInit): Promise<BSubscribeNewsletter201> => {
+
+  return customFetch<BSubscribeNewsletter201>(getBSubscribeNewsletterUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bNewsletterInput,)
+  }
+);}
+
+
+
+
+export const getBSubscribeNewsletterMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bSubscribeNewsletter>>, TError,{data: BodyType<BNewsletterInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bSubscribeNewsletter>>, TError,{data: BodyType<BNewsletterInput>}, TContext> => {
+
+const mutationKey = ['bSubscribeNewsletter'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bSubscribeNewsletter>>, {data: BodyType<BNewsletterInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bSubscribeNewsletter(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BSubscribeNewsletterMutationResult = NonNullable<Awaited<ReturnType<typeof bSubscribeNewsletter>>>
+    export type BSubscribeNewsletterMutationBody = BodyType<BNewsletterInput>
+    export type BSubscribeNewsletterMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Subscribe to newsletter
+ */
+export const useBSubscribeNewsletter = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bSubscribeNewsletter>>, TError,{data: BodyType<BNewsletterInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bSubscribeNewsletter>>,
+        TError,
+        {data: BodyType<BNewsletterInput>},
+        TContext
+      > => {
+      return useMutation(getBSubscribeNewsletterMutationOptions(options));
+    }
+
+export const getBListLectioUrl = (params?: BListLectioParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/b/lectio?${stringifiedParams}` : `/api/b/lectio`
+}
+
+/**
+ * @summary List Lectio Humanitatis articles
+ */
+export const bListLectio = async (params?: BListLectioParams, options?: RequestInit): Promise<BLectio[]> => {
+
+  return customFetch<BLectio[]>(getBListLectioUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListLectioQueryKey = (params?: BListLectioParams,) => {
+    return [
+    `/api/b/lectio`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getBListLectioQueryOptions = <TData = Awaited<ReturnType<typeof bListLectio>>, TError = ErrorType<unknown>>(params?: BListLectioParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListLectio>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListLectioQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListLectio>>> = ({ signal }) => bListLectio(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListLectio>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListLectioQueryResult = NonNullable<Awaited<ReturnType<typeof bListLectio>>>
+export type BListLectioQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List Lectio Humanitatis articles
+ */
+
+export function useBListLectio<TData = Awaited<ReturnType<typeof bListLectio>>, TError = ErrorType<unknown>>(
+ params?: BListLectioParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListLectio>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListLectioQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetLectioRecentiUrl = () => {
+
+
+
+
+  return `/api/b/lectio/recenti`
+}
+
+/**
+ * @summary Get 3 most recent free articles
+ */
+export const bGetLectioRecenti = async ( options?: RequestInit): Promise<BLectio[]> => {
+
+  return customFetch<BLectio[]>(getBGetLectioRecentiUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetLectioRecentiQueryKey = () => {
+    return [
+    `/api/b/lectio/recenti`
+    ] as const;
+    }
+
+
+export const getBGetLectioRecentiQueryOptions = <TData = Awaited<ReturnType<typeof bGetLectioRecenti>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLectioRecenti>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetLectioRecentiQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetLectioRecenti>>> = ({ signal }) => bGetLectioRecenti({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetLectioRecenti>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetLectioRecentiQueryResult = NonNullable<Awaited<ReturnType<typeof bGetLectioRecenti>>>
+export type BGetLectioRecentiQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get 3 most recent free articles
+ */
+
+export function useBGetLectioRecenti<TData = Awaited<ReturnType<typeof bGetLectioRecenti>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLectioRecenti>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetLectioRecentiQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetLectioUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/lectio/${id}`
+}
+
+/**
+ * @summary Get a single Lectio article (gated by tier)
+ */
+export const bGetLectio = async (id: number, options?: RequestInit): Promise<BLectio> => {
+
+  return customFetch<BLectio>(getBGetLectioUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetLectioQueryKey = (id: number,) => {
+    return [
+    `/api/b/lectio/${id}`
+    ] as const;
+    }
+
+
+export const getBGetLectioQueryOptions = <TData = Awaited<ReturnType<typeof bGetLectio>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLectio>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetLectioQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetLectio>>> = ({ signal }) => bGetLectio(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetLectio>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetLectioQueryResult = NonNullable<Awaited<ReturnType<typeof bGetLectio>>>
+export type BGetLectioQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get a single Lectio article (gated by tier)
+ */
+
+export function useBGetLectio<TData = Awaited<ReturnType<typeof bGetLectio>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLectio>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetLectioQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBListEpisodesUrl = () => {
+
+
+
+
+  return `/api/b/episodes`
+}
+
+/**
+ * @summary List Abbas podcast episodes
+ */
+export const bListEpisodes = async ( options?: RequestInit): Promise<BEpisode[]> => {
+
+  return customFetch<BEpisode[]>(getBListEpisodesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListEpisodesQueryKey = () => {
+    return [
+    `/api/b/episodes`
+    ] as const;
+    }
+
+
+export const getBListEpisodesQueryOptions = <TData = Awaited<ReturnType<typeof bListEpisodes>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListEpisodes>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListEpisodesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListEpisodes>>> = ({ signal }) => bListEpisodes({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListEpisodes>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListEpisodesQueryResult = NonNullable<Awaited<ReturnType<typeof bListEpisodes>>>
+export type BListEpisodesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List Abbas podcast episodes
+ */
+
+export function useBListEpisodes<TData = Awaited<ReturnType<typeof bListEpisodes>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListEpisodes>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListEpisodesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetFeaturedEpisodeUrl = () => {
+
+
+
+
+  return `/api/b/episodes/featured`
+}
+
+/**
+ * @summary Get the latest featured episode
+ */
+export const bGetFeaturedEpisode = async ( options?: RequestInit): Promise<BEpisode> => {
+
+  return customFetch<BEpisode>(getBGetFeaturedEpisodeUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetFeaturedEpisodeQueryKey = () => {
+    return [
+    `/api/b/episodes/featured`
+    ] as const;
+    }
+
+
+export const getBGetFeaturedEpisodeQueryOptions = <TData = Awaited<ReturnType<typeof bGetFeaturedEpisode>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetFeaturedEpisode>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetFeaturedEpisodeQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetFeaturedEpisode>>> = ({ signal }) => bGetFeaturedEpisode({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetFeaturedEpisode>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetFeaturedEpisodeQueryResult = NonNullable<Awaited<ReturnType<typeof bGetFeaturedEpisode>>>
+export type BGetFeaturedEpisodeQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get the latest featured episode
+ */
+
+export function useBGetFeaturedEpisode<TData = Awaited<ReturnType<typeof bGetFeaturedEpisode>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetFeaturedEpisode>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetFeaturedEpisodeQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetEpisodeUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/episodes/${id}`
+}
+
+/**
+ * @summary Get a single episode
+ */
+export const bGetEpisode = async (id: number, options?: RequestInit): Promise<BEpisode> => {
+
+  return customFetch<BEpisode>(getBGetEpisodeUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetEpisodeQueryKey = (id: number,) => {
+    return [
+    `/api/b/episodes/${id}`
+    ] as const;
+    }
+
+
+export const getBGetEpisodeQueryOptions = <TData = Awaited<ReturnType<typeof bGetEpisode>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetEpisode>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetEpisodeQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetEpisode>>> = ({ signal }) => bGetEpisode(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetEpisode>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetEpisodeQueryResult = NonNullable<Awaited<ReturnType<typeof bGetEpisode>>>
+export type BGetEpisodeQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get a single episode
+ */
+
+export function useBGetEpisode<TData = Awaited<ReturnType<typeof bGetEpisode>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetEpisode>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetEpisodeQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBListWorkshopsUrl = () => {
+
+
+
+
+  return `/api/b/workshops`
+}
+
+/**
+ * @summary List upcoming workshops
+ */
+export const bListWorkshops = async ( options?: RequestInit): Promise<BWorkshop[]> => {
+
+  return customFetch<BWorkshop[]>(getBListWorkshopsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListWorkshopsQueryKey = () => {
+    return [
+    `/api/b/workshops`
+    ] as const;
+    }
+
+
+export const getBListWorkshopsQueryOptions = <TData = Awaited<ReturnType<typeof bListWorkshops>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListWorkshops>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListWorkshopsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListWorkshops>>> = ({ signal }) => bListWorkshops({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListWorkshops>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListWorkshopsQueryResult = NonNullable<Awaited<ReturnType<typeof bListWorkshops>>>
+export type BListWorkshopsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List upcoming workshops
+ */
+
+export function useBListWorkshops<TData = Awaited<ReturnType<typeof bListWorkshops>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListWorkshops>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListWorkshopsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBRegisterWorkshopUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/workshops/${id}/iscrivi`
+}
+
+/**
+ * @summary Register for a workshop
+ */
+export const bRegisterWorkshop = async (id: number, options?: RequestInit): Promise<BRegisterWorkshop200> => {
+
+  return customFetch<BRegisterWorkshop200>(getBRegisterWorkshopUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getBRegisterWorkshopMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bRegisterWorkshop>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bRegisterWorkshop>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['bRegisterWorkshop'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bRegisterWorkshop>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  bRegisterWorkshop(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BRegisterWorkshopMutationResult = NonNullable<Awaited<ReturnType<typeof bRegisterWorkshop>>>
+
+    export type BRegisterWorkshopMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Register for a workshop
+ */
+export const useBRegisterWorkshop = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bRegisterWorkshop>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bRegisterWorkshop>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getBRegisterWorkshopMutationOptions(options));
+    }
+
+export const getBListTestimonialsUrl = () => {
+
+
+
+
+  return `/api/b/testimonials`
+}
+
+/**
+ * @summary List community testimonials
+ */
+export const bListTestimonials = async ( options?: RequestInit): Promise<BTestimonial[]> => {
+
+  return customFetch<BTestimonial[]>(getBListTestimonialsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListTestimonialsQueryKey = () => {
+    return [
+    `/api/b/testimonials`
+    ] as const;
+    }
+
+
+export const getBListTestimonialsQueryOptions = <TData = Awaited<ReturnType<typeof bListTestimonials>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListTestimonials>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListTestimonialsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListTestimonials>>> = ({ signal }) => bListTestimonials({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListTestimonials>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListTestimonialsQueryResult = NonNullable<Awaited<ReturnType<typeof bListTestimonials>>>
+export type BListTestimonialsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List community testimonials
+ */
+
+export function useBListTestimonials<TData = Awaited<ReturnType<typeof bListTestimonials>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListTestimonials>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListTestimonialsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBListGraduatesUrl = () => {
+
+
+
+
+  return `/api/b/graduates`
+}
+
+/**
+ * @summary List Voto del Custode graduates
+ */
+export const bListGraduates = async ( options?: RequestInit): Promise<BGraduate[]> => {
+
+  return customFetch<BGraduate[]>(getBListGraduatesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListGraduatesQueryKey = () => {
+    return [
+    `/api/b/graduates`
+    ] as const;
+    }
+
+
+export const getBListGraduatesQueryOptions = <TData = Awaited<ReturnType<typeof bListGraduates>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListGraduates>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListGraduatesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListGraduates>>> = ({ signal }) => bListGraduates({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListGraduates>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListGraduatesQueryResult = NonNullable<Awaited<ReturnType<typeof bListGraduates>>>
+export type BListGraduatesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List Voto del Custode graduates
+ */
+
+export function useBListGraduates<TData = Awaited<ReturnType<typeof bListGraduates>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListGraduates>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListGraduatesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBListPlansUrl = () => {
+
+
+
+
+  return `/api/b/plans`
+}
+
+/**
+ * @summary List membership plans with prices
+ */
+export const bListPlans = async ( options?: RequestInit): Promise<BPlan[]> => {
+
+  return customFetch<BPlan[]>(getBListPlansUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListPlansQueryKey = () => {
+    return [
+    `/api/b/plans`
+    ] as const;
+    }
+
+
+export const getBListPlansQueryOptions = <TData = Awaited<ReturnType<typeof bListPlans>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListPlans>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListPlansQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListPlans>>> = ({ signal }) => bListPlans({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListPlans>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListPlansQueryResult = NonNullable<Awaited<ReturnType<typeof bListPlans>>>
+export type BListPlansQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List membership plans with prices
+ */
+
+export function useBListPlans<TData = Awaited<ReturnType<typeof bListPlans>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListPlans>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListPlansQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBCreateCheckoutUrl = () => {
+
+
+
+
+  return `/api/b/checkout`
+}
+
+/**
+ * @summary Create Stripe checkout session
+ */
+export const bCreateCheckout = async (bCheckoutInput: BCheckoutInput, options?: RequestInit): Promise<BCreateCheckout200> => {
+
+  return customFetch<BCreateCheckout200>(getBCreateCheckoutUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bCheckoutInput,)
+  }
+);}
+
+
+
+
+export const getBCreateCheckoutMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateCheckout>>, TError,{data: BodyType<BCheckoutInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bCreateCheckout>>, TError,{data: BodyType<BCheckoutInput>}, TContext> => {
+
+const mutationKey = ['bCreateCheckout'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bCreateCheckout>>, {data: BodyType<BCheckoutInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bCreateCheckout(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BCreateCheckoutMutationResult = NonNullable<Awaited<ReturnType<typeof bCreateCheckout>>>
+    export type BCreateCheckoutMutationBody = BodyType<BCheckoutInput>
+    export type BCreateCheckoutMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create Stripe checkout session
+ */
+export const useBCreateCheckout = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateCheckout>>, TError,{data: BodyType<BCheckoutInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bCreateCheckout>>,
+        TError,
+        {data: BodyType<BCheckoutInput>},
+        TContext
+      > => {
+      return useMutation(getBCreateCheckoutMutationOptions(options));
+    }
+
+export const getBCreatePortalUrl = () => {
+
+
+
+
+  return `/api/b/checkout/portal`
+}
+
+/**
+ * @summary Create Stripe billing portal session
+ */
+export const bCreatePortal = async ( options?: RequestInit): Promise<BCreatePortal200> => {
+
+  return customFetch<BCreatePortal200>(getBCreatePortalUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getBCreatePortalMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreatePortal>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bCreatePortal>>, TError,void, TContext> => {
+
+const mutationKey = ['bCreatePortal'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bCreatePortal>>, void> = () => {
+
+
+          return  bCreatePortal(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BCreatePortalMutationResult = NonNullable<Awaited<ReturnType<typeof bCreatePortal>>>
+
+    export type BCreatePortalMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create Stripe billing portal session
+ */
+export const useBCreatePortal = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreatePortal>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bCreatePortal>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getBCreatePortalMutationOptions(options));
+    }
+
+export const getBGetSubscriptionUrl = () => {
+
+
+
+
+  return `/api/b/subscription`
+}
+
+/**
+ * @summary Get current user subscription
+ */
+export const bGetSubscription = async ( options?: RequestInit): Promise<BSubscription> => {
+
+  return customFetch<BSubscription>(getBGetSubscriptionUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetSubscriptionQueryKey = () => {
+    return [
+    `/api/b/subscription`
+    ] as const;
+    }
+
+
+export const getBGetSubscriptionQueryOptions = <TData = Awaited<ReturnType<typeof bGetSubscription>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetSubscription>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetSubscriptionQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetSubscription>>> = ({ signal }) => bGetSubscription({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetSubscription>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetSubscriptionQueryResult = NonNullable<Awaited<ReturnType<typeof bGetSubscription>>>
+export type BGetSubscriptionQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get current user subscription
+ */
+
+export function useBGetSubscription<TData = Awaited<ReturnType<typeof bGetSubscription>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetSubscription>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetSubscriptionQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetStatsUrl = () => {
+
+
+
+
+  return `/api/b/stats`
+}
+
+/**
+ * @summary Get community statistics
+ */
+export const bGetStats = async ( options?: RequestInit): Promise<BCommunityStats> => {
+
+  return customFetch<BCommunityStats>(getBGetStatsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetStatsQueryKey = () => {
+    return [
+    `/api/b/stats`
+    ] as const;
+    }
+
+
+export const getBGetStatsQueryOptions = <TData = Awaited<ReturnType<typeof bGetStats>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetStatsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetStats>>> = ({ signal }) => bGetStats({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetStats>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetStatsQueryResult = NonNullable<Awaited<ReturnType<typeof bGetStats>>>
+export type BGetStatsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get community statistics
+ */
+
+export function useBGetStats<TData = Awaited<ReturnType<typeof bGetStats>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBListSubscribersUrl = () => {
+
+
+
+
+  return `/api/b/admin/subscribers`
+}
+
+/**
+ * @summary List newsletter subscribers (admin)
+ */
+export const bListSubscribers = async ( options?: RequestInit): Promise<BNewsletterSubscriber[]> => {
+
+  return customFetch<BNewsletterSubscriber[]>(getBListSubscribersUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListSubscribersQueryKey = () => {
+    return [
+    `/api/b/admin/subscribers`
+    ] as const;
+    }
+
+
+export const getBListSubscribersQueryOptions = <TData = Awaited<ReturnType<typeof bListSubscribers>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListSubscribers>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListSubscribersQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListSubscribers>>> = ({ signal }) => bListSubscribers({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListSubscribers>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListSubscribersQueryResult = NonNullable<Awaited<ReturnType<typeof bListSubscribers>>>
+export type BListSubscribersQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List newsletter subscribers (admin)
+ */
+
+export function useBListSubscribers<TData = Awaited<ReturnType<typeof bListSubscribers>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListSubscribers>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListSubscribersQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBCreateLectioUrl = () => {
+
+
+
+
+  return `/api/b/admin/lectio`
+}
+
+/**
+ * @summary Create a new Lectio article (admin)
+ */
+export const bCreateLectio = async (bLectioInput: BLectioInput, options?: RequestInit): Promise<BLectio> => {
+
+  return customFetch<BLectio>(getBCreateLectioUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bLectioInput,)
+  }
+);}
+
+
+
+
+export const getBCreateLectioMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateLectio>>, TError,{data: BodyType<BLectioInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bCreateLectio>>, TError,{data: BodyType<BLectioInput>}, TContext> => {
+
+const mutationKey = ['bCreateLectio'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bCreateLectio>>, {data: BodyType<BLectioInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bCreateLectio(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BCreateLectioMutationResult = NonNullable<Awaited<ReturnType<typeof bCreateLectio>>>
+    export type BCreateLectioMutationBody = BodyType<BLectioInput>
+    export type BCreateLectioMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a new Lectio article (admin)
+ */
+export const useBCreateLectio = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateLectio>>, TError,{data: BodyType<BLectioInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bCreateLectio>>,
+        TError,
+        {data: BodyType<BLectioInput>},
+        TContext
+      > => {
+      return useMutation(getBCreateLectioMutationOptions(options));
+    }
+
+export const getBUpdateLectioUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/admin/lectio/${id}`
+}
+
+/**
+ * @summary Update a Lectio article (admin)
+ */
+export const bUpdateLectio = async (id: number,
+    bLectioUpdate: BLectioUpdate, options?: RequestInit): Promise<BLectio> => {
+
+  return customFetch<BLectio>(getBUpdateLectioUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bLectioUpdate,)
+  }
+);}
+
+
+
+
+export const getBUpdateLectioMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bUpdateLectio>>, TError,{id: number;data: BodyType<BLectioUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bUpdateLectio>>, TError,{id: number;data: BodyType<BLectioUpdate>}, TContext> => {
+
+const mutationKey = ['bUpdateLectio'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bUpdateLectio>>, {id: number;data: BodyType<BLectioUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  bUpdateLectio(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BUpdateLectioMutationResult = NonNullable<Awaited<ReturnType<typeof bUpdateLectio>>>
+    export type BUpdateLectioMutationBody = BodyType<BLectioUpdate>
+    export type BUpdateLectioMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update a Lectio article (admin)
+ */
+export const useBUpdateLectio = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bUpdateLectio>>, TError,{id: number;data: BodyType<BLectioUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bUpdateLectio>>,
+        TError,
+        {id: number;data: BodyType<BLectioUpdate>},
+        TContext
+      > => {
+      return useMutation(getBUpdateLectioMutationOptions(options));
+    }
+
+export const getBDeleteLectioUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/admin/lectio/${id}`
+}
+
+/**
+ * @summary Delete a Lectio article (admin)
+ */
+export const bDeleteLectio = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getBDeleteLectioUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getBDeleteLectioMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bDeleteLectio>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bDeleteLectio>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['bDeleteLectio'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bDeleteLectio>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  bDeleteLectio(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BDeleteLectioMutationResult = NonNullable<Awaited<ReturnType<typeof bDeleteLectio>>>
+
+    export type BDeleteLectioMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete a Lectio article (admin)
+ */
+export const useBDeleteLectio = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bDeleteLectio>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bDeleteLectio>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getBDeleteLectioMutationOptions(options));
+    }
+
+export const getBCreateEpisodeUrl = () => {
+
+
+
+
+  return `/api/b/admin/episodes`
+}
+
+/**
+ * @summary Create a new podcast episode (admin)
+ */
+export const bCreateEpisode = async (bEpisodeInput: BEpisodeInput, options?: RequestInit): Promise<BEpisode> => {
+
+  return customFetch<BEpisode>(getBCreateEpisodeUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bEpisodeInput,)
+  }
+);}
+
+
+
+
+export const getBCreateEpisodeMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateEpisode>>, TError,{data: BodyType<BEpisodeInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bCreateEpisode>>, TError,{data: BodyType<BEpisodeInput>}, TContext> => {
+
+const mutationKey = ['bCreateEpisode'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bCreateEpisode>>, {data: BodyType<BEpisodeInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bCreateEpisode(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BCreateEpisodeMutationResult = NonNullable<Awaited<ReturnType<typeof bCreateEpisode>>>
+    export type BCreateEpisodeMutationBody = BodyType<BEpisodeInput>
+    export type BCreateEpisodeMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a new podcast episode (admin)
+ */
+export const useBCreateEpisode = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateEpisode>>, TError,{data: BodyType<BEpisodeInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bCreateEpisode>>,
+        TError,
+        {data: BodyType<BEpisodeInput>},
+        TContext
+      > => {
+      return useMutation(getBCreateEpisodeMutationOptions(options));
+    }
+
+export const getBCreateTestimonialUrl = () => {
+
+
+
+
+  return `/api/b/admin/testimonials`
+}
+
+/**
+ * @summary Create a testimonial (admin)
+ */
+export const bCreateTestimonial = async (bTestimonialInput: BTestimonialInput, options?: RequestInit): Promise<BTestimonial> => {
+
+  return customFetch<BTestimonial>(getBCreateTestimonialUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bTestimonialInput,)
+  }
+);}
+
+
+
+
+export const getBCreateTestimonialMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateTestimonial>>, TError,{data: BodyType<BTestimonialInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bCreateTestimonial>>, TError,{data: BodyType<BTestimonialInput>}, TContext> => {
+
+const mutationKey = ['bCreateTestimonial'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bCreateTestimonial>>, {data: BodyType<BTestimonialInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bCreateTestimonial(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BCreateTestimonialMutationResult = NonNullable<Awaited<ReturnType<typeof bCreateTestimonial>>>
+    export type BCreateTestimonialMutationBody = BodyType<BTestimonialInput>
+    export type BCreateTestimonialMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a testimonial (admin)
+ */
+export const useBCreateTestimonial = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCreateTestimonial>>, TError,{data: BodyType<BTestimonialInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bCreateTestimonial>>,
+        TError,
+        {data: BodyType<BTestimonialInput>},
+        TContext
+      > => {
+      return useMutation(getBCreateTestimonialMutationOptions(options));
+    }
+
+export const getBDeleteTestimonialUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/admin/testimonials/${id}`
+}
+
+/**
+ * @summary Delete a testimonial (admin)
+ */
+export const bDeleteTestimonial = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getBDeleteTestimonialUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getBDeleteTestimonialMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bDeleteTestimonial>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bDeleteTestimonial>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['bDeleteTestimonial'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bDeleteTestimonial>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  bDeleteTestimonial(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BDeleteTestimonialMutationResult = NonNullable<Awaited<ReturnType<typeof bDeleteTestimonial>>>
+
+    export type BDeleteTestimonialMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete a testimonial (admin)
+ */
+export const useBDeleteTestimonial = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bDeleteTestimonial>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bDeleteTestimonial>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getBDeleteTestimonialMutationOptions(options));
+    }
 

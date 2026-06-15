@@ -1,0 +1,32 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "wN2Ip1G8RXMWBgz2Ldk-c"
+uri = "file://artifacts/benedictus/public/hero-cloister.png"
+type = "image"
+title = "monastic cloister dark atmospheric"
+
+[[generated]]
+id = "OecabfmZYvDtzmOviFH1-"
+uri = "file://artifacts/benedictus/public/monk-manuscript.png"
+type = "image"
+title = "monk writing manuscript candle"
+
+[[generated]]
+id = "3P9c3iO7_DsjJ8nbjWXHo"
+uri = "file://artifacts/benedictus/public/ancient-library.png"
+type = "image"
+title = "ancient library books dark"
+
+[[generated]]
+id = "nl83D_lMCYavaIWB0Ecra"
+uri = "file://artifacts/benedictus/public/stone-corridor.png"
+type = "image"
+title = "stone corridor sunlight beams"
+
+[[generated]]
+id = "yQ8G_1tHsvZdPciRcBREa"
+uri = "file://artifacts/benedictus/public/rule-book.png"
+type = "image"
+title = "monastic rule book detail"

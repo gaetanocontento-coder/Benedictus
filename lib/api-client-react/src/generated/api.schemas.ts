@@ -369,6 +369,208 @@ export interface Insights {
   campioniDaFollowUp: CampioneFollowUp[];
 }
 
+export type BAuthUserTier = typeof BAuthUserTier[keyof typeof BAuthUserTier];
+
+
+export const BAuthUserTier = {
+  pellegrino: 'pellegrino',
+  monaco: 'monaco',
+  abbas: 'abbas',
+} as const;
+
+export interface BAuthUser {
+  id: number;
+  email: string;
+  name: string;
+  tier: BAuthUserTier;
+  /** @nullable */
+  stripeCustomerId?: string | null;
+  /** @nullable */
+  stripeSubscriptionId?: string | null;
+  createdAt: string;
+}
+
+export interface BRegisterInput {
+  email: string;
+  name: string;
+  password: string;
+}
+
+export interface BLoginInput {
+  email: string;
+  password: string;
+}
+
+export interface BNewsletterInput {
+  email: string;
+  name: string;
+  whyHere?: string;
+}
+
+export interface BNewsletterSubscriber {
+  id: number;
+  email: string;
+  name: string;
+  /** @nullable */
+  whyHere?: string | null;
+  createdAt: string;
+}
+
+export type BLectioCategory = typeof BLectioCategory[keyof typeof BLectioCategory];
+
+
+export const BLectioCategory = {
+  ascolto: 'ascolto',
+  comunita: 'comunita',
+  ritmo: 'ritmo',
+  umilta: 'umilta',
+  custodia: 'custodia',
+} as const;
+
+export type BLectioRequiredTier = typeof BLectioRequiredTier[keyof typeof BLectioRequiredTier];
+
+
+export const BLectioRequiredTier = {
+  pellegrino: 'pellegrino',
+  monaco: 'monaco',
+  abbas: 'abbas',
+} as const;
+
+export interface BLectio {
+  id: number;
+  title: string;
+  excerpt: string;
+  /** @nullable */
+  body?: string | null;
+  category: BLectioCategory;
+  publishedAt: string;
+  requiredTier: BLectioRequiredTier;
+  readingMinutes: number;
+}
+
+export interface BLectioInput {
+  title: string;
+  excerpt: string;
+  body: string;
+  category: string;
+  requiredTier: string;
+  readingMinutes: number;
+}
+
+export interface BLectioUpdate {
+  title?: string;
+  excerpt?: string;
+  body?: string;
+  category?: string;
+  requiredTier?: string;
+  readingMinutes?: number;
+}
+
+export interface BEpisode {
+  id: number;
+  title: string;
+  description: string;
+  embedUrl: string;
+  publishedAt: string;
+  durationMinutes: number;
+}
+
+export interface BEpisodeInput {
+  title: string;
+  description: string;
+  embedUrl: string;
+  durationMinutes: number;
+}
+
+export interface BWorkshop {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  maxParticipants: number;
+  currentParticipants: number;
+  isRegistered?: boolean;
+}
+
+export interface BTestimonial {
+  id: number;
+  quote: string;
+  authorName: string;
+  authorRole: string;
+  /** @nullable */
+  photo?: string | null;
+}
+
+export interface BTestimonialInput {
+  quote: string;
+  authorName: string;
+  authorRole: string;
+  photo?: string;
+}
+
+export interface BGraduate {
+  id: number;
+  name: string;
+  votoDate: string;
+  /** @nullable */
+  message?: string | null;
+}
+
+export type BPlanTier = typeof BPlanTier[keyof typeof BPlanTier];
+
+
+export const BPlanTier = {
+  pellegrino: 'pellegrino',
+  monaco: 'monaco',
+  abbas: 'abbas',
+} as const;
+
+export interface BPlan {
+  id: string;
+  name: string;
+  tier: BPlanTier;
+  description: string;
+  features: string[];
+  /** @nullable */
+  monthlyPriceId?: string | null;
+  /** @nullable */
+  annualPriceId?: string | null;
+  /** @nullable */
+  monthlyPrice?: number | null;
+  /** @nullable */
+  annualPrice?: number | null;
+}
+
+export interface BCheckoutInput {
+  priceId: string;
+}
+
+export type BSubscriptionTier = typeof BSubscriptionTier[keyof typeof BSubscriptionTier];
+
+
+export const BSubscriptionTier = {
+  pellegrino: 'pellegrino',
+  monaco: 'monaco',
+  abbas: 'abbas',
+} as const;
+
+export interface BSubscription {
+  tier: BSubscriptionTier;
+  status: string;
+  /** @nullable */
+  currentPeriodEnd?: string | null;
+  cancelAtPeriodEnd?: boolean;
+}
+
+export interface BCommunityStats {
+  subscribers: number;
+  monaciMembers: number;
+  abbatiMembers: number;
+  lectioCount: number;
+  episodeCount: number;
+}
+
 export type ListLeadsParams = {
 stato?: string;
 fonte?: string;
@@ -383,5 +585,31 @@ disponibile?: boolean;
 
 export type ListCampioniParams = {
 stato?: string;
+};
+
+export type BLogout200 = {
+  success: boolean;
+};
+
+export type BSubscribeNewsletter201 = {
+  success: boolean;
+};
+
+export type BListLectioParams = {
+category?: string;
+page?: number;
+limit?: number;
+};
+
+export type BRegisterWorkshop200 = {
+  success: boolean;
+};
+
+export type BCreateCheckout200 = {
+  url: string;
+};
+
+export type BCreatePortal200 = {
+  url: string;
 };
 

@@ -1,0 +1,1 @@
+- [Benedictus Architecture](benedictus-architecture.md) — route prefix /b/, JWT auth, DB namespace b_, Stripe webhook order, tier access control

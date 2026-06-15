@@ -69,7 +69,7 @@ export default function Dashboard() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-white tracking-tight">Command Center</h1>
-          <p className="text-slate-400 text-sm mt-1">Panoramica commerciale e performance di marketing.</p>
+          <p className="text-slate-200 text-sm mt-1">Panoramica commerciale e performance di marketing.</p>
         </div>
         <div className="flex items-center gap-3">
           <select className="bg-slate-900 border border-slate-800 text-sm rounded-md px-3 py-1.5 text-slate-300 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer">
@@ -94,7 +94,7 @@ export default function Dashboard() {
               className="bg-slate-900 border border-slate-800 rounded-lg p-5 flex flex-col justify-between hover:border-slate-700 transition-colors group"
             >
               <div className="flex items-center justify-between mb-4">
-                <span className="text-slate-400 text-sm font-medium">{kpi.label}</span>
+                <span className="text-slate-200 text-sm font-medium">{kpi.label}</span>
                 <Icon size={18} className={`${kpi.color} opacity-70 group-hover:opacity-100 transition-opacity`} />
               </div>
               {statsLoading ? (
@@ -117,7 +117,7 @@ export default function Dashboard() {
         <div className="bg-slate-900 border border-slate-800 rounded-lg p-6">
           <div className="mb-6">
             <h2 className="text-lg font-medium text-white">Trend Acquisizione</h2>
-            <p className="text-xs text-slate-400">Lead generati vs Preventivi inviati nell'ultimo anno</p>
+            <p className="text-xs text-slate-300">Lead generati vs Preventivi inviati nell'ultimo anno</p>
           </div>
           <div className="h-[350px] w-full">
             {andamentoLoading ? (
@@ -143,7 +143,7 @@ export default function Dashboard() {
           <div className="mb-6 flex justify-between items-start">
             <div>
               <h2 className="text-lg font-medium text-white">Crescita Clienti Attivi</h2>
-              <p className="text-xs text-slate-400">Andamento cumulativo base clienti</p>
+              <p className="text-xs text-slate-300">Andamento cumulativo base clienti</p>
             </div>
             {stats && (
               <div className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-medium rounded-full border border-emerald-500/20">

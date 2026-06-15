@@ -86,7 +86,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 flex flex-col">
+    <div className="dark min-h-screen bg-slate-950 text-slate-200 flex flex-col">
       {/* Top Navigation */}
       <header className="h-16 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between px-6 shrink-0">
         {/* Left: logo + nav */}
@@ -105,7 +105,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Link
                   key={item.url}
                   href={item.url}
-                  className={`transition-colors ${active ? "text-amber-500" : "text-slate-400 hover:text-slate-200"}`}
+                  className={`transition-colors ${active ? "text-amber-500" : "text-slate-200 hover:text-white"}`}
                 >
                   {item.title}
                 </Link>
@@ -115,13 +115,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Right: actions + user */}
-        <div className="flex items-center gap-4 text-slate-400">
+        <div className="flex items-center gap-4 text-slate-200">
           {/* Public page shortcuts */}
           <div className="hidden md:flex items-center gap-3 pr-4 border-r border-slate-800 text-sm font-medium">
-            <Link href="/shop" className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
+            <Link href="/shop" className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors">
               <Store size={14} /> Catalogo
             </Link>
-            <Link href="/configuratore" className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
+            <Link href="/configuratore" className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors">
               <Wand2 size={14} /> Configuratore
             </Link>
           </div>
@@ -143,7 +143,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-xs font-medium text-white">{user.nome}</span>
-              <span className="text-[10px] text-slate-500 capitalize">{user.ruolo}</span>
+              <span className="text-[10px] text-slate-300 capitalize">{user.ruolo}</span>
             </div>
             <button
               onClick={handleLogout}

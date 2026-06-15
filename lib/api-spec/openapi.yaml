@@ -48,6 +48,8 @@ tags:
     description: Community statistics
   - name: b-admin
     description: Admin panel operations
+  - name: b-percorso
+    description: Percorso del Custode — module progress tracking
 
 paths:
   /healthz:
@@ -1059,6 +1061,77 @@ paths:
         "204":
           description: Deleted
 
+  /b/percorso/progress:
+    get:
+      operationId: bGetPercorsoProgress
+      tags: [b-percorso]
+      summary: Get user's module progress for all 6 modules
+      responses:
+        "200":
+          description: Array of module progress records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BModuleProgress"
+        "401":
+          description: Unauthorized
+
+  /b/percorso/modules/{id}/inizia:
+    post:
+      operationId: bStartModule
+      tags: [b-percorso]
+      summary: Mark a module as started
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 6
+      responses:
+        "200":
+          description: Module started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required: [success]
+        "401":
+          description: Unauthorized
+
+  /b/percorso/modules/{id}/completa:
+    post:
+      operationId: bCompleteModule
+      tags: [b-percorso]
+      summary: Mark a module as completed
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 6
+      responses:
+        "200":
+          description: Module completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required: [success]
+        "401":
+          description: Unauthorized
+
 components:
   schemas:
     HealthStatus:
@@ -1853,3 +1926,16 @@ components:
           type: integer
         episodeCount:
           type: integer
+
+    BModuleProgress:
+      type: object
+      required: [moduleId, startedAt]
+      properties:
+        moduleId:
+          type: integer
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: ["string", "null"]
+          format: date-time

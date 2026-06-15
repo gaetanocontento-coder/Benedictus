@@ -25,6 +25,7 @@ import type {
   BAuthUser,
   BCheckoutInput,
   BCommunityStats,
+  BCompleteModule200,
   BCreateCheckout200,
   BCreatePortal200,
   BEpisode,
@@ -36,11 +37,13 @@ import type {
   BListLectioParams,
   BLoginInput,
   BLogout200,
+  BModuleProgress,
   BNewsletterInput,
   BNewsletterSubscriber,
   BPlan,
   BRegisterInput,
   BRegisterWorkshop200,
+  BStartModule200,
   BSubscribeNewsletter201,
   BSubscription,
   BTestimonial,
@@ -4195,5 +4198,222 @@ export const useBDeleteTestimonial = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getBDeleteTestimonialMutationOptions(options));
+    }
+
+export const getBGetPercorsoProgressUrl = () => {
+
+
+
+
+  return `/api/b/percorso/progress`
+}
+
+/**
+ * @summary Get user's module progress for all 6 modules
+ */
+export const bGetPercorsoProgress = async ( options?: RequestInit): Promise<BModuleProgress[]> => {
+
+  return customFetch<BModuleProgress[]>(getBGetPercorsoProgressUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetPercorsoProgressQueryKey = () => {
+    return [
+    `/api/b/percorso/progress`
+    ] as const;
+    }
+
+
+export const getBGetPercorsoProgressQueryOptions = <TData = Awaited<ReturnType<typeof bGetPercorsoProgress>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetPercorsoProgress>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetPercorsoProgressQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetPercorsoProgress>>> = ({ signal }) => bGetPercorsoProgress({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetPercorsoProgress>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetPercorsoProgressQueryResult = NonNullable<Awaited<ReturnType<typeof bGetPercorsoProgress>>>
+export type BGetPercorsoProgressQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get user's module progress for all 6 modules
+ */
+
+export function useBGetPercorsoProgress<TData = Awaited<ReturnType<typeof bGetPercorsoProgress>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetPercorsoProgress>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetPercorsoProgressQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBStartModuleUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/percorso/modules/${id}/inizia`
+}
+
+/**
+ * @summary Mark a module as started
+ */
+export const bStartModule = async (id: number, options?: RequestInit): Promise<BStartModule200> => {
+
+  return customFetch<BStartModule200>(getBStartModuleUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getBStartModuleMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bStartModule>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bStartModule>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['bStartModule'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bStartModule>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  bStartModule(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BStartModuleMutationResult = NonNullable<Awaited<ReturnType<typeof bStartModule>>>
+
+    export type BStartModuleMutationError = ErrorType<void>
+
+    /**
+ * @summary Mark a module as started
+ */
+export const useBStartModule = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bStartModule>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bStartModule>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getBStartModuleMutationOptions(options));
+    }
+
+export const getBCompleteModuleUrl = (id: number,) => {
+
+
+
+
+  return `/api/b/percorso/modules/${id}/completa`
+}
+
+/**
+ * @summary Mark a module as completed
+ */
+export const bCompleteModule = async (id: number, options?: RequestInit): Promise<BCompleteModule200> => {
+
+  return customFetch<BCompleteModule200>(getBCompleteModuleUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getBCompleteModuleMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCompleteModule>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bCompleteModule>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['bCompleteModule'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bCompleteModule>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  bCompleteModule(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BCompleteModuleMutationResult = NonNullable<Awaited<ReturnType<typeof bCompleteModule>>>
+
+    export type BCompleteModuleMutationError = ErrorType<void>
+
+    /**
+ * @summary Mark a module as completed
+ */
+export const useBCompleteModule = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bCompleteModule>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bCompleteModule>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getBCompleteModuleMutationOptions(options));
     }
 

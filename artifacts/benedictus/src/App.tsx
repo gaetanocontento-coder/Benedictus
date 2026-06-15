@@ -13,6 +13,7 @@ import IlManifesto from "@/pages/il-manifesto";
 import LectioIndex from "@/pages/lectio/index";
 import LectioDetail from "@/pages/lectio/detail";
 import Percorso from "@/pages/percorso";
+import ModuloDetail from "@/pages/percorso/modulo";
 import Piani from "@/pages/piani";
 import Abbas from "@/pages/abbas";
 import Officina from "@/pages/officina";
@@ -38,6 +39,7 @@ function Router() {
         <Route path="/lectio" component={LectioIndex} />
         <Route path="/lectio/:id" component={LectioDetail} />
         <Route path="/percorso" component={Percorso} />
+        <Route path="/percorso/:id" component={ModuloDetail} />
         <Route path="/piani" component={Piani} />
         <Route path="/abbas" component={Abbas} />
         <Route path="/officina" component={Officina} />

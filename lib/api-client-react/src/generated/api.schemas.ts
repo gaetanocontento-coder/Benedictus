@@ -571,6 +571,13 @@ export interface BCommunityStats {
   episodeCount: number;
 }
 
+export interface BModuleProgress {
+  moduleId: number;
+  startedAt: string;
+  /** @nullable */
+  completedAt?: string | null;
+}
+
 export type ListLeadsParams = {
 stato?: string;
 fonte?: string;
@@ -611,5 +618,13 @@ export type BCreateCheckout200 = {
 
 export type BCreatePortal200 = {
   url: string;
+};
+
+export type BStartModule200 = {
+  success: boolean;
+};
+
+export type BCompleteModule200 = {
+  success: boolean;
 };
 

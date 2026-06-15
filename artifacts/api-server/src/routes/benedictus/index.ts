@@ -9,6 +9,7 @@ import plansRouter from "./plans";
 import checkoutRouter from "./checkout";
 import statsRouter from "./stats";
 import adminRouter from "./admin";
+import percorsoRouter from "./percorso";
 
 const router: IRouter = Router();
 
@@ -22,5 +23,6 @@ router.use("/b", plansRouter);
 router.use("/b", checkoutRouter);
 router.use("/b", statsRouter);
 router.use("/b", adminRouter);
+router.use("/b", percorsoRouter);
 
 export default router;

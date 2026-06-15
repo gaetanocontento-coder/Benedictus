@@ -5,6 +5,7 @@ import {
   integer,
   boolean,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
@@ -132,6 +133,20 @@ export const bGraduatesTable = pgTable("b_graduates", {
   message: text("message"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+export const bModuleProgressTable = pgTable(
+  "b_module_progress",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").notNull(),
+    moduleId: integer("module_id").notNull(),
+    startedAt: timestamp("started_at", { withTimezone: true }).notNull().defaultNow(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+  },
+  (table) => [uniqueIndex("b_module_progress_user_module_idx").on(table.userId, table.moduleId)]
+);
+
+export type BModuleProgress = typeof bModuleProgressTable.$inferSelect;
 
 export const insertBGraduateSchema = createInsertSchema(bGraduatesTable).omit({
   id: true,

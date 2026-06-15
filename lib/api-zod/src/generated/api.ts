@@ -953,3 +953,46 @@ export const BDeleteTestimonialParams = zod.object({
 })
 
 
+/**
+ * @summary Get user's module progress for all 6 modules
+ */
+export const BGetPercorsoProgressResponseItem = zod.object({
+  "moduleId": zod.number(),
+  "startedAt": zod.coerce.date(),
+  "completedAt": zod.coerce.date().nullish()
+})
+export const BGetPercorsoProgressResponse = zod.array(BGetPercorsoProgressResponseItem)
+
+
+/**
+ * @summary Mark a module as started
+ */
+export const bStartModulePathIdMax = 6;
+
+
+
+export const BStartModuleParams = zod.object({
+  "id": zod.coerce.number().min(1).max(bStartModulePathIdMax)
+})
+
+export const BStartModuleResponse = zod.object({
+  "success": zod.boolean()
+})
+
+
+/**
+ * @summary Mark a module as completed
+ */
+export const bCompleteModulePathIdMax = 6;
+
+
+
+export const BCompleteModuleParams = zod.object({
+  "id": zod.coerce.number().min(1).max(bCompleteModulePathIdMax)
+})
+
+export const BCompleteModuleResponse = zod.object({
+  "success": zod.boolean()
+})
+
+

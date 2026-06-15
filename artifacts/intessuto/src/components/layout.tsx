@@ -88,30 +88,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 flex flex-col">
       {/* Top Navigation */}
-      <header className="h-14 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between px-4 md:px-6 shrink-0">
+      <header className="h-16 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between px-6 shrink-0">
         {/* Left: logo + nav */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-8">
           <Link href="/dashboard" className="flex items-center gap-2 shrink-0">
-            <div className="w-7 h-7 rounded bg-amber-600 flex items-center justify-center font-bold text-white text-sm shadow shadow-amber-900/40">
+            <div className="w-8 h-8 rounded bg-amber-600 flex items-center justify-center font-bold text-white shadow-lg shadow-amber-600/20">
               I
             </div>
-            <span className="font-semibold text-base tracking-tight text-white hidden sm:block">Intessuto</span>
+            <span className="font-bold text-lg tracking-tight text-white hidden sm:block">Intessuto</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             {navItems.map((item) => {
               const active = location.startsWith(item.url);
               return (
                 <Link
                   key={item.url}
                   href={item.url}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                    active
-                      ? "text-amber-400 bg-amber-500/10"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-                  }`}
+                  className={`transition-colors ${active ? "text-amber-500" : "text-slate-400 hover:text-slate-200"}`}
                 >
-                  <item.icon className="h-3.5 w-3.5 shrink-0" />
                   {item.title}
                 </Link>
               );
@@ -120,37 +115,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Right: actions + user */}
-        <div className="flex items-center gap-1 text-slate-400">
+        <div className="flex items-center gap-4 text-slate-400">
           {/* Public page shortcuts */}
-          <div className="hidden md:flex items-center gap-1 mr-2 pr-3 border-r border-slate-800">
-            <Link
-              href="/shop"
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
-            >
-              <Store size={13} /> Catalogo
+          <div className="hidden md:flex items-center gap-3 pr-4 border-r border-slate-800 text-sm font-medium">
+            <Link href="/shop" className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
+              <Store size={14} /> Catalogo
             </Link>
-            <Link
-              href="/configuratore"
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
-            >
-              <Wand2 size={13} /> Configuratore
+            <Link href="/configuratore" className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
+              <Wand2 size={14} /> Configuratore
             </Link>
           </div>
 
-          <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors">
-            <Search size={16} />
+          <button className="hidden md:flex hover:text-white transition-colors p-2">
+            <Search size={18} />
           </button>
-          <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors relative">
-            <Bell size={16} />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
+          <button className="hidden md:flex hover:text-white transition-colors p-2 relative">
+            <Bell size={18} />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full"></span>
           </button>
-          <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors">
-            <Settings size={16} />
+          <button className="hidden md:flex hover:text-white transition-colors p-2">
+            <Settings size={18} />
           </button>
 
-          <div className="hidden md:flex items-center gap-2.5 ml-2 pl-3 border-l border-slate-800">
-            <div className="h-7 w-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center">
-              <UserCircle className="h-4 w-4 text-slate-400" />
+          <div className="hidden md:flex items-center gap-2 ml-1 pl-3 border-l border-slate-800">
+            <div className="h-8 w-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center">
+              <UserCircle className="h-5 w-5 text-slate-400" />
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-xs font-medium text-white">{user.nome}</span>
@@ -158,19 +147,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center justify-center w-7 h-7 rounded-md hover:text-rose-400 hover:bg-rose-500/10 transition-colors ml-1"
+              className="hover:text-rose-400 transition-colors p-2 ml-1"
               title="Logout"
             >
-              <LogOut size={14} />
+              <LogOut size={16} />
             </button>
           </div>
 
           {/* Mobile menu toggle */}
           <button
-            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md hover:text-white hover:bg-slate-800 transition-colors ml-1"
+            className="md:hidden hover:text-white transition-colors p-2"
             onClick={() => setMobileOpen((v) => !v)}
           >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </header>

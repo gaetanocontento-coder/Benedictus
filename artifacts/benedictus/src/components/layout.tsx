@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
@@ -44,6 +45,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 flex flex-col">
         {children}
       </main>
+
+      <AudioPlayer />
 
       <footer className="bg-card border-t border-border py-16 text-center">
         <div className="container mx-auto px-6">

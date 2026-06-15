@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -102,4 +102,45 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-normal tracking-tight;
   }
+
+  /* Global grain texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+    opacity: 0.032;
+    pointer-events: none;
+    z-index: 9998;
+    mix-blend-mode: overlay;
+  }
+}
+
+/* Audio waveform bar animation */
+@keyframes barDance {
+  0%   { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+/* Candlelight text glow for primary elements */
+@keyframes candleGlow {
+  0%, 100% { text-shadow: 0 0 12px rgba(245, 230, 200, 0.15); }
+  50%       { text-shadow: 0 0 22px rgba(245, 230, 200, 0.25), 0 0 4px rgba(245, 230, 200, 0.1); }
+}
+
+/* Gentle flicker on lit elements */
+@keyframes flicker {
+  0%, 89%, 91%, 93%, 100% { opacity: 1; }
+  90%                      { opacity: 0.92; }
+  92%                      { opacity: 0.96; }
+}
+
+/* Vellum / parchment section tint */
+.vellum {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='parchment'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch' result='noise'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0 0.02  0 0 0 0.04 0' in='noise'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23parchment)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
 }

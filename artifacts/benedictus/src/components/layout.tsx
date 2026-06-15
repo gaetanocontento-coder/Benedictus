@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { AudioPlayer } from "@/components/AudioPlayer";
+import { LiturgiaOre } from "@/components/LiturgiaOre";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
@@ -46,6 +47,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
+      <LiturgiaOre />
       <AudioPlayer />
 
       <footer className="bg-card border-t border-border py-16 text-center">

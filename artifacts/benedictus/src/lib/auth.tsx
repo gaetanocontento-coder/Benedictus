@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import { useQueryClient } from "@tanstack/react-query";
 import { setAuthTokenGetter, useBGetMe } from "@workspace/api-client-react";
 import type { BAuthUser } from "@workspace/api-client-react";
 
@@ -18,6 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.getItem("benedictus_token")
   );
   const [, setLocation] = useLocation();
+  const queryClient = useQueryClient();
 
   const setToken = (newToken: string | null) => {
     if (newToken) {
@@ -53,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     setToken(null);
+    queryClient.clear();
     setLocation("/");
   };
 

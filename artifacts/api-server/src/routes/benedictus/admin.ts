@@ -5,6 +5,7 @@ import {
   bLectioTable,
   bEpisodesTable,
   bTestimonialsTable,
+  bUsersTable,
 } from "@workspace/db";
 import {
   BCreateLectioBody,
@@ -172,6 +173,57 @@ router.delete("/admin/testimonials/:id", async (req: Request, res: Response): Pr
     .delete(bTestimonialsTable)
     .where(eq(bTestimonialsTable.id, params.data.id));
   res.sendStatus(204);
+});
+
+// User management (admin)
+router.get("/admin/users", async (req: Request, res: Response): Promise<void> => {
+  if (!(await requireAdmin(req, res))) return;
+  const users = await db
+    .select({
+      id: bUsersTable.id,
+      email: bUsersTable.email,
+      name: bUsersTable.name,
+      tier: bUsersTable.tier,
+      isAdmin: bUsersTable.isAdmin,
+      createdAt: bUsersTable.createdAt,
+    })
+    .from(bUsersTable)
+    .orderBy(desc(bUsersTable.createdAt));
+  res.json(
+    users.map((u) => ({
+      id: u.id,
+      email: u.email,
+      name: u.name,
+      tier: u.tier,
+      isAdmin: u.isAdmin,
+      createdAt: u.createdAt.toISOString(),
+    }))
+  );
+});
+
+router.patch("/admin/users/:id/tier", async (req: Request, res: Response): Promise<void> => {
+  if (!(await requireAdmin(req, res))) return;
+  const raw = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  const id = parseInt(raw, 10);
+  if (isNaN(id)) {
+    res.status(400).json({ error: "ID non valido" });
+    return;
+  }
+  const { tier } = req.body as { tier?: string };
+  if (!tier || !["pellegrino", "monaco", "abbas"].includes(tier)) {
+    res.status(400).json({ error: "Tier non valido. Valori: pellegrino, monaco, abbas" });
+    return;
+  }
+  const [updated] = await db
+    .update(bUsersTable)
+    .set({ tier: tier as "pellegrino" | "monaco" | "abbas" })
+    .where(eq(bUsersTable.id, id))
+    .returning({ id: bUsersTable.id, email: bUsersTable.email, tier: bUsersTable.tier });
+  if (!updated) {
+    res.status(404).json({ error: "Utente non trovato" });
+    return;
+  }
+  res.json(updated);
 });
 
 export default router;

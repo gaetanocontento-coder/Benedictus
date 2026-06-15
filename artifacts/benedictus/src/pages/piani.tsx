@@ -48,6 +48,7 @@ const FAQ = [
 export default function Piani() {
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [stripeNotice, setStripeNotice] = useState<string | null>(null);
   const [, navigate] = useLocation();
   const { user } = useAuth();
 
@@ -108,7 +109,8 @@ export default function Piani() {
     const priceId =
       billing === "annual" ? plan.annualPriceId : plan.monthlyPriceId;
     if (!priceId) {
-      navigate("/contatti");
+      setStripeNotice(plan.name);
+      setTimeout(() => setStripeNotice(null), 5000);
       return;
     }
     createCheckout({ data: { priceId } });
@@ -205,6 +207,20 @@ export default function Piani() {
           </div>
         </div>
       </section>
+
+      {stripeNotice && (
+        <section className="bg-amber-900/20 border-b border-amber-700/30 py-4 animate-in fade-in">
+          <div className="container mx-auto px-6 max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-amber-200/80 font-light">
+              Il piano <span className="font-medium text-amber-200">{stripeNotice}</span> sarà disponibile a breve. Stripe non è ancora configurato in questo ambiente.
+              Per testare la piattaforma, l'amministratore può assegnarti manualmente il tier dal{" "}
+              <Link href="/admin" className="underline hover:text-amber-100">
+                Sanctuarium
+              </Link>.
+            </p>
+          </div>
+        </section>
+      )}
 
       {hasActivePaidSub && sub && (
         <section className="bg-primary/5 border-b border-primary/20 py-4">

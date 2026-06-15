@@ -24,6 +24,7 @@ import Registrazione from "@/pages/registrazione";
 import AdminDashboard from "@/pages/admin/index";
 import CheckoutSuccess from "@/pages/checkout/success";
 import CheckoutCancel from "@/pages/checkout/cancel";
+import Scriptorium from "@/pages/scriptorium";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ function Router() {
         <Route path="/login" component={Login} />
         <Route path="/registrazione" component={Registrazione} />
         <Route path="/admin" component={AdminDashboard} />
+        <Route path="/scriptorium" component={Scriptorium} />
         <Route path="/checkout/success" component={CheckoutSuccess} />
         <Route path="/checkout/cancel" component={CheckoutCancel} />
         <Route component={NotFound} />

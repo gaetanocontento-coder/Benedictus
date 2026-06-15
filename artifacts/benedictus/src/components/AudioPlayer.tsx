@@ -30,34 +30,34 @@ declare global {
 
 const PLAYLIST = [
   {
-    id: "k4L-HoDCXZc",
-    title: "Antifone dell'Ufficio",
-    info: "Coro Benedettino · Solesmes",
+    id: "HFZImNz4BrE",
+    title: "Credo",
+    info: "Monaci Benedettini · 1 ora",
   },
   {
-    id: "wHHJhBuwqU8",
-    title: "Kyrie Eleison",
-    info: "Messa VIII · Canto Romano",
+    id: "qi3eMo88oT4",
+    title: "Sanctus",
+    info: "Monaci Benedettini · 1 ora",
   },
   {
-    id: "XlyLXJF6oB4",
-    title: "Salve Regina",
-    info: "Antifona Mariana · Coro Monastico",
+    id: "Cd0DniJLwDw",
+    title: "Canti dal Monastero",
+    info: "Canti Cattolici per la Preghiera · 1 ora",
   },
   {
-    id: "qZ6PMX2a4rY",
-    title: "Te Deum Laudamus",
-    info: "Inno del Mattutino · Schola Gregoriana",
+    id: "Ed90FUyE4rM",
+    title: "Messa in Canto Gregoriano",
+    info: "Sacra Musica Corale · 1 ora",
   },
   {
-    id: "y-VPqjXO9mw",
-    title: "Ora et Labora",
-    info: "Canti delle Ore · Abbazia di Montecassino",
+    id: "eGw5O62N2dE",
+    title: "Antologia Gregoriana",
+    info: "Coro Monastico Latino · 2 ore",
   },
   {
-    id: "GN6J0Zu5Z1Y",
-    title: "Veni Creator Spiritus",
-    info: "Inno Vespertino · Schola Cantorum",
+    id: "D_jRfYPWNT0",
+    title: "Alleluia di Pasqua",
+    info: "Canti di Pasqua e Risurrezione · 90 min",
   },
 ];
 

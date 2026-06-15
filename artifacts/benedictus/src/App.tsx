@@ -25,6 +25,8 @@ import AdminDashboard from "@/pages/admin/index";
 import CheckoutSuccess from "@/pages/checkout/success";
 import CheckoutCancel from "@/pages/checkout/cancel";
 import Scriptorium from "@/pages/scriptorium";
+import PasswordDimenticata from "@/pages/password-dimenticata";
+import ReimpostaPassword from "@/pages/reimposta-password";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +52,8 @@ function Router() {
         <Route path="/registrazione" component={Registrazione} />
         <Route path="/admin" component={AdminDashboard} />
         <Route path="/scriptorium" component={Scriptorium} />
+        <Route path="/password-dimenticata" component={PasswordDimenticata} />
+        <Route path="/reimposta-password" component={ReimpostaPassword} />
         <Route path="/checkout/success" component={CheckoutSuccess} />
         <Route path="/checkout/cancel" component={CheckoutCancel} />
         <Route component={NotFound} />

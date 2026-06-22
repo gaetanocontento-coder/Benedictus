@@ -8,6 +8,7 @@ import {
   suonaCampanaOrologio,
   suonaMezzoOra,
   isOraCanonica,
+  warmUpAudio,
   type OraCanonica,
 } from "@/lib/liturgia";
 
@@ -259,6 +260,7 @@ export function LiturgiaOre() {
   const lastHalfKey = useRef<number>(-1);
 
   const toggleMute = useCallback(() => {
+    warmUpAudio(); // user gesture — keep AudioContext alive
     const next = !muteRef.current;
     setMutato(next);
     muteRef.current = next;
@@ -293,44 +295,56 @@ export function LiturgiaOre() {
     lastOraId.current = getOraCorrente().ora.id;
   }, []);
 
-  // ── Clock bells — 1-second precision timer
+  // ── Clock bells ───────────────────────────────────────────────────────────
+  // We poll every 2 seconds. Instead of gating on seconds (too brittle when
+  // the tab is backgrounded and the browser throttles timers), we track a
+  // per-slot key and fire as soon as we enter the slot window, regardless of
+  // how many seconds past the boundary we are. Each :00 and :30 slot gets one
+  // unique key so the bell fires exactly once per slot even if the interval
+  // fires late or multiple times.
+  //
+  // Slot encoding:
+  //   :00 slot → h * 2        (0..47 across 24 h)
+  //   :30 slot → h * 2 + 1
   useEffect(() => {
     const checkClock = () => {
       if (muteRef.current) return;
 
-      const now = new Date();
-      const h = now.getHours();
-      const m = now.getMinutes();
-      const s = now.getSeconds();
+      const now  = new Date();
+      const h    = now.getHours();
+      const m    = now.getMinutes();
 
-      // Only fire within the first 4 seconds of the minute to avoid drift issues
-      if (s > 4) return;
-
-      // Hourly bell at :00 — skip if a canonical hour starts here (canonical handles it)
+      // ── Hourly slot (:00 of each hour) ───────────────────────────────────
       if (m === 0) {
-        const key = h;
-        if (key !== lastHourKey.current && !isOraCanonica(h, 0)) {
-          lastHourKey.current = key;
+        const slot = h * 2;
+        if (slot !== lastHourKey.current && !isOraCanonica(h, 0)) {
+          lastHourKey.current = slot;
           suonaCampanaOrologio(h, 0.28);
         }
       }
 
-      // Half-hour bell at :30 — skip if a canonical hour starts here
+      // ── Half-hour slot (:30 of each hour) ────────────────────────────────
       if (m === 30) {
-        const key = h * 100 + 30;
-        if (key !== lastHalfKey.current && !isOraCanonica(h, 30)) {
-          lastHalfKey.current = key;
+        const slot = h * 2 + 1;
+        if (slot !== lastHalfKey.current && !isOraCanonica(h, 30)) {
+          lastHalfKey.current = slot;
           suonaMezzoOra(0.22);
         }
       }
     };
 
-    const iv = setInterval(checkClock, 1_000);
+    // 2-second interval is frequent enough for reliable detection even in
+    // background tabs (browsers throttle to ~1 s minimum, not skipping entire
+    // minutes), yet light enough not to affect performance.
+    const iv = setInterval(checkClock, 2_000);
     return () => clearInterval(iv);
   }, []);
 
   // ── Widget open/close
+  // warmUpAudio() is called on every user click so the shared AudioContext
+  // is always in "running" state before the next programmatic bell fires.
   const handleBellClick = useCallback(() => {
+    warmUpAudio();
     if (open) {
       setOpen(false);
     } else {

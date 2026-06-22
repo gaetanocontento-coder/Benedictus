@@ -207,37 +207,72 @@ export function formatMinuti(min: number): string {
   return `${min}m`;
 }
 
+// ── Shared AudioContext singleton ─────────────────────────────────────────────
+// Creating a new AudioContext on every bell call risks browser blocking
+// (browsers require a user gesture to start audio). We keep one shared context,
+// recreate it if closed, and resume it before every play operation.
+
+let _audioCtx: AudioContext | null = null;
+
+function getCtx(): AudioContext {
+  if (!_audioCtx || _audioCtx.state === "closed") {
+    _audioCtx = new AudioContext();
+  }
+  return _audioCtx;
+}
+
+/**
+ * Warm up the shared AudioContext — call this inside a user-gesture handler
+ * (e.g. a click) so the context is in "running" state before programmatic
+ * bell triggers fire (which have no gesture and cannot resume on their own).
+ */
+export function warmUpAudio(): void {
+  try {
+    const ctx = getCtx();
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+  } catch {
+    // Not supported
+  }
+}
+
+function playPartials(
+  ctx: AudioContext,
+  baseFreq: number,
+  partials: number[],
+  partialGains: number[],
+  startTime: number,
+  volume: number,
+  decay: number
+): void {
+  partials.forEach((ratio, j) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = "sine";
+    osc.frequency.value = baseFreq * ratio;
+    const peak = volume * partialGains[j];
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(peak, startTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + decay);
+    osc.start(startTime);
+    osc.stop(startTime + decay + 0.1);
+  });
+}
+
 /** Synthesise a bell strike using Web Audio API — rich monastery bell tone (D4) */
 export function suonaCampana(volte: number = 1, volume = 0.4): void {
   try {
-    const ctx = new AudioContext();
-    const partials = [1, 2.756, 3.5, 5.5, 7.0];
-    const partialGains = [1.0, 0.4, 0.3, 0.15, 0.08];
-    const baseFreq = 293.7; // D4 — deep monastery bell
-
-    for (let colpo = 0; colpo < volte; colpo++) {
-      const startTime = ctx.currentTime + colpo * 1.6;
-
-      partials.forEach((ratio, j) => {
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
-
-        osc.type = "sine";
-        osc.frequency.value = baseFreq * ratio;
-
-        const peak = volume * partialGains[j];
-        gainNode.gain.setValueAtTime(0, startTime);
-        gainNode.gain.linearRampToValueAtTime(peak, startTime + 0.01);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 5);
-
-        osc.start(startTime);
-        osc.stop(startTime + 5.1);
-      });
+    const ctx = getCtx();
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const partials      = [1, 2.756, 3.5, 5.5, 7.0];
+    const partialGains  = [1.0, 0.4, 0.3, 0.15, 0.08];
+    const baseFreq      = 293.7; // D4 — deep monastery bell
+    for (let i = 0; i < volte; i++) {
+      playPartials(ctx, baseFreq, partials, partialGains, ctx.currentTime + i * 1.6, volume, 5);
     }
   } catch {
-    // AudioContext not supported or blocked
+    // AudioContext not supported
   }
 }
 
@@ -248,35 +283,17 @@ export function suonaCampana(volte: number = 1, volume = 0.4): void {
  */
 export function suonaCampanaOrologio(ora: number, volume = 0.3): void {
   try {
-    const colpi = ora % 12 || 12; // 0 h → 12, 13 h → 1, etc.
-    const ctx = new AudioContext();
-    const partials = [1, 2.756, 3.5, 5.5];
+    const ctx   = getCtx();
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const colpi        = ora % 12 || 12; // 0 h → 12, 13 h → 1
+    const partials     = [1, 2.756, 3.5, 5.5];
     const partialGains = [1.0, 0.38, 0.25, 0.1];
-    const baseFreq = 329.6; // E4 — slightly brighter than D4
-
-    for (let colpo = 0; colpo < colpi; colpo++) {
-      const startTime = ctx.currentTime + colpo * 1.5;
-
-      partials.forEach((ratio, j) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.type = "sine";
-        osc.frequency.value = baseFreq * ratio;
-
-        const peak = volume * partialGains[j];
-        gain.gain.setValueAtTime(0, startTime);
-        gain.gain.linearRampToValueAtTime(peak, startTime + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 4);
-
-        osc.start(startTime);
-        osc.stop(startTime + 4.1);
-      });
+    const baseFreq     = 329.6; // E4 — brighter than D4
+    for (let i = 0; i < colpi; i++) {
+      playPartials(ctx, baseFreq, partials, partialGains, ctx.currentTime + i * 1.5, volume, 4);
     }
   } catch {
-    // AudioContext not supported or blocked
+    // AudioContext not supported
   }
 }
 
@@ -286,31 +303,13 @@ export function suonaCampanaOrologio(ora: number, volume = 0.3): void {
  */
 export function suonaMezzoOra(volume = 0.22): void {
   try {
-    const ctx = new AudioContext();
-    const partials = [1, 2.756, 3.5];
+    const ctx = getCtx();
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const partials     = [1, 2.756, 3.5];
     const partialGains = [1.0, 0.32, 0.18];
-    const baseFreq = 392.0; // G4 — lighter, shorter
-
-    const startTime = ctx.currentTime;
-    partials.forEach((ratio, j) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.type = "sine";
-      osc.frequency.value = baseFreq * ratio;
-
-      const peak = volume * partialGains[j];
-      gain.gain.setValueAtTime(0, startTime);
-      gain.gain.linearRampToValueAtTime(peak, startTime + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 2.8);
-
-      osc.start(startTime);
-      osc.stop(startTime + 2.9);
-    });
+    playPartials(ctx, 392.0, partials, partialGains, ctx.currentTime, volume, 2.8); // G4
   } catch {
-    // AudioContext not supported or blocked
+    // AudioContext not supported
   }
 }
 

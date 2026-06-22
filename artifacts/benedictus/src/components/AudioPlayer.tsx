@@ -39,22 +39,22 @@ interface Track {
 }
 
 const PLAYLIST: Track[] = [
-  { id: "_MOChTLdO9E", titolo: "Monaci di Santo Domingo de Silos",  autore: "Benedettini di Silos",        durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "j1rHt7MylVQ", titolo: "Abbazia di Chiaravalle",            autore: "Canti della Liturgia delle Ore", durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "f-Ei_0nkRlw", titolo: "Canto Gregoriano — Meditazione",   autore: "Schola Gregoriana",           durata: "3 h",    categoria: "Gregoriano"  },
   { id: "VNmxfy_wEYg", titolo: "10 Canti Gregoriani",               autore: "Monaci Benedettini",          durata: "1 h",    categoria: "Gregoriano"  },
   { id: "YMxY21UJR-8", titolo: "Canti Gregoriani del Monastero",    autore: "Monaci del Monastero",        durata: "2 h",    categoria: "Gregoriano"  },
-  { id: "5_pVFhhC-Vc", titolo: "Canti Gregoriani — Abbazia",        autore: "Coro Benedettino",            durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "eXwSZkMiyIg", titolo: "Masters of Chant",                  autore: "Gregorian",                   durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "Iu_QLG_LLvU", titolo: "Vespri Gregoriani",                 autore: "Schola Cantorum",             durata: "1 h",    categoria: "Lodi"        },
-  { id: "vNzsu_-rFe0", titolo: "Salve Regina Gregoriana",           autore: "Coro Monastico",              durata: "30 min", categoria: "Lodi"        },
-  { id: "dD43qthEdec", titolo: "Compieta Monastica",                autore: "Monaci Benedettini",          durata: "40 min", categoria: "Lodi"        },
-  { id: "_NGTsdL2YzE", titolo: "A Feather on the Breath of God",    autore: "Hildegard von Bingen",        durata: "1 h",    categoria: "Meditazione" },
-  { id: "BRfF7W4El60", titolo: "Missa Papae Marcelli",              autore: "Palestrina",                  durata: "50 min", categoria: "Polifonia"   },
+  { id: "68tmj9SPfhI", titolo: "Obscura Liturgia",                  autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "hOMQvuDgbcc", titolo: "Sancta Tenebrae",                   autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
+  { id: "NhrV6H78CCc", titolo: "Dies Irae — Canto Sacro",           autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
+  { id: "6A4A9Xkx6Xo", titolo: "Cantici Monastici",                 autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
+  { id: "_8s6srDYCJQ", titolo: "Meditazione Sacra",                 autore: "Sacred Gregorian Ambient",    durata: "2 h",    categoria: "Meditazione" },
+  { id: "_NGTsdL2YzE", titolo: "A Feather on the Breath of God",    autore: "Hildegard von Bingen",        durata: "1 h",    categoria: "Polifonia"   },
   { id: "iT-ZAAi4UQQ", titolo: "Spem in Alium",                     autore: "Thomas Tallis",               durata: "12 min", categoria: "Polifonia"   },
-  { id: "qzOmPUu-F_M", titolo: "Stabat Mater",                      autore: "Pergolesi",                   durata: "35 min", categoria: "Polifonia"   },
-  { id: "qDHsLs6eOIs", titolo: "Lamentazioni di Geremia",           autore: "Charpentier",                 durata: "1 h",    categoria: "Meditazione" },
   { id: "7YqF69HLkj8", titolo: "Tabula Rasa",                       autore: "Arvo Pärt",                   durata: "55 min", categoria: "Meditazione" },
-  { id: "BDdZZgDJ5Tw", titolo: "Requiem",                           autore: "Tomás Luis de Victoria",      durata: "45 min", categoria: "Polifonia"   },
   { id: "Yq0vmweRfh4", titolo: "Komm, süsser Tod",                  autore: "J. S. Bach",                  durata: "30 min", categoria: "Meditazione" },
+  { id: "BRfF7W4El60", titolo: "Missa Papae Marcelli",              autore: "Palestrina",                  durata: "50 min", categoria: "Polifonia"   },
+  { id: "qzOmPUu-F_M", titolo: "Stabat Mater",                      autore: "Pergolesi",                   durata: "35 min", categoria: "Polifonia"   },
+  { id: "BDdZZgDJ5Tw", titolo: "Requiem",                           autore: "Tomás Luis de Victoria",      durata: "45 min", categoria: "Polifonia"   },
 ];
 
 const CATEGORIA_COLORE: Record<Categoria, string> = {
@@ -80,12 +80,18 @@ export function AudioPlayer() {
   // Ref that always holds the current trackIndex — avoids stale closures
   // inside the YouTube API callbacks which are created only once at mount.
   const trackIndexRef                 = useRef(0);
+  // Counts consecutive errors to break the cascade loop: if every track in
+  // the playlist is unavailable / not embeddable we stop trying automatically.
+  const errorStreakRef                = useRef(0);
 
   // Keep trackIndexRef in sync whenever the state changes
   useEffect(() => { trackIndexRef.current = trackIndex; }, [trackIndex]);
 
-  const goTo = (idx: number) => {
+  // fromUser = true when the user explicitly picks a track (click, skip btn)
+  // so we reset the error streak and give the new track a fresh chance.
+  const goTo = (idx: number, fromUser = false) => {
     const next = ((idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
+    if (fromUser) errorStreakRef.current = 0;
     setTrackIndex(next);
     trackIndexRef.current = next;
     playerRef.current?.loadVideoById(PLAYLIST[next].id);
@@ -107,10 +113,23 @@ export function AudioPlayer() {
           onReady: () => setReady(true),
           onStateChange: (e) => {
             setPlaying(e.data === window.YT.PlayerState.PLAYING);
-            // Use the ref (not the closed-over state) to get the current index
-            if (e.data === window.YT.PlayerState.ENDED) goTo(trackIndexRef.current + 1);
+            if (e.data === window.YT.PlayerState.PLAYING) {
+              // Successful play — reset the error streak counter
+              errorStreakRef.current = 0;
+            }
+            if (e.data === window.YT.PlayerState.ENDED) {
+              errorStreakRef.current = 0;
+              goTo(trackIndexRef.current + 1);
+            }
           },
-          onError: () => goTo(trackIndexRef.current + 1),
+          onError: () => {
+            // Increment streak; skip only if we haven't tried every track yet
+            errorStreakRef.current += 1;
+            if (errorStreakRef.current < PLAYLIST.length) {
+              goTo(trackIndexRef.current + 1);
+            }
+            // else: all tracks failed (all non-embeddable) — stop silently
+          },
         },
       });
     };
@@ -212,7 +231,7 @@ export function AudioPlayer() {
             {/* Controls */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => goTo(trackIndex - 1)}
+                onClick={() => goTo(trackIndex - 1, true)}
                 disabled={!ready}
                 className="w-9 h-9 flex items-center justify-center border border-[#3a2e1a] text-amber-100/50 hover:border-amber-300/30 hover:text-amber-100 transition-colors disabled:opacity-30"
               >
@@ -236,7 +255,7 @@ export function AudioPlayer() {
               </button>
 
               <button
-                onClick={() => goTo(trackIndex + 1)}
+                onClick={() => goTo(trackIndex + 1, true)}
                 disabled={!ready}
                 className="w-9 h-9 flex items-center justify-center border border-[#3a2e1a] text-amber-100/50 hover:border-amber-300/30 hover:text-amber-100 transition-colors disabled:opacity-30"
               >
@@ -256,7 +275,7 @@ export function AudioPlayer() {
                   <button
                     key={t.id}
                     data-idx={i}
-                    onClick={() => goTo(i)}
+                    onClick={() => goTo(i, true)}
                     className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors border-b border-[#251d0e] last:border-0 ${
                       i === trackIndex
                         ? "bg-amber-300/8"

@@ -75,7 +75,7 @@ function Router() {
         <Route path="/liturgia/pratica" component={PraticaSpirituale} />
         <Route path="/video" component={VideoPage} />
         <Route path="/habitare-secum" component={HabitareSecum} />
-        <Route path="/mensa" component={MensaPage} />
+        <Route path="/refettorio" component={MensaPage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

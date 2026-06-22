@@ -195,7 +195,7 @@ export default function MensaPage() {
 
         <div className="relative container mx-auto px-6 max-w-4xl py-20 text-center">
           <p className="text-[9px] uppercase tracking-[0.4em] text-muted-foreground/50 mb-5">
-            Mensa Monastica · Benedictus
+            Refettorio · Benedictus
           </p>
           <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4 leading-tight">
             La Tavola del Custode

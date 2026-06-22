@@ -996,3 +996,129 @@ export const BCompleteModuleResponse = zod.object({
 })
 
 
+/**
+ * @summary Get current user's oblato profile
+ */
+export const BGetOblatoProfiloResponse = zod.object({
+  "grado": zod.number(),
+  "nomeGrado": zod.string().optional(),
+  "xpTotale": zod.number(),
+  "xpAlProssimoGrado": zod.number().optional(),
+  "xpPreghiera": zod.number(),
+  "xpLavoro": zod.number(),
+  "xpSilenzio": zod.number(),
+  "xpUmilta": zod.number(),
+  "xpOspitalita": zod.number(),
+  "xpStabilitas": zod.number(),
+  "streakCorrente": zod.number(),
+  "streakMassimo": zod.number(),
+  "ultimaPratica": zod.string().nullish(),
+  "gradiUmiltaSbloccati": zod.number(),
+  "checkInTotali": zod.number(),
+  "lectioCompletate": zod.number(),
+  "capitoliLetti": zod.number(),
+  "esamiCompletati": zod.number()
+})
+
+
+/**
+ * @summary Check in at current canonical hour
+ */
+export const BOfficiumCheckInBody = zod.object({
+  "oraId": zod.string()
+})
+
+export const BOfficiumCheckInResponse = zod.object({
+  "success": zod.boolean(),
+  "xpGuadagnato": zod.number(),
+  "sigilliNuovi": zod.array(zod.object({
+  "id": zod.number(),
+  "sigilloId": zod.string(),
+  "nome": zod.string(),
+  "descrizione": zod.string(),
+  "icona": zod.string(),
+  "xpValore": zod.number(),
+  "sbloccatoIl": zod.coerce.date()
+})),
+  "streakCorrente": zod.number(),
+  "grado": zod.number(),
+  "gradoNuovo": zod.boolean().optional()
+})
+
+
+/**
+ * @summary Get today's check-ins for current user
+ */
+export const BGetOfficiumOggiResponseItem = zod.object({
+  "id": zod.number(),
+  "oraId": zod.string(),
+  "giorno": zod.string(),
+  "xpGuadagnato": zod.number()
+})
+export const BGetOfficiumOggiResponse = zod.array(BGetOfficiumOggiResponseItem)
+
+
+/**
+ * @summary Get current user's earned sigilli (achievements)
+ */
+export const BGetSigilliResponseItem = zod.object({
+  "id": zod.number(),
+  "sigilloId": zod.string(),
+  "nome": zod.string(),
+  "descrizione": zod.string(),
+  "icona": zod.string(),
+  "xpValore": zod.number(),
+  "sbloccatoIl": zod.coerce.date()
+})
+export const BGetSigilliResponse = zod.array(BGetSigilliResponseItem)
+
+
+/**
+ * @summary Get this week's chapter of the Rule
+ */
+export const BGetCapitoloCorrenteResponse = zod.object({
+  "id": zod.number(),
+  "numero": zod.number(),
+  "titolo": zod.string(),
+  "testo": zod.string(),
+  "domande": zod.array(zod.string()),
+  "settimana": zod.string()
+})
+
+
+/**
+ * @summary Get user's journal entries
+ */
+export const BGetLibroCuoreResponseItem = zod.object({
+  "id": zod.number(),
+  "tipo": zod.string(),
+  "riferimentoId": zod.string().nullish(),
+  "testo": zod.string(),
+  "domanda": zod.string().nullish(),
+  "giorno": zod.string(),
+  "createdAt": zod.coerce.date()
+})
+export const BGetLibroCuoreResponse = zod.array(BGetLibroCuoreResponseItem)
+
+
+/**
+ * @summary Save a journal entry (capitolo reflection or esame di coscienza)
+ */
+export const BSalvaLibroCuoreBody = zod.object({
+  "tipo": zod.string(),
+  "riferimentoId": zod.string().optional(),
+  "testo": zod.string(),
+  "domanda": zod.string().optional(),
+  "giorno": zod.string()
+})
+
+
+/**
+ * @summary Get today's esame di coscienza questions
+ */
+export const BGetEsameDomandeResponse = zod.object({
+  "domande": zod.array(zod.string()),
+  "data": zod.string()
+})
+
+

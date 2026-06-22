@@ -23,6 +23,7 @@ import type {
   AndamentoMensile,
   AuthUser,
   BAuthUser,
+  BCapitolo,
   BCheckoutInput,
   BCommunityStats,
   BCompleteModule200,
@@ -30,19 +31,25 @@ import type {
   BCreatePortal200,
   BEpisode,
   BEpisodeInput,
+  BEsameDomande,
   BGraduate,
   BLectio,
   BLectioInput,
   BLectioUpdate,
+  BLibroCuoreEntry,
+  BLibroCuoreInput,
   BListLectioParams,
   BLoginInput,
   BLogout200,
   BModuleProgress,
   BNewsletterInput,
   BNewsletterSubscriber,
+  BOblatoProfilo,
+  BOfficiumCheckIn,
   BPlan,
   BRegisterInput,
   BRegisterWorkshop200,
+  BSigillo,
   BStartModule200,
   BSubscribeNewsletter201,
   BSubscription,
@@ -67,6 +74,8 @@ import type {
   MaterialeInput,
   MaterialeRichiesto,
   MaterialeUpdate,
+  OfficiumCheckInInput,
+  OfficiumCheckInResult,
   Proposta,
   PropostaInput,
   PropostaUpdate,
@@ -4416,4 +4425,608 @@ export const useBCompleteModule = <TError = ErrorType<void>,
       > => {
       return useMutation(getBCompleteModuleMutationOptions(options));
     }
+
+export const getBGetOblatoProfiloUrl = () => {
+
+
+
+
+  return `/api/b/oblato/profilo`
+}
+
+/**
+ * @summary Get current user's oblato profile
+ */
+export const bGetOblatoProfilo = async ( options?: RequestInit): Promise<BOblatoProfilo> => {
+
+  return customFetch<BOblatoProfilo>(getBGetOblatoProfiloUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetOblatoProfiloQueryKey = () => {
+    return [
+    `/api/b/oblato/profilo`
+    ] as const;
+    }
+
+
+export const getBGetOblatoProfiloQueryOptions = <TData = Awaited<ReturnType<typeof bGetOblatoProfilo>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetOblatoProfilo>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetOblatoProfiloQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetOblatoProfilo>>> = ({ signal }) => bGetOblatoProfilo({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetOblatoProfilo>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetOblatoProfiloQueryResult = NonNullable<Awaited<ReturnType<typeof bGetOblatoProfilo>>>
+export type BGetOblatoProfiloQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get current user's oblato profile
+ */
+
+export function useBGetOblatoProfilo<TData = Awaited<ReturnType<typeof bGetOblatoProfilo>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetOblatoProfilo>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetOblatoProfiloQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBOfficiumCheckInUrl = () => {
+
+
+
+
+  return `/api/b/officium/check-in`
+}
+
+/**
+ * @summary Check in at current canonical hour
+ */
+export const bOfficiumCheckIn = async (officiumCheckInInput: OfficiumCheckInInput, options?: RequestInit): Promise<OfficiumCheckInResult> => {
+
+  return customFetch<OfficiumCheckInResult>(getBOfficiumCheckInUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      officiumCheckInInput,)
+  }
+);}
+
+
+
+
+export const getBOfficiumCheckInMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bOfficiumCheckIn>>, TError,{data: BodyType<OfficiumCheckInInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bOfficiumCheckIn>>, TError,{data: BodyType<OfficiumCheckInInput>}, TContext> => {
+
+const mutationKey = ['bOfficiumCheckIn'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bOfficiumCheckIn>>, {data: BodyType<OfficiumCheckInInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bOfficiumCheckIn(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BOfficiumCheckInMutationResult = NonNullable<Awaited<ReturnType<typeof bOfficiumCheckIn>>>
+    export type BOfficiumCheckInMutationBody = BodyType<OfficiumCheckInInput>
+    export type BOfficiumCheckInMutationError = ErrorType<void>
+
+    /**
+ * @summary Check in at current canonical hour
+ */
+export const useBOfficiumCheckIn = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bOfficiumCheckIn>>, TError,{data: BodyType<OfficiumCheckInInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bOfficiumCheckIn>>,
+        TError,
+        {data: BodyType<OfficiumCheckInInput>},
+        TContext
+      > => {
+      return useMutation(getBOfficiumCheckInMutationOptions(options));
+    }
+
+export const getBGetOfficiumOggiUrl = () => {
+
+
+
+
+  return `/api/b/officium/oggi`
+}
+
+/**
+ * @summary Get today's check-ins for current user
+ */
+export const bGetOfficiumOggi = async ( options?: RequestInit): Promise<BOfficiumCheckIn[]> => {
+
+  return customFetch<BOfficiumCheckIn[]>(getBGetOfficiumOggiUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetOfficiumOggiQueryKey = () => {
+    return [
+    `/api/b/officium/oggi`
+    ] as const;
+    }
+
+
+export const getBGetOfficiumOggiQueryOptions = <TData = Awaited<ReturnType<typeof bGetOfficiumOggi>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetOfficiumOggi>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetOfficiumOggiQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetOfficiumOggi>>> = ({ signal }) => bGetOfficiumOggi({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetOfficiumOggi>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetOfficiumOggiQueryResult = NonNullable<Awaited<ReturnType<typeof bGetOfficiumOggi>>>
+export type BGetOfficiumOggiQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get today's check-ins for current user
+ */
+
+export function useBGetOfficiumOggi<TData = Awaited<ReturnType<typeof bGetOfficiumOggi>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetOfficiumOggi>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetOfficiumOggiQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetSigilliUrl = () => {
+
+
+
+
+  return `/api/b/sigilli`
+}
+
+/**
+ * @summary Get current user's earned sigilli (achievements)
+ */
+export const bGetSigilli = async ( options?: RequestInit): Promise<BSigillo[]> => {
+
+  return customFetch<BSigillo[]>(getBGetSigilliUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetSigilliQueryKey = () => {
+    return [
+    `/api/b/sigilli`
+    ] as const;
+    }
+
+
+export const getBGetSigilliQueryOptions = <TData = Awaited<ReturnType<typeof bGetSigilli>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetSigilli>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetSigilliQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetSigilli>>> = ({ signal }) => bGetSigilli({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetSigilli>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetSigilliQueryResult = NonNullable<Awaited<ReturnType<typeof bGetSigilli>>>
+export type BGetSigilliQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get current user's earned sigilli (achievements)
+ */
+
+export function useBGetSigilli<TData = Awaited<ReturnType<typeof bGetSigilli>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetSigilli>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetSigilliQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetCapitoloCorrenteUrl = () => {
+
+
+
+
+  return `/api/b/capitolo/corrente`
+}
+
+/**
+ * @summary Get this week's chapter of the Rule
+ */
+export const bGetCapitoloCorrente = async ( options?: RequestInit): Promise<BCapitolo> => {
+
+  return customFetch<BCapitolo>(getBGetCapitoloCorrenteUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetCapitoloCorrenteQueryKey = () => {
+    return [
+    `/api/b/capitolo/corrente`
+    ] as const;
+    }
+
+
+export const getBGetCapitoloCorrenteQueryOptions = <TData = Awaited<ReturnType<typeof bGetCapitoloCorrente>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetCapitoloCorrente>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetCapitoloCorrenteQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetCapitoloCorrente>>> = ({ signal }) => bGetCapitoloCorrente({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetCapitoloCorrente>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetCapitoloCorrenteQueryResult = NonNullable<Awaited<ReturnType<typeof bGetCapitoloCorrente>>>
+export type BGetCapitoloCorrenteQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get this week's chapter of the Rule
+ */
+
+export function useBGetCapitoloCorrente<TData = Awaited<ReturnType<typeof bGetCapitoloCorrente>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetCapitoloCorrente>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetCapitoloCorrenteQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetLibroCuoreUrl = () => {
+
+
+
+
+  return `/api/b/libro-cuore`
+}
+
+/**
+ * @summary Get user's journal entries
+ */
+export const bGetLibroCuore = async ( options?: RequestInit): Promise<BLibroCuoreEntry[]> => {
+
+  return customFetch<BLibroCuoreEntry[]>(getBGetLibroCuoreUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetLibroCuoreQueryKey = () => {
+    return [
+    `/api/b/libro-cuore`
+    ] as const;
+    }
+
+
+export const getBGetLibroCuoreQueryOptions = <TData = Awaited<ReturnType<typeof bGetLibroCuore>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLibroCuore>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetLibroCuoreQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetLibroCuore>>> = ({ signal }) => bGetLibroCuore({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetLibroCuore>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetLibroCuoreQueryResult = NonNullable<Awaited<ReturnType<typeof bGetLibroCuore>>>
+export type BGetLibroCuoreQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get user's journal entries
+ */
+
+export function useBGetLibroCuore<TData = Awaited<ReturnType<typeof bGetLibroCuore>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLibroCuore>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetLibroCuoreQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBSalvaLibroCuoreUrl = () => {
+
+
+
+
+  return `/api/b/libro-cuore`
+}
+
+/**
+ * @summary Save a journal entry (capitolo reflection or esame di coscienza)
+ */
+export const bSalvaLibroCuore = async (bLibroCuoreInput: BLibroCuoreInput, options?: RequestInit): Promise<BLibroCuoreEntry> => {
+
+  return customFetch<BLibroCuoreEntry>(getBSalvaLibroCuoreUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bLibroCuoreInput,)
+  }
+);}
+
+
+
+
+export const getBSalvaLibroCuoreMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bSalvaLibroCuore>>, TError,{data: BodyType<BLibroCuoreInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bSalvaLibroCuore>>, TError,{data: BodyType<BLibroCuoreInput>}, TContext> => {
+
+const mutationKey = ['bSalvaLibroCuore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bSalvaLibroCuore>>, {data: BodyType<BLibroCuoreInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bSalvaLibroCuore(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BSalvaLibroCuoreMutationResult = NonNullable<Awaited<ReturnType<typeof bSalvaLibroCuore>>>
+    export type BSalvaLibroCuoreMutationBody = BodyType<BLibroCuoreInput>
+    export type BSalvaLibroCuoreMutationError = ErrorType<void>
+
+    /**
+ * @summary Save a journal entry (capitolo reflection or esame di coscienza)
+ */
+export const useBSalvaLibroCuore = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bSalvaLibroCuore>>, TError,{data: BodyType<BLibroCuoreInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bSalvaLibroCuore>>,
+        TError,
+        {data: BodyType<BLibroCuoreInput>},
+        TContext
+      > => {
+      return useMutation(getBSalvaLibroCuoreMutationOptions(options));
+    }
+
+export const getBGetEsameDomandeUrl = () => {
+
+
+
+
+  return `/api/b/esame/domande`
+}
+
+/**
+ * @summary Get today's esame di coscienza questions
+ */
+export const bGetEsameDomande = async ( options?: RequestInit): Promise<BEsameDomande> => {
+
+  return customFetch<BEsameDomande>(getBGetEsameDomandeUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetEsameDomandeQueryKey = () => {
+    return [
+    `/api/b/esame/domande`
+    ] as const;
+    }
+
+
+export const getBGetEsameDomandeQueryOptions = <TData = Awaited<ReturnType<typeof bGetEsameDomande>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetEsameDomande>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetEsameDomandeQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetEsameDomande>>> = ({ signal }) => bGetEsameDomande({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetEsameDomande>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetEsameDomandeQueryResult = NonNullable<Awaited<ReturnType<typeof bGetEsameDomande>>>
+export type BGetEsameDomandeQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get today's esame di coscienza questions
+ */
+
+export function useBGetEsameDomande<TData = Awaited<ReturnType<typeof bGetEsameDomande>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetEsameDomande>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetEsameDomandeQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
 

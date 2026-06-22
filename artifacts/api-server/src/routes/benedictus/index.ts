@@ -10,6 +10,7 @@ import checkoutRouter from "./checkout";
 import statsRouter from "./stats";
 import adminRouter from "./admin";
 import percorsoRouter from "./percorso";
+import oblatoRouter from "./oblato";
 
 const router: IRouter = Router();
 
@@ -24,5 +25,6 @@ router.use("/b", checkoutRouter);
 router.use("/b", statsRouter);
 router.use("/b", adminRouter);
 router.use("/b", percorsoRouter);
+router.use("/b", oblatoRouter);
 
 export default router;

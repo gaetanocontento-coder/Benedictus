@@ -27,6 +27,11 @@ import CheckoutCancel from "@/pages/checkout/cancel";
 import Scriptorium from "@/pages/scriptorium";
 import PasswordDimenticata from "@/pages/password-dimenticata";
 import ReimpostaPassword from "@/pages/reimposta-password";
+import OblatoDashboard from "@/pages/oblato";
+import OfficiumPage from "@/pages/officium";
+import CapitoloPage from "@/pages/capitolo";
+import EsamePage from "@/pages/esame";
+import LibroCuorePage from "@/pages/libro-cuore";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +61,11 @@ function Router() {
         <Route path="/reimposta-password" component={ReimpostaPassword} />
         <Route path="/checkout/success" component={CheckoutSuccess} />
         <Route path="/checkout/cancel" component={CheckoutCancel} />
+        <Route path="/oblato" component={OblatoDashboard} />
+        <Route path="/officium" component={OfficiumPage} />
+        <Route path="/capitolo" component={CapitoloPage} />
+        <Route path="/esame" component={EsamePage} />
+        <Route path="/libro-cuore" component={LibroCuorePage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

@@ -6,6 +6,7 @@ import {
   boolean,
   timestamp,
   uniqueIndex,
+  date,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
@@ -154,3 +155,101 @@ export const insertBGraduateSchema = createInsertSchema(bGraduatesTable).omit({
 });
 export type InsertBGraduate = z.infer<typeof insertBGraduateSchema>;
 export type BGraduate = typeof bGraduatesTable.$inferSelect;
+
+// ── Oblato gamification system ──────────────────────────────────────────────
+
+/** Profilo oblato: grado, XP, streak, virtù */
+export const bOblatoProfileTable = pgTable("b_oblato_profile", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().unique(),
+  grado: integer("grado").notNull().default(1), // 1-7
+  xpTotale: integer("xp_totale").notNull().default(0),
+  // XP per le 6 virtù benedettine
+  xpPreghiera: integer("xp_preghiera").notNull().default(0),
+  xpLavoro: integer("xp_lavoro").notNull().default(0),
+  xpSilenzio: integer("xp_silenzio").notNull().default(0),
+  xpUmilta: integer("xp_umilta").notNull().default(0),
+  xpOspitalita: integer("xp_ospitalita").notNull().default(0),
+  xpStabilitas: integer("xp_stabilitas").notNull().default(0),
+  // Streak
+  streakCorrente: integer("streak_corrente").notNull().default(0),
+  streakMassimo: integer("streak_massimo").notNull().default(0),
+  ultimaPratica: date("ultima_pratica", { mode: "string" }),
+  // Gradi umiltà sbloccati (bitmask 0-4095 per i 12 gradi)
+  gradiUmiltaSbloccati: integer("gradi_umilta_sbloccati").notNull().default(0),
+  // Contatori per milestone
+  checkInTotali: integer("check_in_totali").notNull().default(0),
+  lectioCompletate: integer("lectio_completate").notNull().default(0),
+  capitoliLetti: integer("capitoli_letti").notNull().default(0),
+  esamiCompletati: integer("esami_completati").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+});
+
+export type BOblatoProfile = typeof bOblatoProfileTable.$inferSelect;
+
+/** Check-in alle ore canoniche */
+export const bOfficiumCheckInTable = pgTable(
+  "b_officium_check_in",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").notNull(),
+    oraId: text("ora_id").notNull(), // e.g. "lodi", "terza", "sesta"
+    giorno: date("giorno", { mode: "string" }).notNull(), // YYYY-MM-DD
+    xpGuadagnato: integer("xp_guadagnato").notNull().default(10),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("b_officium_check_in_user_ora_day_idx").on(t.userId, t.oraId, t.giorno)]
+);
+
+export type BOfficiumCheckIn = typeof bOfficiumCheckInTable.$inferSelect;
+
+/** Sigilli guadagnati (achievements XII Gradi + speciali) */
+export const bSigilliTable = pgTable(
+  "b_sigilli",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").notNull(),
+    sigilloId: text("sigillo_id").notNull(), // e.g. "grado_umilta_1", "stabilitas_7"
+    nome: text("nome").notNull(),
+    descrizione: text("descrizione").notNull(),
+    icona: text("icona").notNull(),
+    xpValore: integer("xp_valore").notNull().default(50),
+    sbloccatoIl: timestamp("sbloccato_il", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("b_sigilli_user_sigillo_idx").on(t.userId, t.sigilloId)]
+);
+
+export type BSigillo = typeof bSigilliTable.$inferSelect;
+
+/** Capitoli settimanali della Regola */
+export const bCapitoliTable = pgTable("b_capitoli", {
+  id: serial("id").primaryKey(),
+  numero: integer("numero").notNull().unique(), // 1-73 (capitoli della Regola)
+  titolo: text("titolo").notNull(),
+  testo: text("testo").notNull(), // testo latino + traduzione
+  domande: text("domande").notNull(), // JSON array di domande
+  settimana: date("settimana", { mode: "string" }).notNull(), // data lunedì della settimana
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type BCapitolo = typeof bCapitoliTable.$inferSelect;
+
+/** Risposte dell'utente al Capitolo + Libro del Cuore */
+export const bLibroCuoreTable = pgTable("b_libro_cuore", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  tipo: text("tipo").notNull(), // "capitolo" | "esame"
+  riferimentoId: text("riferimento_id"), // capitolo id o data
+  testo: text("testo").notNull(),
+  domanda: text("domanda"), // domanda specifica a cui risponde
+  giorno: date("giorno", { mode: "string" }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const insertBLibroCuoreSchema = createInsertSchema(bLibroCuoreTable).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertBLibroCuore = z.infer<typeof insertBLibroCuoreSchema>;
+export type BLibroCuore = typeof bLibroCuoreTable.$inferSelect;

@@ -1132,6 +1132,146 @@ paths:
         "401":
           description: Unauthorized
 
+  # ── Oblato gamification ──────────────────────────────────────────────────
+
+  /b/oblato/profilo:
+    get:
+      operationId: bGetOblatoProfilo
+      tags: [b-oblato]
+      summary: Get current user's oblato profile
+      responses:
+        "200":
+          description: Oblato profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BOblatoProfilo"
+        "401":
+          description: Unauthorized
+
+  /b/officium/check-in:
+    post:
+      operationId: bOfficiumCheckIn
+      tags: [b-oblato]
+      summary: Check in at current canonical hour
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfficiumCheckInInput"
+      responses:
+        "200":
+          description: Check-in result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfficiumCheckInResult"
+        "409":
+          description: Already checked in for this hour today
+        "401":
+          description: Unauthorized
+
+  /b/officium/oggi:
+    get:
+      operationId: bGetOfficiumOggi
+      tags: [b-oblato]
+      summary: Get today's check-ins for current user
+      responses:
+        "200":
+          description: List of today's check-ins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BOfficiumCheckIn"
+        "401":
+          description: Unauthorized
+
+  /b/sigilli:
+    get:
+      operationId: bGetSigilli
+      tags: [b-oblato]
+      summary: Get current user's earned sigilli (achievements)
+      responses:
+        "200":
+          description: List of earned sigilli
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BSigillo"
+        "401":
+          description: Unauthorized
+
+  /b/capitolo/corrente:
+    get:
+      operationId: bGetCapitoloCorrente
+      tags: [b-oblato]
+      summary: Get this week's chapter of the Rule
+      responses:
+        "200":
+          description: Current week's chapter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BCapitolo"
+        "401":
+          description: Unauthorized
+
+  /b/libro-cuore:
+    get:
+      operationId: bGetLibroCuore
+      tags: [b-oblato]
+      summary: Get user's journal entries
+      responses:
+        "200":
+          description: Journal entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BLibroCuoreEntry"
+        "401":
+          description: Unauthorized
+    post:
+      operationId: bSalvaLibroCuore
+      tags: [b-oblato]
+      summary: Save a journal entry (capitolo reflection or esame di coscienza)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BLibroCuoreInput"
+      responses:
+        "201":
+          description: Entry saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BLibroCuoreEntry"
+        "401":
+          description: Unauthorized
+
+  /b/esame/domande:
+    get:
+      operationId: bGetEsameDomande
+      tags: [b-oblato]
+      summary: Get today's esame di coscienza questions
+      responses:
+        "200":
+          description: Three questions for today
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BEsameDomande"
+        "401":
+          description: Unauthorized
+
 components:
   schemas:
     HealthStatus:
@@ -1939,3 +2079,168 @@ components:
         completedAt:
           type: ["string", "null"]
           format: date-time
+
+    BOblatoProfilo:
+      type: object
+      required: [grado, xpTotale, xpPreghiera, xpLavoro, xpSilenzio, xpUmilta, xpOspitalita, xpStabilitas, streakCorrente, streakMassimo, gradiUmiltaSbloccati, checkInTotali, lectioCompletate, capitoliLetti, esamiCompletati]
+      properties:
+        grado:
+          type: integer
+        nomeGrado:
+          type: string
+        xpTotale:
+          type: integer
+        xpAlProssimoGrado:
+          type: integer
+        xpPreghiera:
+          type: integer
+        xpLavoro:
+          type: integer
+        xpSilenzio:
+          type: integer
+        xpUmilta:
+          type: integer
+        xpOspitalita:
+          type: integer
+        xpStabilitas:
+          type: integer
+        streakCorrente:
+          type: integer
+        streakMassimo:
+          type: integer
+        ultimaPratica:
+          type: ["string", "null"]
+        gradiUmiltaSbloccati:
+          type: integer
+        checkInTotali:
+          type: integer
+        lectioCompletate:
+          type: integer
+        capitoliLetti:
+          type: integer
+        esamiCompletati:
+          type: integer
+
+    OfficiumCheckInInput:
+      type: object
+      required: [oraId]
+      properties:
+        oraId:
+          type: string
+
+    OfficiumCheckInResult:
+      type: object
+      required: [success, xpGuadagnato, sigilliNuovi, streakCorrente, grado]
+      properties:
+        success:
+          type: boolean
+        xpGuadagnato:
+          type: integer
+        sigilliNuovi:
+          type: array
+          items:
+            $ref: "#/components/schemas/BSigillo"
+        streakCorrente:
+          type: integer
+        grado:
+          type: integer
+        gradoNuovo:
+          type: boolean
+
+    BOfficiumCheckIn:
+      type: object
+      required: [id, oraId, giorno, xpGuadagnato]
+      properties:
+        id:
+          type: integer
+        oraId:
+          type: string
+        giorno:
+          type: string
+        xpGuadagnato:
+          type: integer
+
+    BSigillo:
+      type: object
+      required: [id, sigilloId, nome, descrizione, icona, xpValore, sbloccatoIl]
+      properties:
+        id:
+          type: integer
+        sigilloId:
+          type: string
+        nome:
+          type: string
+        descrizione:
+          type: string
+        icona:
+          type: string
+        xpValore:
+          type: integer
+        sbloccatoIl:
+          type: string
+          format: date-time
+
+    BCapitolo:
+      type: object
+      required: [id, numero, titolo, testo, domande, settimana]
+      properties:
+        id:
+          type: integer
+        numero:
+          type: integer
+        titolo:
+          type: string
+        testo:
+          type: string
+        domande:
+          type: array
+          items:
+            type: string
+        settimana:
+          type: string
+
+    BLibroCuoreEntry:
+      type: object
+      required: [id, tipo, testo, giorno, createdAt]
+      properties:
+        id:
+          type: integer
+        tipo:
+          type: string
+        riferimentoId:
+          type: ["string", "null"]
+        testo:
+          type: string
+        domanda:
+          type: ["string", "null"]
+        giorno:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    BLibroCuoreInput:
+      type: object
+      required: [tipo, testo, giorno]
+      properties:
+        tipo:
+          type: string
+        riferimentoId:
+          type: string
+        testo:
+          type: string
+        domanda:
+          type: string
+        giorno:
+          type: string
+
+    BEsameDomande:
+      type: object
+      required: [domande, data]
+      properties:
+        domande:
+          type: array
+          items:
+            type: string
+        data:
+          type: string

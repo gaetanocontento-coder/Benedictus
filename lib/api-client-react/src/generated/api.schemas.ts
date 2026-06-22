@@ -578,6 +578,92 @@ export interface BModuleProgress {
   completedAt?: string | null;
 }
 
+export interface BOblatoProfilo {
+  grado: number;
+  nomeGrado?: string;
+  xpTotale: number;
+  xpAlProssimoGrado?: number;
+  xpPreghiera: number;
+  xpLavoro: number;
+  xpSilenzio: number;
+  xpUmilta: number;
+  xpOspitalita: number;
+  xpStabilitas: number;
+  streakCorrente: number;
+  streakMassimo: number;
+  /** @nullable */
+  ultimaPratica?: string | null;
+  gradiUmiltaSbloccati: number;
+  checkInTotali: number;
+  lectioCompletate: number;
+  capitoliLetti: number;
+  esamiCompletati: number;
+}
+
+export interface OfficiumCheckInInput {
+  oraId: string;
+}
+
+export interface BSigillo {
+  id: number;
+  sigilloId: string;
+  nome: string;
+  descrizione: string;
+  icona: string;
+  xpValore: number;
+  sbloccatoIl: string;
+}
+
+export interface OfficiumCheckInResult {
+  success: boolean;
+  xpGuadagnato: number;
+  sigilliNuovi: BSigillo[];
+  streakCorrente: number;
+  grado: number;
+  gradoNuovo?: boolean;
+}
+
+export interface BOfficiumCheckIn {
+  id: number;
+  oraId: string;
+  giorno: string;
+  xpGuadagnato: number;
+}
+
+export interface BCapitolo {
+  id: number;
+  numero: number;
+  titolo: string;
+  testo: string;
+  domande: string[];
+  settimana: string;
+}
+
+export interface BLibroCuoreEntry {
+  id: number;
+  tipo: string;
+  /** @nullable */
+  riferimentoId?: string | null;
+  testo: string;
+  /** @nullable */
+  domanda?: string | null;
+  giorno: string;
+  createdAt: string;
+}
+
+export interface BLibroCuoreInput {
+  tipo: string;
+  riferimentoId?: string;
+  testo: string;
+  domanda?: string;
+  giorno: string;
+}
+
+export interface BEsameDomande {
+  domande: string[];
+  data: string;
+}
+
 export type ListLeadsParams = {
 stato?: string;
 fonte?: string;

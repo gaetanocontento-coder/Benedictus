@@ -14,13 +14,17 @@ export default function Home() {
             src={`${B}hero-cloister.png`}
             alt="Chiostro monastico"
             className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.48) contrast(1.05)" }}
+            style={{ filter: "brightness(0.56) contrast(1.12) saturate(0.72) sepia(0.18)" }}
           />
-          {/* Top vignette — keeps nav readable */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+          {/* Warm amber split-tone */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(140, 85, 20, 0.14)" }} />
+          {/* Radial vignette — darkens corners, not centre */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 38%, rgba(0,0,0,0.52) 100%)" }} />
+          {/* Top fade — keeps nav readable */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
           {/* Bottom fade — transitions to parchment background */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/55 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/35 via-transparent to-transparent" />
         </div>
 
         {/* Hero text — hardcoded dark sepia (sits on the parchment gradient at the bottom) */}
@@ -113,8 +117,12 @@ export default function Home() {
               src={`${B}monk-manuscript.png`}
               alt="Monaco che scrive un manoscritto"
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ filter: "brightness(0.82) saturate(0.75)" }}
+              style={{ filter: "brightness(0.74) contrast(1.14) saturate(0.62) sepia(0.14)" }}
             />
+            {/* Warm amber cast */}
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(130, 75, 15, 0.12)" }} />
+            {/* Radial vignette */}
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 42% 50%, transparent 35%, rgba(0,0,0,0.48) 100%)" }} />
             {/* Blend toward the right side where content starts */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background lg:block hidden" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background lg:hidden" />
@@ -177,9 +185,13 @@ export default function Home() {
             src={`${B}stone-corridor.png`}
             alt="Corridoio in pietra"
             className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.28) contrast(1.1) saturate(0.5)" }}
+            style={{ filter: "brightness(0.42) contrast(1.15) saturate(0.52) sepia(0.24)" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/40" />
+          {/* Warm amber split-tone */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(100, 55, 10, 0.18)" }} />
+          {/* Radial vignette */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(8,4,1,0.65) 100%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
         </div>
 
         {/* Text always on very dark photo — use hardcoded light colors */}
@@ -243,9 +255,13 @@ export default function Home() {
             src={`${B}ancient-library.png`}
             alt="Biblioteca antica"
             className="w-full h-full object-cover object-top"
-            style={{ filter: "brightness(0.32) saturate(0.45)" }}
+            style={{ filter: "brightness(0.44) contrast(1.14) saturate(0.48) sepia(0.22)" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+          {/* Warm amber cast */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(110, 60, 12, 0.16)" }} />
+          {/* Radial vignette — centred left where text lives */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 30% 55%, transparent 32%, rgba(6,3,1,0.62) 100%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/10 to-transparent" />
         </div>
 
         {/* Hardcoded light text on dark photo */}

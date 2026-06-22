@@ -14,10 +14,14 @@ export default function ChiSiamo() {
             src={`${B}stone-corridor.png`}
             alt="Corridoio monastico"
             className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.38) saturate(0.6) contrast(1.05)" }}
+            style={{ filter: "brightness(0.48) contrast(1.12) saturate(0.62) sepia(0.20)" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-background/95" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/20 to-transparent" />
+          {/* Warm amber cast */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(120, 70, 15, 0.14)" }} />
+          {/* Radial vignette */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(4,2,0,0.58) 100%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-background/95" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/15 to-transparent" />
         </div>
 
         <div className="relative z-10 container mx-auto px-6 max-w-4xl pb-12">
@@ -114,9 +118,13 @@ export default function ChiSiamo() {
             src={`${B}monk-manuscript.png`}
             alt="Monaco in preghiera"
             className="w-full h-full object-cover object-center"
-            style={{ filter: "brightness(0.25) saturate(0.4)" }}
+            style={{ filter: "brightness(0.38) contrast(1.15) saturate(0.45) sepia(0.24)" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+          {/* Warm amber cast */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(105, 58, 10, 0.20)" }} />
+          {/* Radial vignette */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 38% 50%, transparent 28%, rgba(5,2,0,0.68) 100%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/5 to-transparent" />
         </div>
         <div className="relative z-10 container mx-auto px-8 md:px-16 max-w-4xl">
           <blockquote className="max-w-sm">

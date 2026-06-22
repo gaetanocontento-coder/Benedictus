@@ -41,10 +41,14 @@ export default function Percorso() {
             src={`${B}monk-manuscript.png`}
             alt="Monaco in cammino"
             className="w-full h-full object-cover object-center"
-            style={{ filter: "brightness(0.40) saturate(0.60) contrast(1.05)" }}
+            style={{ filter: "brightness(0.52) contrast(1.12) saturate(0.62) sepia(0.14)" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-background/95" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/10 to-transparent" />
+          {/* Warm amber cast */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(125, 72, 14, 0.13)" }} />
+          {/* Radial vignette */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 42%, transparent 38%, rgba(4,2,0,0.56) 100%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/22 via-transparent to-background/95" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/8 to-transparent" />
         </div>
 
         <div className="relative z-10 container mx-auto px-6 max-w-4xl pb-12">
@@ -168,9 +172,13 @@ export default function Percorso() {
             src={`${B}stone-corridor.png`}
             alt="Corridoio in pietra"
             className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.22) contrast(1.1) saturate(0.4)" }}
+            style={{ filter: "brightness(0.38) contrast(1.15) saturate(0.48) sepia(0.24)" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+          {/* Warm amber cast */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(100, 55, 10, 0.20)" }} />
+          {/* Radial vignette */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 40% 50%, transparent 28%, rgba(6,3,0,0.66) 100%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/5 to-transparent" />
         </div>
         <div className="relative z-10 container mx-auto px-8 md:px-16 max-w-4xl">
           <blockquote className="max-w-md">

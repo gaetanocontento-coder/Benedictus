@@ -85,7 +85,25 @@ Parli sempre in italiano, in seconda persona singolare, con calore e profondità
   return `${systemPrompt}\n\n${guide[stepId] ?? guide.lectio}`;
 }
 
-function buildIgnazianaPrompt(stepId: string, testoUtente: string, letture: { tipo: string; riferimento: string; testo: string }[]): string {
+// ── Ignaziana: multi-turn conversation ────────────────────────────────────────
+
+function buildIgnazianaSystem(riferimento: string, testoSacro: string): string {
+  return `Sei Padre Benedetto, guida spirituale ignaziana. Accompagni un esercitante negli Esercizi Spirituali di Sant'Ignazio di Loyola con cura, presenza e discernimento.
+Il brano meditato: ${testoSacro ? `"${testoSacro.slice(0, 400)}…" (${riferimento})` : riferimento}
+Metodo: immaginazione apostolica, discernimento degli spiriti, consolazione e desolazione, colloquio.
+Stile: italiano, seconda persona singolare, tono caldo e paterno. Risposte brevi (80-150 parole), concrete.
+Fai domande aperte. Aiuti a scoprire, non a spiegare. Sei sempre in ascolto.`;
+}
+
+const STEP_INTRO: Record<string, string> = {
+  composizioneLuogo: "Sono pronto a iniziare la Composizione di Luogo. Guidami: cosa devo fare, come disporre il corpo e l'attenzione, cosa immaginare nella scena del Vangelo.",
+  colloquio: "Ho terminato la composizione di luogo e sono pronto per il Colloquio. Aiutami a capire come aprire il cuore a Gesù e come iniziare questo dialogo intimo.",
+  esameConscienza: "Entro nell'Esame di Coscienza. Guidami brevemente attraverso i passi del metodo ignaziano: ringraziamento, revisione della giornata, riconoscimento, perdono, proposito.",
+  frutti: "Siamo all'ultima tappa: raccogliere i Frutti. Aiutami a capire cosa cercare e come formulare ciò che ho ricevuto in questa preghiera.",
+};
+
+// Legacy single-shot builder (kept for backward compatibility)
+function buildIgnazianaPromptLegacy(stepId: string, testoUtente: string, letture: { tipo: string; riferimento: string; testo: string }[]): string {
   const vangelo = letture.find((l) => l.tipo === "vangelo") ?? letture[letture.length - 1];
   const riferimento = vangelo?.riferimento ?? "il Vangelo";
   const testoSacro = vangelo?.testo?.slice(0, 600) ?? "";
@@ -97,44 +115,34 @@ Come guida ignaziana, rispondi in 100-130 parole:
 - Accogli l'immagine che ha costruito — è la sua, rispettala
 - Aiuta ad arricchire la scena: un dettaglio sensoriale che potrebbe non aver notato (un suono, un odore, la luce, la temperatura)
 - Chiedi: dove si colloca lui nella scena? È spettatore o partecipante?
-- Invitalo a fermarsi ancora un momento nella scena prima di procedere
+- Invitalo a fermarsi ancora un momento nella scena prima di procedere`,
 
-Tono: guida che aiuta a entrare in profondità nell'immaginazione apostolica.`,
-
-    colloquio: `L'esercitante ha scritto il suo colloquio (dialogo con Gesù/il Padre) su ${riferimento}: "${testoUtente}".
+    colloquio: `L'esercitante ha scritto il suo colloquio con Gesù su ${riferimento}: "${testoUtente}".
 
 Come guida ignaziana, rispondi in 100-120 parole:
 - Rispecchia la qualità del dialogo: c'è intimità, distanza, paura, fiducia?
 - Aiuta a riconoscere eventuali consolazioni o desolazioni nel dialogo
-- Se il dialogo è monologante (solo richieste o solo ringraziamento), invitalo a stare in ascolto — cosa risponde Gesù?
-- Chiudi con: "Cosa senti che ti sta dicendo adesso, in questo silenzio?"
+- Se il dialogo è monologante, invitalo a stare in ascolto — cosa risponde Gesù?
+- Chiudi con: "Cosa senti che ti sta dicendo adesso, in questo silenzio?"`,
 
-Non inventare risposte di Gesù. Aiuta l'esercitante a trovarle lui.`,
-
-    esameConscienza: `L'esercitante ha completato l'esame di coscienza su ${riferimento} e ha scritto: "${testoUtente}".
+    esameConscienza: `L'esercitante ha completato l'esame di coscienza: "${testoUtente}".
 
 Come guida ignaziana, rispondi in 90-110 parole:
-- Accogli sia il ringraziamento sia il riconoscimento dei limiti — entrambi sono necessari
+- Accogli sia il ringraziamento sia il riconoscimento dei limiti
 - Aiuta a non restare nel senso di colpa: il discernimento è diverso dall'autoaccusa
-- Individua un possibile "mozione" (impulso interiore positivo) da seguire
-- Invita a ricevere il perdono come dono, non come merito
+- Individua un possibile "mozione" da seguire
+- Invita a ricevere il perdono come dono`,
 
-Tono: misericordioso e pratico. La consolazione viene da Dio, non da sé stessi.`,
-
-    frutti: `L'esercitante ha scritto i frutti dell'orazione ignaziana su ${riferimento}: "${testoUtente}".
+    frutti: `L'esercitante ha scritto i frutti dell'orazione: "${testoUtente}".
 
 Come guida ignaziana, rispondi in 80-100 parole:
-- Celebra il frutto — è un segno di consolazione, cioè di movimento verso Dio
-- Aiuta a formulare un proposito concreto per le prossime 24 ore (non una risoluzione grandiosa, ma un gesto piccolo e preciso)
-- Invita a portare con sé la grazia ricevuta come un seme, non come un programma
-
-Chiudi con una benedizione apostolica semplice.`,
+- Celebra il frutto — è un segno di consolazione
+- Aiuta a formulare un proposito concreto per le prossime 24 ore
+- Invita a portare con sé la grazia ricevuta come un seme`,
   };
 
-  const systemPrompt = `Sei una guida spirituale ignaziana che accompagna un esercitante negli Esercizi Spirituali di Sant'Ignazio di Loyola.
-Il brano meditato oggi è: ${testoSacro ? `"${testoSacro.slice(0, 300)}…" (${riferimento})` : riferimento}
-Usi il metodo ignaziano: immaginazione apostolica, discernimento degli spiriti, consolazione e desolazione.
-Parli sempre in italiano, in seconda persona singolare, con chiarezza e profondità.`;
+  const systemPrompt = `Sei una guida spirituale ignaziana. Il brano: ${testoSacro ? `"${testoSacro.slice(0, 300)}…" (${riferimento})` : riferimento}
+Parli in italiano, seconda persona singolare, con chiarezza e profondità.`;
 
   return `${systemPrompt}\n\n${guide[stepId] ?? guide.composizioneLuogo}`;
 }
@@ -142,30 +150,27 @@ Parli sempre in italiano, in seconda persona singolare, con chiarezza e profondi
 // ── POST /b/guida-spirituale (SSE) ────────────────────────────────────────────
 
 router.post("/guida-spirituale", async (req: Request, res: Response): Promise<void> => {
-  const { tipo, stepId, testoUtente = "", letture = [], titoloLiturgico = "" } = req.body as {
+  const {
+    tipo,
+    stepId,
+    testoUtente = "",
+    letture = [],
+    titoloLiturgico = "",
+    messagesHistory,
+    messaggioCorrente,
+  } = req.body as {
     tipo: "lectio" | "ignaziana" | "analisi";
     stepId: string;
     testoUtente?: string;
     letture?: { tipo: string; riferimento: string; testo: string }[];
     titoloLiturgico?: string;
+    messagesHistory?: { role: "user" | "assistant"; content: string }[];
+    messaggioCorrente?: string | null;
   };
 
   if (!tipo || !stepId) {
     res.status(400).json({ error: "tipo e stepId sono richiesti" });
     return;
-  }
-
-  let prompt: string;
-  if (tipo === "analisi") {
-    if (!letture.length) {
-      res.status(400).json({ error: "letture richieste per l'analisi" });
-      return;
-    }
-    prompt = buildAnalisiPrompt(letture, titoloLiturgico);
-  } else if (tipo === "lectio") {
-    prompt = buildLectioPrompt(stepId, testoUtente, letture);
-  } else {
-    prompt = buildIgnazianaPrompt(stepId, testoUtente, letture);
   }
 
   res.setHeader("Content-Type", "text/event-stream");
@@ -174,6 +179,68 @@ router.post("/guida-spirituale", async (req: Request, res: Response): Promise<vo
   res.setHeader("X-Accel-Buffering", "no");
 
   try {
+    // ── Multi-turn ignaziana conversation ──────────────────────────────────────
+    if (tipo === "ignaziana" && Array.isArray(messagesHistory)) {
+      const vangelo = letture.find((l) => l.tipo === "vangelo") ?? letture[letture.length - 1];
+      const riferimento = vangelo?.riferimento ?? "il Vangelo";
+      const testoSacro = vangelo?.testo ?? "";
+      const systemPrompt = buildIgnazianaSystem(riferimento, testoSacro);
+
+      // Build messages array
+      type AnthropicRole = "user" | "assistant";
+      let messages: { role: AnthropicRole; content: string }[];
+
+      if (messagesHistory.length === 0 && !messaggioCorrente) {
+        // Step introduction — no history, no current message → use canned intro
+        messages = [
+          { role: "user", content: STEP_INTRO[stepId] ?? "Guidami in questa tappa degli Esercizi Ignaziani." },
+        ];
+      } else {
+        messages = messagesHistory.map((m) => ({ role: m.role as AnthropicRole, content: m.content }));
+        if (messaggioCorrente) {
+          messages.push({ role: "user", content: messaggioCorrente });
+        }
+      }
+
+      // Anthropic requires alternating roles; ensure last message is from user
+      if (messages.length === 0 || messages[messages.length - 1]!.role !== "user") {
+        res.write(`data: ${JSON.stringify({ error: "Sequenza messaggi non valida" })}\n\n`);
+        res.end();
+        return;
+      }
+
+      const stream = await anthropic.messages.stream({
+        model: "claude-opus-4-5",
+        max_tokens: 512,
+        system: systemPrompt,
+        messages,
+      });
+
+      for await (const chunk of stream) {
+        if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+          res.write(`data: ${JSON.stringify({ content: chunk.delta.text })}\n\n`);
+        }
+      }
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+      res.end();
+      return;
+    }
+
+    // ── Single-shot modes (lectio, analisi, legacy ignaziana) ─────────────────
+    let prompt: string;
+    if (tipo === "analisi") {
+      if (!letture.length) {
+        res.write(`data: ${JSON.stringify({ error: "letture richieste" })}\n\n`);
+        res.end();
+        return;
+      }
+      prompt = buildAnalisiPrompt(letture, titoloLiturgico);
+    } else if (tipo === "lectio") {
+      prompt = buildLectioPrompt(stepId, testoUtente, letture);
+    } else {
+      prompt = buildIgnazianaPromptLegacy(stepId, testoUtente, letture);
+    }
+
     const stream = await anthropic.messages.stream({
       model: "claude-opus-4-5",
       max_tokens: 1024,
@@ -181,10 +248,7 @@ router.post("/guida-spirituale", async (req: Request, res: Response): Promise<vo
     });
 
     for await (const chunk of stream) {
-      if (
-        chunk.type === "content_block_delta" &&
-        chunk.delta.type === "text_delta"
-      ) {
+      if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
         res.write(`data: ${JSON.stringify({ content: chunk.delta.text })}\n\n`);
       }
     }

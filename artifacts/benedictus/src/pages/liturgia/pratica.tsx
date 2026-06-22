@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { ArrowLeft, Save, CheckCircle, BookOpen, Flame, ChevronRight, Sparkles, StopCircle, Loader2 } from "lucide-react";
+import {
+  ArrowLeft, Save, CheckCircle, BookOpen, Flame, ChevronRight,
+  Sparkles, StopCircle, Loader2, Send, MessageCircle,
+} from "lucide-react";
 import {
   useBSavePratica,
   useBGetPraticheByDate,
@@ -11,8 +14,12 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
 import { useGuidaSpirituale } from "@/lib/useGuidaSpirituale";
+import { useGuidaIgnaziana, type Messaggio } from "@/lib/useGuidaIgnaziana";
 
-function todayISO() { return new Date().toISOString().slice(0, 10); }
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
 
 const LECTIO_STEPS = [
   {
@@ -61,7 +68,6 @@ const IGNAZIANA_STEPS = [
     guida: "Usa l'immaginazione per entrare nella scena del Vangelo. Dove sei? Cosa vedi, senti, odori? Chi è presente?",
     placeholder: "Mi trovo in… Vedo… Sento… Noto che…",
     icona: "①",
-    guidaLabel: "Lasciati guidare nell'immaginazione apostolica",
   },
   {
     id: "colloquio" as const,
@@ -70,7 +76,6 @@ const IGNAZIANA_STEPS = [
     guida: "Parla con Gesù come con un amico. Cosa vuoi dirgli? Cosa senti che ti risponde?",
     placeholder: "Gli dico… Sento che mi risponde… Tra noi è come se…",
     icona: "②",
-    guidaLabel: "Ricevi accompagnamento nel tuo dialogo con Gesù",
   },
   {
     id: "esameConscienza" as const,
@@ -79,7 +84,6 @@ const IGNAZIANA_STEPS = [
     guida: "Ripercorri la giornata o la settimana: per cosa ringrazi? Dove hai mancato? Cosa vuoi cambiare?",
     placeholder: "Ringrazio per… Riconosco di aver… Mi propongo di…",
     icona: "③",
-    guidaLabel: "Ricevi guida nel discernimento ignaziano",
   },
   {
     id: "frutti" as const,
@@ -88,18 +92,184 @@ const IGNAZIANA_STEPS = [
     guida: "Qual è il frutto di questa preghiera? Un'intuizione, un proposito, una consolazione?",
     placeholder: "Il frutto di questo momento è…",
     icona: "④",
-    guidaLabel: "Ricevi la benedizione apostolica finale",
   },
 ];
 
 type LectioFields = { lectio: string; meditatio: string; oratio: string; contemplatio: string };
 type IgnazianaFields = { composizioneLuogo: string; colloquio: string; esameConscienza: string; frutti: string };
 
+// ── Ignaziana conversation panel ──────────────────────────────────────────────
+
+function GuidaPanelIgnaziana({
+  guida,
+  stepId,
+  letture,
+  testoUtente,
+}: {
+  guida: ReturnType<typeof useGuidaIgnaziana>;
+  stepId: string;
+  letture: { tipo: string; riferimento: string; testo: string }[];
+  testoUtente: string;
+}) {
+  const [input, setInput] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom on new messages
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [guida.conversazione, guida.streamingTesto]);
+
+  function inviaRisposta() {
+    const msg = input.trim();
+    if (!msg || guida.loading) return;
+    setInput("");
+    guida.invia({ messaggioCorrente: msg, stepId, letture });
+  }
+
+  function chiediSulTesto() {
+    if (!testoUtente.trim() || guida.loading) return;
+    guida.invia({
+      messaggioCorrente: `Ho scritto questo nel mio diario spirituale: "${testoUtente.trim()}". Cosa ne pensi?`,
+      stepId,
+      letture,
+    });
+  }
+
+  const haConversazione = guida.conversazione.length > 0 || guida.streamingTesto || guida.loading;
+
+  return (
+    <div className="border border-primary/25 bg-card flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-3 border-b border-border/60">
+        <div className="flex items-center gap-2">
+          <MessageCircle className="w-3.5 h-3.5 text-primary/60" />
+          <span className="text-[10px] uppercase tracking-widest text-primary/70">
+            Padre Benedetto · Guida Ignaziana
+          </span>
+        </div>
+        {guida.loading && (
+          <button
+            onClick={guida.annulla}
+            className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground"
+          >
+            <StopCircle className="w-3 h-3" /> Interrompi
+          </button>
+        )}
+      </div>
+
+      {/* Conversation area */}
+      <div
+        ref={scrollRef}
+        className={`px-5 py-4 overflow-y-auto space-y-4 ${haConversazione ? "min-h-[140px] max-h-[320px]" : "min-h-[80px]"}`}
+      >
+        {!haConversazione && (
+          <div className="flex items-center gap-2 py-2">
+            <Loader2 className="w-3.5 h-3.5 text-primary/40 animate-spin" />
+            <span className="text-muted-foreground text-xs italic">
+              Il padre sta meditando sul brano…
+            </span>
+          </div>
+        )}
+
+        {guida.conversazione.map((msg, i) => (
+          <MsgBubble key={i} msg={msg} />
+        ))}
+
+        {/* Current streaming response */}
+        {guida.streamingTesto && (
+          <div className="text-foreground/85 font-serif text-sm leading-relaxed">
+            {guida.streamingTesto}
+            <span className="inline-block w-0.5 h-4 bg-primary/50 animate-pulse ml-0.5 align-middle" />
+          </div>
+        )}
+
+        {/* Loading indicator (no text yet) */}
+        {guida.loading && !guida.streamingTesto && (
+          <div className="flex items-center gap-2">
+            <Loader2 className="w-3.5 h-3.5 text-primary/40 animate-spin" />
+            <span className="text-muted-foreground text-xs italic">Il padre sta meditando…</span>
+          </div>
+        )}
+
+        {guida.errore && (
+          <p className="text-muted-foreground text-xs">{guida.errore}</p>
+        )}
+      </div>
+
+      {/* Action bar */}
+      <div className="border-t border-border/60 px-4 py-3 space-y-2">
+        {/* Ask about written text */}
+        {testoUtente.trim().length > 10 && (
+          <button
+            onClick={chiediSulTesto}
+            disabled={guida.loading}
+            className="w-full text-left text-xs text-primary/70 hover:text-primary border border-primary/15 hover:border-primary/40 px-4 py-2 transition-all flex items-center gap-2 disabled:opacity-50"
+          >
+            <Sparkles className="w-3 h-3 flex-shrink-0" />
+            <span>Chiedi un commento su ciò che ho scritto</span>
+          </button>
+        )}
+
+        {/* Free-form reply input */}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); inviaRisposta(); } }}
+            placeholder="Scrivi al padre spirituale…"
+            disabled={guida.loading}
+            className="flex-1 bg-background border border-border px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50 disabled:opacity-50"
+          />
+          <button
+            onClick={inviaRisposta}
+            disabled={!input.trim() || guida.loading}
+            className="px-4 py-2 border border-primary/30 text-primary hover:bg-primary/5 transition-colors disabled:opacity-30"
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MsgBubble({ msg }: { msg: Messaggio }) {
+  if (msg.role === "assistant") {
+    return (
+      <div className="text-foreground/85 font-serif text-sm leading-relaxed">
+        {msg.content}
+      </div>
+    );
+  }
+  // User message — show only if it's not the automated intro invocation
+  const isAutoIntro = msg.content.startsWith("Sono pronto a iniziare") ||
+    msg.content.startsWith("Ho terminato") ||
+    msg.content.startsWith("Entriamo nell") ||
+    msg.content.startsWith("Siamo all'ultima");
+  if (isAutoIntro) return null;
+
+  return (
+    <div className="flex justify-end">
+      <div className="bg-primary/5 border border-primary/15 px-4 py-2 max-w-[85%] text-sm text-foreground/80 leading-relaxed">
+        {msg.content.startsWith("Ho scritto questo nel mio diario spirituale: \"")
+          ? msg.content.replace(/^Ho scritto questo nel mio diario spirituale: "/, "").replace(/".*$/, " ✦")
+          : msg.content}
+      </div>
+    </div>
+  );
+}
+
+// ── Main component ─────────────────────────────────────────────────────────────
+
 export default function PraticaSpirituale() {
   const [location] = useLocation();
   const { user } = useAuth();
   const qc = useQueryClient();
   const guida = useGuidaSpirituale();
+  const guidaIgn = useGuidaIgnaziana();
 
   const params     = new URLSearchParams(location.split("?")[1] ?? "");
   const data       = params.get("data") ?? todayISO();
@@ -123,6 +293,12 @@ export default function PraticaSpirituale() {
     { data },
     { query: { queryKey: getBGetLiturgiaGiornoQueryKey({ data }) } }
   );
+
+  const letture = liturgia?.letture?.map((l) => ({
+    tipo: l.tipo,
+    riferimento: l.riferimento,
+    testo: l.testo.slice(0, 500),
+  })) ?? [];
 
   const { data: existingPratiche = [] } = useBGetPraticheByDate(data, {
     query: { enabled: !!user, queryKey: getBGetPraticheByDateQueryKey(data) },
@@ -149,12 +325,25 @@ export default function PraticaSpirituale() {
     if (existing.passaggioRef) setPassaggioRef(existing.passaggioRef);
   }, [existingPratiche, tipo]);
 
-  // Reset guida when step changes
+  // Reset lectio guide when step/tipo changes
   useEffect(() => {
     guida.reset();
     setGuidaAperta(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, tipo]);
+
+  // Auto-trigger ignaziana guide intro when entering a step
+  useEffect(() => {
+    if (tipo !== "ignaziana" || !user) return;
+    guidaIgn.resetStep();
+    // Delay slightly so the reset clears first
+    const t = setTimeout(() => {
+      const stepId = IGNAZIANA_STEPS[currentStep]!.id;
+      guidaIgn.invia({ stepId, letture });
+    }, 150);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep, tipo, user]);
 
   const { mutate: savePratica, isPending: saving } = useBSavePratica({
     mutation: {
@@ -173,12 +362,9 @@ export default function PraticaSpirituale() {
     else savePratica({ data: { ...base, ...ignFields } });
   }
 
-  function richiediGuida() {
+  function richiediGuidaLectio() {
     const step = steps[currentStep]!;
-    const currentValue = tipo === "lectio"
-      ? lectioFields[step.id as keyof LectioFields]
-      : ignFields[step.id as keyof IgnazianaFields];
-
+    const currentValue = lectioFields[step.id as keyof LectioFields];
     guida.richiedi({
       tipo,
       stepId: step.id,
@@ -316,76 +502,90 @@ export default function PraticaSpirituale() {
                 value={currentValue}
                 onChange={(e) => setCurrentValue(e.target.value)}
                 placeholder={step.placeholder}
-                rows={8}
+                rows={7}
                 className="w-full bg-background border border-border px-6 py-5 text-foreground font-serif text-base leading-relaxed placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/60 resize-none"
               />
 
-              {/* ── GUIDA AI ── */}
-              <div className="mt-4">
-                {!guidaAperta ? (
-                  <button
-                    onClick={richiediGuida}
-                    className="flex items-center gap-2 text-xs uppercase tracking-widest text-primary/70 hover:text-primary border border-primary/20 hover:border-primary/50 px-5 py-2.5 transition-all"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    {step.guidaLabel}
-                  </button>
-                ) : (
-                  <div className="border border-primary/20 bg-card">
-                    <div className="flex items-center justify-between px-5 py-3 border-b border-border">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-3.5 h-3.5 text-primary/60" />
-                        <span className="text-[10px] uppercase tracking-widest text-primary/60">
-                          {tipo === "lectio" ? "Padre Spirituale Benedettino" : "Guida Ignaziana"}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        {guida.loading && (
-                          <button onClick={guida.annulla} className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground">
-                            <StopCircle className="w-3 h-3" /> Interrompi
-                          </button>
-                        )}
-                        {!guida.loading && (
-                          <button
-                            onClick={richiediGuida}
-                            className="text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            ↺ Rigenera
-                          </button>
-                        )}
-                        <button
-                          onClick={() => { setGuidaAperta(false); guida.reset(); }}
-                          className="text-muted-foreground hover:text-foreground transition-colors text-sm"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
+              {/* ── GUIDA: Ignaziana (conversational) ── */}
+              {tipo === "ignaziana" && (
+                <div className="mt-4">
+                  <GuidaPanelIgnaziana
+                    guida={guidaIgn}
+                    stepId={step.id}
+                    letture={letture}
+                    testoUtente={currentValue}
+                  />
+                </div>
+              )}
 
-                    <div className="px-6 py-5 min-h-[80px]">
-                      {guida.loading && !guida.testo && (
-                        <div className="flex items-center gap-3">
-                          <Loader2 className="w-4 h-4 text-primary/40 animate-spin" />
-                          <span className="text-muted-foreground text-xs uppercase tracking-widest">
-                            {tipo === "lectio" ? "Il padre sta meditando…" : "La guida sta riflettendo…"}
+              {/* ── GUIDA: Lectio (one-shot) ── */}
+              {tipo === "lectio" && (
+                <div className="mt-4">
+                  {!guidaAperta ? (
+                    <button
+                      onClick={richiediGuidaLectio}
+                      className="flex items-center gap-2 text-xs uppercase tracking-widest text-primary/70 hover:text-primary border border-primary/20 hover:border-primary/50 px-5 py-2.5 transition-all"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      {(step as typeof LECTIO_STEPS[0]).guidaLabel}
+                    </button>
+                  ) : (
+                    <div className="border border-primary/20 bg-card">
+                      <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-3.5 h-3.5 text-primary/60" />
+                          <span className="text-[10px] uppercase tracking-widest text-primary/60">
+                            Padre Spirituale Benedettino
                           </span>
                         </div>
-                      )}
-                      {guida.testo && (
-                        <div className="font-serif text-sm md:text-base text-foreground/85 leading-loose">
-                          {guida.testo}
+                        <div className="flex items-center gap-3">
                           {guida.loading && (
-                            <span className="inline-block w-0.5 h-4 bg-primary/50 animate-pulse ml-0.5 align-middle" />
+                            <button onClick={guida.annulla} className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground">
+                              <StopCircle className="w-3 h-3" /> Interrompi
+                            </button>
                           )}
+                          {!guida.loading && (
+                            <button
+                              onClick={richiediGuidaLectio}
+                              className="text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                            >
+                              ↺ Rigenera
+                            </button>
+                          )}
+                          <button
+                            onClick={() => { setGuidaAperta(false); guida.reset(); }}
+                            className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+                          >
+                            ✕
+                          </button>
                         </div>
-                      )}
-                      {guida.errore && (
-                        <p className="text-muted-foreground text-sm">{guida.errore}</p>
-                      )}
+                      </div>
+
+                      <div className="px-6 py-5 min-h-[80px]">
+                        {guida.loading && !guida.testo && (
+                          <div className="flex items-center gap-3">
+                            <Loader2 className="w-4 h-4 text-primary/40 animate-spin" />
+                            <span className="text-muted-foreground text-xs uppercase tracking-widest">
+                              Il padre sta meditando…
+                            </span>
+                          </div>
+                        )}
+                        {guida.testo && (
+                          <div className="font-serif text-sm md:text-base text-foreground/85 leading-loose">
+                            {guida.testo}
+                            {guida.loading && (
+                              <span className="inline-block w-0.5 h-4 bg-primary/50 animate-pulse ml-0.5 align-middle" />
+                            )}
+                          </div>
+                        )}
+                        {guida.errore && (
+                          <p className="text-muted-foreground text-sm">{guida.errore}</p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </>
           )}
 

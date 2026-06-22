@@ -56,7 +56,7 @@ export default function Home() {
           >
             <Link
               href="/la-chiamata"
-              className="bg-amber-500 text-stone-950 px-9 py-4 tracking-[0.2em] uppercase text-[12px] font-medium hover:bg-amber-400 transition-all duration-300 shadow-lg shadow-amber-900/30"
+              className="bg-primary text-primary-foreground px-9 py-4 tracking-[0.2em] uppercase text-[12px] font-medium hover:bg-primary/85 transition-all duration-300 shadow-lg shadow-black/30"
             >
               Ascolta la Chiamata
             </Link>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, BookOpen, UtensilsCrossed, Clock, Leaf } from "lucide-react";
+import { ChevronDown, ChevronUp, BookOpen, UtensilsCrossed, Clock, Leaf, Coffee, Droplets } from "lucide-react";
 import {
   getMenuGiorno,
   getStagione,
@@ -17,6 +17,23 @@ const COLORE_CLASSE: Record<string, string> = {
   bianco: "bg-amber-100/10 text-amber-100/80 border-amber-100/20",
   rosso: "bg-red-800/20 text-red-300/80 border-red-800/30",
 };
+
+function BevandeBadges({ bevande }: { bevande: string[] }) {
+  if (!bevande || bevande.length === 0) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-2 mt-3">
+      <Droplets className="w-3 h-3 text-primary/40 flex-none" />
+      {bevande.map((b, i) => (
+        <span
+          key={i}
+          className="text-[9px] uppercase tracking-[0.2em] text-primary/55 border border-primary/20 px-2 py-0.5"
+        >
+          {b}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 function RicettaCard({ piatto }: { piatto: Piatto }) {
   const [aperta, setAperta] = useState(false);
@@ -48,7 +65,6 @@ function RicettaCard({ piatto }: { piatto: Piatto }) {
 
       {aperta && (
         <div className="px-5 pb-5 border-t border-border/30 animate-in slide-in-from-top-1 duration-200">
-          {/* Ingredienti */}
           <div className="mt-4 mb-5">
             <p className="text-[9px] uppercase tracking-[0.3em] text-primary/40 mb-3 flex items-center gap-2">
               <Leaf className="w-2.5 h-2.5" /> Ingredienti
@@ -65,7 +81,6 @@ function RicettaCard({ piatto }: { piatto: Piatto }) {
             </div>
           </div>
 
-          {/* Preparazione */}
           <div>
             <p className="text-[9px] uppercase tracking-[0.3em] text-primary/40 mb-3 flex items-center gap-2">
               <UtensilsCrossed className="w-2.5 h-2.5" /> Preparazione
@@ -109,7 +124,7 @@ function LetturaCard({ lettura }: { lettura: Pasto["lettura"] }) {
           <p className="text-xs text-muted-foreground/70 italic">{lettura.rito}</p>
         </div>
       </div>
-      <blockquote className="font-serif text-base md:text-lg text-foreground/85 leading-relaxed italic mb-4 border-l-2 border-primary/30 pl-4">
+      <blockquote className="font-serif text-sm md:text-base text-foreground/85 leading-relaxed italic mb-4 border-l-2 border-primary/30 pl-4 whitespace-pre-line">
         {lettura.testo}
       </blockquote>
       <div>
@@ -122,21 +137,24 @@ function LetturaCard({ lettura }: { lettura: Pasto["lettura"] }) {
   );
 }
 
-function PastoSection({ pasto, accentColor }: { pasto: Pasto; accentColor: string }) {
+function PastoSection({ pasto }: { pasto: Pasto }) {
   return (
     <div className="flex flex-col gap-6">
-      {/* Ora + titolo */}
-      <div className="flex items-center gap-4">
-        <div className="text-center">
-          <p className="font-mono text-2xl text-primary tabular-nums">{pasto.ora}</p>
-          <p className="text-[9px] uppercase tracking-[0.25em] text-muted-foreground/50">
-            {pasto.oraLatina}
+      {/* Ora + titolo + bevande */}
+      <div>
+        <div className="flex items-center gap-4">
+          <div className="text-center">
+            <p className="font-mono text-2xl text-primary tabular-nums">{pasto.ora}</p>
+            <p className="text-[9px] uppercase tracking-[0.25em] text-muted-foreground/50">
+              {pasto.oraLatina}
+            </p>
+          </div>
+          <div className="h-px flex-1 bg-border/40" />
+          <p className="text-[10px] uppercase tracking-[0.35em] text-foreground/50 font-display">
+            {pasto.titolo}
           </p>
         </div>
-        <div className="h-px flex-1 bg-border/40" />
-        <p className="text-[10px] uppercase tracking-[0.35em] text-foreground/50 font-display">
-          {pasto.titolo}
-        </p>
+        <BevandeBadges bevande={pasto.bevande} />
       </div>
 
       {/* Introduzione */}
@@ -144,7 +162,7 @@ function PastoSection({ pasto, accentColor }: { pasto: Pasto; accentColor: strin
         {pasto.introduzione}
       </p>
 
-      {/* Lectio mensalis — prima del pasto come in monastero */}
+      {/* Lectio mensalis */}
       <LetturaCard lettura={pasto.lettura} />
 
       {/* Ricette */}
@@ -162,10 +180,64 @@ function PastoSection({ pasto, accentColor }: { pasto: Pasto; accentColor: strin
   );
 }
 
+function ColazioneSection({ pasto }: { pasto: Pasto }) {
+  return (
+    <div className="flex flex-col gap-5">
+      {/* Ora + titolo */}
+      <div>
+        <div className="flex items-center gap-4">
+          <div className="text-center">
+            <p className="font-mono text-xl text-primary/80 tabular-nums">{pasto.ora}</p>
+            <p className="text-[9px] uppercase tracking-[0.25em] text-muted-foreground/50">
+              {pasto.oraLatina}
+            </p>
+          </div>
+          <div className="h-px flex-1 bg-border/30" />
+          <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-foreground/40 font-display">
+            <Coffee className="w-3 h-3" />
+            {pasto.titolo}
+          </div>
+        </div>
+        <BevandeBadges bevande={pasto.bevande} />
+      </div>
+
+      {/* Introduzione */}
+      <p className="text-sm text-muted-foreground/70 font-light leading-relaxed border-l border-border/30 pl-4 italic">
+        {pasto.introduzione}
+      </p>
+
+      {/* Lettura breve */}
+      <div className="bg-card/30 border border-border/30 px-5 py-4">
+        <div className="flex items-center gap-2 mb-3">
+          <BookOpen className="w-3 h-3 text-primary/40" />
+          <p className="text-[9px] uppercase tracking-[0.3em] text-primary/40">Prima della colazione</p>
+        </div>
+        <p className="text-xs text-muted-foreground/60 italic mb-1">{pasto.lettura.rito}</p>
+        <blockquote className="font-serif text-sm text-foreground/75 leading-relaxed italic border-l-2 border-primary/20 pl-3 mb-3 whitespace-pre-line">
+          {pasto.lettura.testo}
+        </blockquote>
+        <p className="text-[9px] uppercase tracking-widest text-primary/40">{pasto.lettura.titolo}</p>
+        <p className="text-[9px] text-muted-foreground/30">{pasto.lettura.fonte}</p>
+      </div>
+
+      {/* Cibi */}
+      <div>
+        <p className="text-[9px] uppercase tracking-[0.35em] text-muted-foreground/30 mb-2">
+          Tavola mattutina
+        </p>
+        <div className="flex flex-col gap-2">
+          {pasto.piatti.map((piatto, i) => (
+            <RicettaCard key={i} piatto={piatto} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MensaPage() {
   const stagione = getStagione();
   const colore = getColore(stagione);
-  const giorno = getMenuGiorno();
   const dataFormatata = formatDataLiturgica();
   const [giornoSelezionato, setGiornoSelezionato] = useState(new Date().getDay());
 
@@ -186,13 +258,12 @@ export default function MensaPage() {
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative bg-background border-b border-border overflow-hidden">
-        {/* Sfondo decorativo */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        <div
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c89b3c' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}
         />
-
         <div className="relative container mx-auto px-6 max-w-4xl py-20 text-center">
           <p className="text-[9px] uppercase tracking-[0.4em] text-muted-foreground/50 mb-5">
             Refettorio · Benedictus
@@ -201,11 +272,9 @@ export default function MensaPage() {
             La Tavola del Custode
           </h1>
           <p className="text-foreground/55 font-light text-base leading-relaxed max-w-xl mx-auto mb-7">
-            Menu giornalieri, ricette e lettura mensalis secondo le tradizioni e le stagioni benedettine.
+            Menu giornalieri, ricette e lectio mensalis secondo le tradizioni dell'Abbazia della Scala di Noci.
             Come nei monasteri, ogni pasto è preceduto da una lettura spirituale.
           </p>
-
-          {/* Stagione liturgica */}
           <div className="flex items-center justify-center gap-3 mb-3">
             <span className={`inline-flex items-center gap-2 px-3 py-1.5 text-[10px] uppercase tracking-widest border ${COLORE_CLASSE[colore]}`}>
               <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -274,6 +343,13 @@ export default function MensaPage() {
         </div>
       </section>
 
+      {/* ── COLAZIONE ────────────────────────────────────────────────────── */}
+      <section className="py-10 bg-card/30 border-b border-border/50">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <ColazioneSection pasto={giornoVisualizzato.colazione} />
+        </div>
+      </section>
+
       {/* ── PRANZO E CENA ────────────────────────────────────────────────── */}
       <section className="py-12 bg-background">
         <div className="container mx-auto px-6 max-w-4xl">
@@ -281,7 +357,7 @@ export default function MensaPage() {
 
             {/* PRANZO */}
             <div>
-              <PastoSection pasto={giornoVisualizzato.pranzo} accentColor="primary" />
+              <PastoSection pasto={giornoVisualizzato.pranzo} />
             </div>
 
             {/* Divisore verticale — solo desktop */}
@@ -289,7 +365,7 @@ export default function MensaPage() {
 
             {/* CENA */}
             <div className="border-t border-border/40 pt-10 lg:border-t-0 lg:pt-0">
-              <PastoSection pasto={giornoVisualizzato.cena} accentColor="primary" />
+              <PastoSection pasto={giornoVisualizzato.cena} />
             </div>
 
           </div>
@@ -308,7 +384,7 @@ export default function MensaPage() {
             ma chi legge per tutta la settimana comincerà la domenica.»
           </blockquote>
           <p className="text-[10px] uppercase tracking-widest text-muted-foreground/30">
-            Regola di San Benedetto, Cap. XXXVIII · ca. 530 d.C.
+            Regola di San Benedetto, Cap. XXXVIII · Abbazia della Scala, Noci · Puglia
           </p>
         </div>
       </section>

@@ -41,10 +41,12 @@ interface Lettura {
 }
 
 const TYPE_MAP: Record<string, { tipo: string; label: string; ordine: number }> = {
-  first_reading:  { tipo: "prima_lettura",   label: "Prima Lettura",   ordine: 1 },
-  psalm:          { tipo: "salmo",            label: "Salmo Responsoriale", ordine: 2 },
-  second_reading: { tipo: "seconda_lettura",  label: "Seconda Lettura", ordine: 3 },
-  gospel:         { tipo: "vangelo",          label: "Vangelo",         ordine: 4 },
+  reading:        { tipo: "prima_lettura",   label: "Prima Lettura",       ordine: 1 },
+  first_reading:  { tipo: "prima_lettura",   label: "Prima Lettura",       ordine: 1 },
+  psalm:          { tipo: "salmo",           label: "Salmo Responsoriale", ordine: 2 },
+  second_reading: { tipo: "seconda_lettura", label: "Seconda Lettura",     ordine: 3 },
+  epistle:        { tipo: "seconda_lettura", label: "Seconda Lettura",     ordine: 3 },
+  gospel:         { tipo: "vangelo",         label: "Vangelo",             ordine: 4 },
 };
 
 const COLOR_MAP: Record<string, string> = {

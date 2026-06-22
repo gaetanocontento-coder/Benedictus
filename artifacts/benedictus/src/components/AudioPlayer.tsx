@@ -39,22 +39,35 @@ interface Track {
 }
 
 const PLAYLIST: Track[] = [
-  { id: "j1rHt7MylVQ", titolo: "Abbazia di Chiaravalle",            autore: "Canti della Liturgia delle Ore", durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "f-Ei_0nkRlw", titolo: "Canto Gregoriano — Meditazione",   autore: "Schola Gregoriana",           durata: "3 h",    categoria: "Gregoriano"  },
-  { id: "VNmxfy_wEYg", titolo: "10 Canti Gregoriani",               autore: "Monaci Benedettini",          durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "YMxY21UJR-8", titolo: "Canti Gregoriani del Monastero",    autore: "Monaci del Monastero",        durata: "2 h",    categoria: "Gregoriano"  },
-  { id: "68tmj9SPfhI", titolo: "Obscura Liturgia",                  autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "hOMQvuDgbcc", titolo: "Sancta Tenebrae",                   autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
-  { id: "NhrV6H78CCc", titolo: "Dies Irae — Canto Sacro",           autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
-  { id: "6A4A9Xkx6Xo", titolo: "Cantici Monastici",                 autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
-  { id: "_8s6srDYCJQ", titolo: "Meditazione Sacra",                 autore: "Sacred Gregorian Ambient",    durata: "2 h",    categoria: "Meditazione" },
-  { id: "_NGTsdL2YzE", titolo: "A Feather on the Breath of God",    autore: "Hildegard von Bingen",        durata: "1 h",    categoria: "Polifonia"   },
+  // ── Gregoriano ──────────────────────────────────────────────────────────────
+  { id: "djkLm3WpUOE", titolo: "Kyrie Eleison",                     autore: "Canto Gregoriano",            durata: "2 h",    categoria: "Gregoriano"  },
+  { id: "0ddLO5VT2jg", titolo: "Salve Regina",                      autore: "Canto Gregoriano Solenne",    durata: "8 min",  categoria: "Gregoriano"  },
+  { id: "F4MhIw1jaBw", titolo: "Ave Maria",                         autore: "Canto Gregoriano Monastico",  durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "JrZiC8Zajh4", titolo: "Pater Noster",                      autore: "Canto Gregoriano",            durata: "5 min",  categoria: "Gregoriano"  },
+  { id: "5GrQJGQWfd8", titolo: "Veni Creator Spiritus",             autore: "Canto Gregoriano",            durata: "6 min",  categoria: "Gregoriano"  },
+  { id: "OsR1V2boSQk", titolo: "Gloria in Excelsis Deo",            autore: "Canto Gregoriano Monastico",  durata: "10 min", categoria: "Gregoriano"  },
+  { id: "hFbajU8a2RI", titolo: "Alleluia — Specie Tua",             autore: "Monaci Benedettini",          durata: "4 min",  categoria: "Gregoriano"  },
+  { id: "XjqpedsTrLk", titolo: "O Salutaris Hostia",                autore: "Canto Gregoriano",            durata: "5 min",  categoria: "Gregoriano"  },
+  { id: "c2cEzberbXM", titolo: "Tantum Ergo",                       autore: "Canto Gregoriano",            durata: "5 min",  categoria: "Gregoriano"  },
+  { id: "j1rHt7MylVQ", titolo: "Abbazia di Chiaravalle",            autore: "Liturgia delle Ore",          durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "f-Ei_0nkRlw", titolo: "Canto Gregoriano — Meditazione",    autore: "Schola Gregoriana",           durata: "3 h",    categoria: "Gregoriano"  },
+  // ── Lodi ────────────────────────────────────────────────────────────────────
+  { id: "Iu_QLG_LLvU", titolo: "Vespri Gregoriani",                 autore: "Schola Cantorum",             durata: "1 h",    categoria: "Lodi"        },
+  { id: "dD43qthEdec", titolo: "Compieta Monastica",                autore: "Monaci Benedettini",          durata: "40 min", categoria: "Lodi"        },
+  // ── Polifonia ───────────────────────────────────────────────────────────────
   { id: "iT-ZAAi4UQQ", titolo: "Spem in Alium",                     autore: "Thomas Tallis",               durata: "12 min", categoria: "Polifonia"   },
-  { id: "7YqF69HLkj8", titolo: "Tabula Rasa",                       autore: "Arvo Pärt",                   durata: "55 min", categoria: "Meditazione" },
-  { id: "Yq0vmweRfh4", titolo: "Komm, süsser Tod",                  autore: "J. S. Bach",                  durata: "30 min", categoria: "Meditazione" },
   { id: "BRfF7W4El60", titolo: "Missa Papae Marcelli",              autore: "Palestrina",                  durata: "50 min", categoria: "Polifonia"   },
+  { id: "_NGTsdL2YzE", titolo: "A Feather on the Breath of God",    autore: "Hildegard von Bingen",        durata: "1 h",    categoria: "Polifonia"   },
   { id: "qzOmPUu-F_M", titolo: "Stabat Mater",                      autore: "Pergolesi",                   durata: "35 min", categoria: "Polifonia"   },
   { id: "BDdZZgDJ5Tw", titolo: "Requiem",                           autore: "Tomás Luis de Victoria",      durata: "45 min", categoria: "Polifonia"   },
+  { id: "wB35pHMACrI", titolo: "Laudate Dominum",                   autore: "W. A. Mozart",                durata: "5 min",  categoria: "Polifonia"   },
+  // ── Meditazione ─────────────────────────────────────────────────────────────
+  { id: "AiuC_CaObbI", titolo: "Agnus Dei",                         autore: "Samuel Barber",               durata: "10 min", categoria: "Meditazione" },
+  { id: "7YqF69HLkj8", titolo: "Tabula Rasa",                       autore: "Arvo Pärt",                   durata: "55 min", categoria: "Meditazione" },
+  { id: "Yq0vmweRfh4", titolo: "Komm, süsser Tod",                  autore: "J. S. Bach",                  durata: "30 min", categoria: "Meditazione" },
+  { id: "hOMQvuDgbcc", titolo: "Sancta Tenebrae",                   autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
+  { id: "NhrV6H78CCc", titolo: "Dies Irae — Canto Sacro",           autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
+  { id: "_8s6srDYCJQ", titolo: "Meditazione Sacra Gregoriana",      autore: "Sacred Gregorian Ambient",    durata: "2 h",    categoria: "Meditazione" },
 ];
 
 const CATEGORIA_COLORE: Record<Categoria, string> = {
@@ -144,6 +157,17 @@ export function AudioPlayer() {
         document.head.appendChild(s);
       }
     }
+
+    return () => {
+      // Destroy the player on unmount / HMR so the next mount gets a fresh
+      // instance. Without this, hot-reload leaves a stale player object in the
+      // ref whose DOM node has been replaced, causing "playVideo is not a
+      // function" errors.
+      try { (playerRef.current as unknown as { destroy(): void })?.destroy(); } catch {}
+      playerRef.current = null;
+      setReady(false);
+      setPlaying(false);
+    };
   }, []);
 
   const toggle = () => {

@@ -142,6 +142,26 @@ const VIDEO: Video[] = [
     durata: "67 min",
     luogo: "Lezione Magistrale",
   },
+  {
+    id: "GQ_9cbrO2Hk",
+    titolo: "Il Nome della Rosa — Scena Iniziale",
+    sottotitolo: "Jean-Jacques Annaud, 1986",
+    categoria: "testimonianze",
+    descrizione:
+      "L'apertura del capolavoro cinematografico tratto dal romanzo di Umberto Eco: Guglielmo da Baskerville e Adso da Melk arrivano all'abbazia benedettina tra le montagne dell'Abruzzo. Le pietre di Rocca Calascio diventano il monastero del mistero.",
+    durata: "Estratto",
+    luogo: "Campo Imperatore & Rocca Calascio, Abruzzo",
+  },
+  {
+    id: "5-4Pzc8ozM4",
+    titolo: "Il Nome della Rosa — Colonna Sonora",
+    sottotitolo: "James Horner · Suite Completa",
+    categoria: "canto gregoriano",
+    descrizione:
+      "La colonna sonora ufficiale del film di Annaud composta da James Horner: temi gregoriani, cori medievali e orchestrazioni cupe che evocano l'atmosfera dell'abbazia benedettina, il peso dei manoscritti e il terrore dell'ignoto.",
+    durata: "Suite",
+    luogo: "Colonna Sonora Originale, 1986",
+  },
 ];
 
 function getThumbnail(id: string) {

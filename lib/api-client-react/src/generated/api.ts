@@ -33,6 +33,7 @@ import type {
   BEpisodeInput,
   BEsameDomande,
   BGetLiturgiaGiornoParams,
+  BGetRegolaGiornoParams,
   BGraduate,
   BGuidaSpirituale,
   BLectio,
@@ -54,6 +55,7 @@ import type {
   BPraticaSpirituale,
   BRegisterInput,
   BRegisterWorkshop200,
+  BRegolaGiorno,
   BSigillo,
   BStartModule200,
   BSubscribeNewsletter201,
@@ -5023,6 +5025,90 @@ export function useBGetEsameDomande<TData = Awaited<ReturnType<typeof bGetEsameD
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getBGetEsameDomandeQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetRegolaGiornoUrl = (params?: BGetRegolaGiornoParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/b/regola/giorno?${stringifiedParams}` : `/api/b/regola/giorno`
+}
+
+/**
+ * @summary Get the RSB (Regola di San Benedetto) daily reading for a given date
+ */
+export const bGetRegolaGiorno = async (params?: BGetRegolaGiornoParams, options?: RequestInit): Promise<BRegolaGiorno> => {
+
+  return customFetch<BRegolaGiorno>(getBGetRegolaGiornoUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetRegolaGiornoQueryKey = (params?: BGetRegolaGiornoParams,) => {
+    return [
+    `/api/b/regola/giorno`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getBGetRegolaGiornoQueryOptions = <TData = Awaited<ReturnType<typeof bGetRegolaGiorno>>, TError = ErrorType<void>>(params?: BGetRegolaGiornoParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetRegolaGiorno>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetRegolaGiornoQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetRegolaGiorno>>> = ({ signal }) => bGetRegolaGiorno(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetRegolaGiorno>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetRegolaGiornoQueryResult = NonNullable<Awaited<ReturnType<typeof bGetRegolaGiorno>>>
+export type BGetRegolaGiornoQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get the RSB (Regola di San Benedetto) daily reading for a given date
+ */
+
+export function useBGetRegolaGiorno<TData = Awaited<ReturnType<typeof bGetRegolaGiorno>>, TError = ErrorType<void>>(
+ params?: BGetRegolaGiornoParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetRegolaGiorno>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetRegolaGiornoQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

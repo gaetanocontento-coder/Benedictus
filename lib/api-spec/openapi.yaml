@@ -52,6 +52,8 @@ tags:
     description: Percorso del Custode — module progress tracking
   - name: b-liturgia
     description: Liturgia del Giorno, Lectio Divina e Esercizi Ignaziani
+  - name: b-regola
+    description: Regola di San Benedetto — lettura quotidiana
 
 paths:
   /healthz:
@@ -1274,6 +1276,30 @@ paths:
         "401":
           description: Unauthorized
 
+  /b/regola/giorno:
+    get:
+      operationId: bGetRegolaGiorno
+      tags: [b-regola]
+      summary: Get the RSB (Regola di San Benedetto) daily reading for a given date
+      parameters:
+        - name: data
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Date in YYYY-MM-DD format (defaults to today)
+      responses:
+        "200":
+          description: RSB daily reading
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BRegolaGiorno"
+        "400":
+          description: Invalid date format
+        "404":
+          description: Date not in RSB calendar
+
   /b/liturgia:
     get:
       operationId: bGetLiturgiaGiorno
@@ -2468,3 +2494,31 @@ components:
                 type: string
         titoloLiturgico:
           type: string
+
+    BRegolaGiorno:
+      type: object
+      required: [data, riferimento, capitolo, titoloCapitolo, etichetta]
+      properties:
+        data:
+          type: string
+          description: Date in YYYY-MM-DD format
+        riferimento:
+          type: string
+          description: Raw chapter reference from the RSB calendar (e.g. "7, 5")
+        capitolo:
+          type: integer
+          description: Chapter number (0 = Prologo, 1-73 = chapters)
+        titoloCapitolo:
+          type: string
+          description: Italian chapter title
+        versoInizio:
+          type: integer
+          nullable: true
+          description: Starting verse number within the chapter (null if from the beginning)
+        etichetta:
+          type: string
+          description: Human-readable label
+        testo:
+          type: string
+          nullable: true
+          description: Full chapter text in Italian (null if unavailable)

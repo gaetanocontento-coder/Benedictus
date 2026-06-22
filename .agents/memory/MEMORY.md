@@ -1,1 +1,2 @@
 - [Benedictus Architecture](benedictus-architecture.md) — route prefix /b/, JWT auth, DB namespace b_, Stripe webhook order, tier access control
+- [RSB Calendar Integration](rsb-calendario.md) — ora-et-labora.net uses Windows-1252 encoding; fetch with TextDecoder('windows-1252'); normalize CRLF before text parsing

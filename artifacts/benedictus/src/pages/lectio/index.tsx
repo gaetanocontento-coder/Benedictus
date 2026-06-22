@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight } from "lucide-react";
-import { useBListLectio } from "@workspace/api-client-react";
+import { ArrowRight, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
+import { useBListLectio, useBGetRegolaGiorno } from "@workspace/api-client-react";
 
 const CATEGORIES = [
   { value: "", label: "Tutto" },
@@ -11,6 +11,107 @@ const CATEGORIES = [
   { value: "umilta", label: "Umiltà" },
   { value: "custodia", label: "Custodia" },
 ];
+
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function RegolaGiorno() {
+  const [expanded, setExpanded] = useState(false);
+  const { data, isLoading, isError } = useBGetRegolaGiorno({ data: todayISO() });
+
+  if (isLoading) {
+    return (
+      <div className="border border-border p-8 bg-card/50 text-center">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground animate-pulse">
+          Caricamento Regola...
+        </p>
+      </div>
+    );
+  }
+
+  if (isError || !data) return null;
+
+  const paragrafi = data.testo
+    ? data.testo.split(/\n{2,}/).filter(Boolean)
+    : [];
+
+  const preview = paragrafi.slice(0, 2);
+  const rest = paragrafi.slice(2);
+
+  return (
+    <div className="border border-primary/20 bg-card">
+      {/* Header */}
+      <div className="border-b border-border/50 px-8 py-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <BookOpen className="w-4 h-4 text-primary flex-shrink-0" />
+          <p className="text-xs uppercase tracking-[0.25em] text-primary">
+            Regola di San Benedetto — Oggi
+          </p>
+        </div>
+        <span className="text-xs text-muted-foreground font-mono border border-border px-2 py-0.5">
+          {data.etichetta}
+        </span>
+      </div>
+
+      {/* Body */}
+      <div className="px-8 py-6">
+        <h3 className="text-xl font-serif text-foreground mb-1">
+          {data.capitolo === 0 ? "Prologo" : `Capitolo ${data.capitolo}`}
+        </h3>
+        <p className="text-sm text-muted-foreground mb-5 italic">
+          {data.titoloCapitolo}
+        </p>
+
+        {data.versoInizio && (
+          <p className="text-xs text-primary/70 uppercase tracking-widest mb-4">
+            Lettura dal verso {data.versoInizio}
+          </p>
+        )}
+
+        {paragrafi.length > 0 ? (
+          <div className="space-y-3 text-muted-foreground font-light leading-relaxed text-sm">
+            {preview.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+
+            {rest.length > 0 && (
+              <>
+                {expanded && rest.map((p, i) => (
+                  <p key={i + 100}>{p}</p>
+                ))}
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="flex items-center gap-1.5 text-xs uppercase tracking-widest text-primary hover:text-foreground transition-colors pt-1"
+                >
+                  {expanded ? (
+                    <><ChevronUp className="w-3 h-3" /> Comprimi</>
+                  ) : (
+                    <><ChevronDown className="w-3 h-3" /> Leggi tutto</>
+                  )}
+                </button>
+              </>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground italic">
+            Testo non disponibile. Consulta il{" "}
+            <a
+              href="https://www.ora-et-labora.net/RSB_it.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline underline-offset-2"
+            >
+              testo integrale online
+            </a>
+            .
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function LectioIndex() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -32,6 +133,13 @@ export default function LectioIndex() {
           <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
             Scritti, riflessioni e pratiche per nutrire il custode. Lettura lenta come atto spirituale.
           </p>
+        </div>
+      </section>
+
+      {/* RSB Daily Reading */}
+      <section className="py-10 bg-background border-b border-border">
+        <div className="container mx-auto px-6 max-w-3xl">
+          <RegolaGiorno />
         </div>
       </section>
 

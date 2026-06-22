@@ -746,6 +746,23 @@ export interface BGuidaSpirituale {
   titoloLiturgico?: string;
 }
 
+export interface BRegolaGiorno {
+  /** Date in YYYY-MM-DD format */
+  data: string;
+  /** Raw chapter reference from the RSB calendar (e.g. "7, 5") */
+  riferimento: string;
+  /** Chapter number (0 = Prologo, 1-73 = chapters) */
+  capitolo: number;
+  /** Italian chapter title */
+  titoloCapitolo: string;
+  /** Starting verse number within the chapter (null if from the beginning) */
+  versoInizio?: number | null;
+  /** Human-readable label */
+  etichetta: string;
+  /** Full chapter text in Italian (null if unavailable) */
+  testo?: string | null;
+}
+
 export type ListLeadsParams = {
 stato?: string;
 fonte?: string;
@@ -794,6 +811,13 @@ export type BStartModule200 = {
 
 export type BCompleteModule200 = {
   success: boolean;
+};
+
+export type BGetRegolaGiornoParams = {
+/**
+ * Date in YYYY-MM-DD format (defaults to today)
+ */
+data?: string;
 };
 
 export type BGetLiturgiaGiornoParams = {

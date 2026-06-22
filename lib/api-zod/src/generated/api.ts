@@ -1123,6 +1123,24 @@ export const BGetEsameDomandeResponse = zod.object({
 
 
 /**
+ * @summary Get the RSB (Regola di San Benedetto) daily reading for a given date
+ */
+export const BGetRegolaGiornoQueryParams = zod.object({
+  "data": zod.coerce.string().optional()
+})
+
+export const BGetRegolaGiornoResponse = zod.object({
+  "data": zod.string().describe('Date in YYYY-MM-DD format'),
+  "riferimento": zod.string().describe('Raw chapter reference from the RSB calendar (e.g. \"7, 5\")'),
+  "capitolo": zod.number().describe('Chapter number (0 = Prologo, 1-73 = chapters)'),
+  "titoloCapitolo": zod.string().describe('Italian chapter title'),
+  "versoInizio": zod.number().nullish().describe('Starting verse number within the chapter (null if from the beginning)'),
+  "etichetta": zod.string().describe('Human-readable label'),
+  "testo": zod.string().nullish().describe('Full chapter text in Italian (null if unavailable)')
+})
+
+
+/**
  * @summary Get liturgical readings for a given date (default today)
  */
 export const BGetLiturgiaGiornoQueryParams = zod.object({

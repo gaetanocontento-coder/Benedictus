@@ -207,13 +207,13 @@ export function formatMinuti(min: number): string {
   return `${min}m`;
 }
 
-/** Synthesise a bell strike using Web Audio API */
+/** Synthesise a bell strike using Web Audio API — rich monastery bell tone (D4) */
 export function suonaCampana(volte: number = 1, volume = 0.4): void {
   try {
     const ctx = new AudioContext();
     const partials = [1, 2.756, 3.5, 5.5, 7.0];
     const partialGains = [1.0, 0.4, 0.3, 0.15, 0.08];
-    const baseFreq = 293.7; // D4 bell tone
+    const baseFreq = 293.7; // D4 — deep monastery bell
 
     for (let colpo = 0; colpo < volte; colpo++) {
       const startTime = ctx.currentTime + colpo * 1.6;
@@ -239,4 +239,82 @@ export function suonaCampana(volte: number = 1, volume = 0.4): void {
   } catch {
     // AudioContext not supported or blocked
   }
+}
+
+/**
+ * Ring the clock bell at the hour — N strikes in 12h format (E4, slightly
+ * brighter and shorter than the canonical bell).
+ * E.g. 13:00 → 1 strike, 12:00 → 12 strikes.
+ */
+export function suonaCampanaOrologio(ora: number, volume = 0.3): void {
+  try {
+    const colpi = ora % 12 || 12; // 0 h → 12, 13 h → 1, etc.
+    const ctx = new AudioContext();
+    const partials = [1, 2.756, 3.5, 5.5];
+    const partialGains = [1.0, 0.38, 0.25, 0.1];
+    const baseFreq = 329.6; // E4 — slightly brighter than D4
+
+    for (let colpo = 0; colpo < colpi; colpo++) {
+      const startTime = ctx.currentTime + colpo * 1.5;
+
+      partials.forEach((ratio, j) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.type = "sine";
+        osc.frequency.value = baseFreq * ratio;
+
+        const peak = volume * partialGains[j];
+        gain.gain.setValueAtTime(0, startTime);
+        gain.gain.linearRampToValueAtTime(peak, startTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 4);
+
+        osc.start(startTime);
+        osc.stop(startTime + 4.1);
+      });
+    }
+  } catch {
+    // AudioContext not supported or blocked
+  }
+}
+
+/**
+ * Ring a single soft half-hour bell — G4, shorter decay, lighter character.
+ * Signals the half-hour without the full weight of the hourly stroke.
+ */
+export function suonaMezzoOra(volume = 0.22): void {
+  try {
+    const ctx = new AudioContext();
+    const partials = [1, 2.756, 3.5];
+    const partialGains = [1.0, 0.32, 0.18];
+    const baseFreq = 392.0; // G4 — lighter, shorter
+
+    const startTime = ctx.currentTime;
+    partials.forEach((ratio, j) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.type = "sine";
+      osc.frequency.value = baseFreq * ratio;
+
+      const peak = volume * partialGains[j];
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(peak, startTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 2.8);
+
+      osc.start(startTime);
+      osc.stop(startTime + 2.9);
+    });
+  } catch {
+    // AudioContext not supported or blocked
+  }
+}
+
+/** Returns true if the given hour:minute exactly matches a canonical hour start */
+export function isOraCanonica(h: number, m: number): boolean {
+  return ORE_CANONICHE.some((o) => o.oraInizio === h && o.minutoInizio === m);
 }

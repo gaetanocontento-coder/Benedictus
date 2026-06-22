@@ -39,6 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               { href: "/liturgia",    label: "Liturgia"     },
               { href: "/lectio",      label: "Lectio"       },
               { href: "/scriptorium", label: "Scriptorium"  },
+              { href: "/video",       label: "Video"        },
               { href: "/percorso",    label: "Percorso"     },
               { href: "/piani",       label: "Piani"        },
             ].map(({ href, label }) => (

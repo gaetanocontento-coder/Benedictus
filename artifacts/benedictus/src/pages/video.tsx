@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Play, X, Clock, MapPin } from "lucide-react";
 
 type Categoria = "vita monastica" | "canto gregoriano" | "eremi" | "testimonianze";
@@ -193,10 +193,29 @@ function getFallbackThumbnail(id: string) {
 
 function VideoCard({ video, onClick }: { video: Video; onClick: () => void }) {
   const [imgSrc, setImgSrc] = useState(getThumbnail(video.id));
+  const [hovered, setHovered] = useState(false);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMouseEnter = () => {
+    hoverTimer.current = setTimeout(() => setHovered(true), 400);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    setHovered(false);
+    setIframeLoaded(false);
+  };
 
   return (
-    <button onClick={onClick} className="group text-left w-full block">
+    <button
+      onClick={onClick}
+      className="group text-left w-full block"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className="relative overflow-hidden aspect-video bg-stone-900 mb-4">
+        {/* Static thumbnail — always rendered, hidden when iframe is ready */}
         <img
           src={imgSrc}
           alt={video.titolo}
@@ -205,15 +224,34 @@ function VideoCard({ video, onClick }: { video: Video; onClick: () => void }) {
               setImgSrc(getFallbackThumbnail(video.id));
             }
           }}
-          className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:brightness-75"
+          className={`w-full h-full object-cover transition-all duration-500 ${
+            iframeLoaded ? "opacity-0" : "opacity-100 group-hover:brightness-75"
+          }`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+
+        {/* YouTube iframe preview — muted autoplay on hover */}
+        {hovered && (
+          <iframe
+            className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${
+              iframeLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&showinfo=0&loop=1&playlist=${video.id}&iv_load_policy=3`}
+            allow="autoplay; encrypted-media"
+            title={video.titolo}
+            onLoad={() => setIframeLoaded(true)}
+          />
+        )}
+
+        <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${iframeLoaded ? "opacity-0" : "opacity-100"}`} />
+
+        {/* Play button — visible on hover before iframe loads */}
+        <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${hovered && iframeLoaded ? "opacity-0" : "opacity-0 group-hover:opacity-100"}`}>
           <div className="w-14 h-14 rounded-full border border-white/60 flex items-center justify-center bg-black/30 backdrop-blur-sm">
             <Play className="w-5 h-5 text-white fill-white ml-0.5" />
           </div>
         </div>
-        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2">
+
+        <div className={`absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 transition-opacity duration-300 ${iframeLoaded ? "opacity-0" : "opacity-100"}`}>
           <span className="text-[9px] uppercase tracking-widest text-white/80 bg-black/50 px-2 py-1 backdrop-blur-sm">
             {video.categoria}
           </span>

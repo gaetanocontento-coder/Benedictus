@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/lectio",      label: "Lectio"      },
   { href: "/scriptorium", label: "Scriptorium" },
   { href: "/video",       label: "Video"       },
+  { href: "/mensa",       label: "Mensa"       },
   { href: "/percorso",    label: "Percorso"    },
   { href: "/piani",       label: "Piani"       },
 ];

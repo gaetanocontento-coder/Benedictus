@@ -36,6 +36,7 @@ import LiturgiaIndex from "@/pages/liturgia/index";
 import PraticaSpirituale from "@/pages/liturgia/pratica";
 import VideoPage from "@/pages/video";
 import HabitareSecum from "@/pages/habitare-secum";
+import MensaPage from "@/pages/mensa";
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,7 @@ function Router() {
         <Route path="/liturgia/pratica" component={PraticaSpirituale} />
         <Route path="/video" component={VideoPage} />
         <Route path="/habitare-secum" component={HabitareSecum} />
+        <Route path="/mensa" component={MensaPage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

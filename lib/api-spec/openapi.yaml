@@ -1356,6 +1356,23 @@ paths:
         "401":
           description: Unauthorized
 
+  /b/guida-spirituale:
+    post:
+      operationId: bGuidaSpirituale
+      tags: [b-liturgia]
+      summary: Stream AI spiritual guidance for Lectio Divina or Ignatian Exercises (SSE)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BGuidaSpirituale"
+      responses:
+        "200":
+          description: SSE stream of spiritual guidance text
+        "400":
+          description: Bad request
+
 components:
   schemas:
     HealthStatus:
@@ -2425,4 +2442,29 @@ components:
         esameConscienza:
           type: string
         frutti:
+          type: string
+
+    BGuidaSpirituale:
+      type: object
+      required: [tipo, stepId]
+      properties:
+        tipo:
+          type: string
+          enum: [lectio, ignaziana, analisi]
+        stepId:
+          type: string
+        testoUtente:
+          type: string
+        letture:
+          type: array
+          items:
+            type: object
+            properties:
+              riferimento:
+                type: string
+              testo:
+                type: string
+              tipo:
+                type: string
+        titoloLiturgico:
           type: string

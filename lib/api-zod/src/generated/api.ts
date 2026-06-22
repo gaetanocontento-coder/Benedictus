@@ -1231,3 +1231,19 @@ export const BGetPraticheByDateResponseItem = zod.object({
 export const BGetPraticheByDateResponse = zod.array(BGetPraticheByDateResponseItem)
 
 
+/**
+ * @summary Stream AI spiritual guidance for Lectio Divina or Ignatian Exercises (SSE)
+ */
+export const BGuidaSpiritualeBody = zod.object({
+  "tipo": zod.enum(['lectio', 'ignaziana', 'analisi']),
+  "stepId": zod.string(),
+  "testoUtente": zod.string().optional(),
+  "letture": zod.array(zod.object({
+  "riferimento": zod.string().optional(),
+  "testo": zod.string().optional(),
+  "tipo": zod.string().optional()
+})).optional(),
+  "titoloLiturgico": zod.string().optional()
+})
+
+

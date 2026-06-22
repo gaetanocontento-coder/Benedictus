@@ -723,6 +723,29 @@ export interface BPraticaInput {
   frutti?: string;
 }
 
+export type BGuidaSpiritualeTipo = typeof BGuidaSpiritualeTipo[keyof typeof BGuidaSpiritualeTipo];
+
+
+export const BGuidaSpiritualeTipo = {
+  lectio: 'lectio',
+  ignaziana: 'ignaziana',
+  analisi: 'analisi',
+} as const;
+
+export type BGuidaSpiritualeLettureItem = {
+  riferimento?: string;
+  testo?: string;
+  tipo?: string;
+};
+
+export interface BGuidaSpirituale {
+  tipo: BGuidaSpiritualeTipo;
+  stepId: string;
+  testoUtente?: string;
+  letture?: BGuidaSpiritualeLettureItem[];
+  titoloLiturgico?: string;
+}
+
 export type ListLeadsParams = {
 stato?: string;
 fonte?: string;

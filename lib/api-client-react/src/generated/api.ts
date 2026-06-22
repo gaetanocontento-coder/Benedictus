@@ -34,6 +34,7 @@ import type {
   BEsameDomande,
   BGetLiturgiaGiornoParams,
   BGraduate,
+  BGuidaSpirituale,
   BLectio,
   BLectioInput,
   BLectioUpdate,
@@ -5342,4 +5343,75 @@ export function useBGetPraticheByDate<TData = Awaited<ReturnType<typeof bGetPrat
 
 
 
+
+export const getBGuidaSpiritualeUrl = () => {
+
+
+
+
+  return `/api/b/guida-spirituale`
+}
+
+/**
+ * @summary Stream AI spiritual guidance for Lectio Divina or Ignatian Exercises (SSE)
+ */
+export const bGuidaSpirituale = async (bGuidaSpirituale: BGuidaSpirituale, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getBGuidaSpiritualeUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bGuidaSpirituale,)
+  }
+);}
+
+
+
+
+export const getBGuidaSpiritualeMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bGuidaSpirituale>>, TError,{data: BodyType<BGuidaSpirituale>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bGuidaSpirituale>>, TError,{data: BodyType<BGuidaSpirituale>}, TContext> => {
+
+const mutationKey = ['bGuidaSpirituale'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bGuidaSpirituale>>, {data: BodyType<BGuidaSpirituale>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bGuidaSpirituale(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BGuidaSpiritualeMutationResult = NonNullable<Awaited<ReturnType<typeof bGuidaSpirituale>>>
+    export type BGuidaSpiritualeMutationBody = BodyType<BGuidaSpirituale>
+    export type BGuidaSpiritualeMutationError = ErrorType<void>
+
+    /**
+ * @summary Stream AI spiritual guidance for Lectio Divina or Ignatian Exercises (SSE)
+ */
+export const useBGuidaSpirituale = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bGuidaSpirituale>>, TError,{data: BodyType<BGuidaSpirituale>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bGuidaSpirituale>>,
+        TError,
+        {data: BodyType<BGuidaSpirituale>},
+        TContext
+      > => {
+      return useMutation(getBGuidaSpiritualeMutationOptions(options));
+    }
 

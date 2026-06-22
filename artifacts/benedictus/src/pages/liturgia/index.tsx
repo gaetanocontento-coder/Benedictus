@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { BookOpen, Flame, ChevronLeft, ChevronRight, Loader2, AlertCircle } from "lucide-react";
+import { BookOpen, Flame, ChevronLeft, ChevronRight, Loader2, AlertCircle, Sparkles, StopCircle } from "lucide-react";
 import {
   useBGetLiturgiaGiorno,
   getBGetLiturgiaGiornoQueryKey,
@@ -8,6 +8,7 @@ import {
   getBGetPraticheByDateQueryKey,
 } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
+import { useGuidaSpirituale } from "@/lib/useGuidaSpirituale";
 
 const COLORE_MAP: Record<string, { bg: string; label: string }> = {
   verde:  { bg: "#2d6a2d", label: "Tempo Ordinario" },
@@ -19,17 +20,10 @@ const COLORE_MAP: Record<string, { bg: string; label: string }> = {
 function formatDateIT(iso: string) {
   const [y, m, d] = iso.split("-");
   const dt = new Date(Number(y), Number(m) - 1, Number(d));
-  return dt.toLocaleDateString("it-IT", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  return dt.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 }
 
-function todayISO() {
-  return new Date().toISOString().slice(0, 10);
-}
+function todayISO() { return new Date().toISOString().slice(0, 10); }
 
 function addDays(iso: string, delta: number): string {
   const [y, m, d] = iso.split("-").map(Number);
@@ -49,6 +43,7 @@ export default function LiturgiaIndex() {
   const { user } = useAuth();
   const [selectedData, setSelectedData] = useState(todayISO());
   const [expandedLettura, setExpandedLettura] = useState<string | null>("vangelo");
+  const guida = useGuidaSpirituale();
 
   const { data: liturgia, isLoading, isError } = useBGetLiturgiaGiorno(
     { data: selectedData },
@@ -56,33 +51,41 @@ export default function LiturgiaIndex() {
   );
 
   const { data: pratiche = [] } = useBGetPraticheByDate(selectedData, {
-    query: {
-      enabled: !!user,
-      queryKey: getBGetPraticheByDateQueryKey(selectedData),
-    },
+    query: { enabled: !!user, queryKey: getBGetPraticheByDateQueryKey(selectedData) },
   });
 
   const haLectio    = pratiche.some((p) => p.tipo === "lectio");
   const haIgnaziana = pratiche.some((p) => p.tipo === "ignaziana");
-
   const colore = liturgia ? (COLORE_MAP[liturgia.colore] ?? COLORE_MAP.verde) : COLORE_MAP.verde;
   const isToday = selectedData === todayISO();
+
+  function avviaAnalisi() {
+    if (!liturgia) return;
+    guida.richiedi({
+      tipo: "analisi",
+      stepId: "analisi",
+      titoloLiturgico: liturgia.titoloLiturgico,
+      letture: liturgia.letture.map((l) => ({
+        tipo: l.tipo,
+        riferimento: l.riferimento,
+        testo: l.testo,
+      })),
+    });
+  }
 
   return (
     <div className="w-full">
 
-      {/* ── HERO ────────────────────────────────────────────────────── */}
+      {/* ── HERO ── */}
       <section className="bg-background border-b border-border py-16">
         <div className="container mx-auto px-6 max-w-4xl">
-          {/* Navigazione date */}
           <div className="flex items-center justify-between mb-8">
             <button
-              onClick={() => setSelectedData(addDays(selectedData, -1))}
+              onClick={() => { setSelectedData(addDays(selectedData, -1)); guida.reset(); }}
               className="flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-widest"
             >
               <ChevronLeft className="w-4 h-4" /> Ieri
             </button>
-
             <div className="text-center">
               <p className="text-primary tracking-[0.35em] text-[10px] uppercase mb-1">Liturgia del Giorno</p>
               <h1 className="font-serif text-2xl md:text-3xl text-foreground capitalize">
@@ -90,19 +93,15 @@ export default function LiturgiaIndex() {
               </h1>
               {!isToday && (
                 <button
-                  onClick={() => setSelectedData(todayISO())}
+                  onClick={() => { setSelectedData(todayISO()); guida.reset(); }}
                   className="mt-2 text-[10px] uppercase tracking-widest text-primary hover:text-foreground transition-colors"
                 >
                   ← Torna ad oggi
                 </button>
               )}
             </div>
-
             <button
-              onClick={() => {
-                const next = addDays(selectedData, 1);
-                if (next <= todayISO()) setSelectedData(next);
-              }}
+              onClick={() => { if (!isToday) { setSelectedData(addDays(selectedData, 1)); guida.reset(); } }}
               disabled={isToday}
               className="flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-widest disabled:opacity-30"
             >
@@ -110,35 +109,25 @@ export default function LiturgiaIndex() {
             </button>
           </div>
 
-          {/* Colore liturgico */}
           {liturgia && (
-            <div className="flex items-center justify-center gap-3 mb-10">
-              <div
-                className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: colore.bg }}
-              />
-              <span className="text-muted-foreground text-xs uppercase tracking-widest">
-                {colore.label}
-              </span>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colore.bg }} />
+              <span className="text-muted-foreground text-xs uppercase tracking-widest">{colore.label}</span>
               <span className="text-border">·</span>
-              <span className="text-muted-foreground text-xs capitalize font-light">
-                {liturgia.titoloLiturgico}
-              </span>
+              <span className="text-muted-foreground text-xs capitalize font-light">{liturgia.titoloLiturgico}</span>
             </div>
           )}
         </div>
       </section>
 
-      {/* ── LETTURE ─────────────────────────────────────────────────── */}
+      {/* ── LETTURE ── */}
       <section className="py-12 bg-card">
         <div className="container mx-auto px-6 max-w-4xl">
 
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-24 gap-4">
               <Loader2 className="w-6 h-6 text-primary/50 animate-spin" />
-              <p className="text-muted-foreground text-xs uppercase tracking-widest">
-                Convocando le letture…
-              </p>
+              <p className="text-muted-foreground text-xs uppercase tracking-widest">Convocando le letture…</p>
             </div>
           )}
 
@@ -148,7 +137,6 @@ export default function LiturgiaIndex() {
               <p className="font-serif text-xl text-foreground">Letture non disponibili</p>
               <p className="text-muted-foreground text-sm font-light leading-relaxed">
                 Il servizio di letture liturgiche non è raggiungibile in questo momento.
-                Puoi comunque aprire la tua pratica e inserire il brano manualmente.
               </p>
               <Link
                 href={`/liturgia/pratica?data=${selectedData}`}
@@ -169,54 +157,36 @@ export default function LiturgiaIndex() {
                 return (
                   <div
                     key={lettura.tipo}
-                    className={`border transition-all duration-300 ${
-                      isVangelo
-                        ? "border-primary/30 bg-background"
-                        : "border-border bg-background/70"
-                    }`}
+                    className={`border transition-all duration-300 ${isVangelo ? "border-primary/30 bg-background" : "border-border bg-background/70"}`}
                   >
                     <button
                       className="w-full flex items-center gap-4 px-6 py-5 text-left group"
                       onClick={() => setExpandedLettura(isOpen ? null : lettura.tipo)}
                     >
-                      <span
-                        className={`font-serif text-sm flex-none w-7 text-center ${
-                          isVangelo ? "text-primary" : "text-muted-foreground"
-                        }`}
-                      >
+                      <span className={`font-serif text-sm flex-none w-7 text-center ${isVangelo ? "text-primary" : "text-muted-foreground"}`}>
                         {icona}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-[10px] uppercase tracking-widest mb-0.5 ${
-                          isVangelo ? "text-primary" : "text-muted-foreground"
-                        }`}>
+                        <p className={`text-[10px] uppercase tracking-widest mb-0.5 ${isVangelo ? "text-primary" : "text-muted-foreground"}`}>
                           {lettura.label}
                         </p>
-                        <p className={`font-serif text-base ${
-                          isVangelo ? "text-foreground" : "text-foreground/80"
-                        }`}>
+                        <p className={`font-serif text-base ${isVangelo ? "text-foreground" : "text-foreground/80"}`}>
                           {lettura.riferimento}
                         </p>
                       </div>
                       <ChevronRight
-                        className={`w-4 h-4 text-muted-foreground flex-none transition-transform duration-200 ${
-                          isOpen ? "rotate-90" : ""
-                        }`}
+                        className={`w-4 h-4 text-muted-foreground flex-none transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}
                       />
                     </button>
 
                     {isOpen && (
                       <div className="px-6 pb-8 animate-in fade-in slide-in-from-top-2 duration-300">
                         {lettura.intro && (
-                          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-5 italic">
-                            {lettura.intro}
-                          </p>
+                          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-5 italic">{lettura.intro}</p>
                         )}
                         <div className="font-serif text-base md:text-lg text-foreground/90 leading-loose whitespace-pre-wrap border-l-2 border-primary/20 pl-5">
                           {lettura.testo}
                         </div>
-
-                        {/* Quick-start practice from this reading */}
                         <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row gap-3">
                           <button
                             onClick={() => navigate(`/liturgia/pratica?data=${selectedData}&tipo=lectio&ref=${encodeURIComponent(lettura.riferimento)}`)}
@@ -243,21 +213,102 @@ export default function LiturgiaIndex() {
         </div>
       </section>
 
-      {/* ── CTA PRATICA ─────────────────────────────────────────────── */}
-      {!isLoading && !isError && liturgia && (
+      {/* ── MEDITAZIONE AI ── */}
+      {liturgia && !isLoading && !isError && (
         <section className="py-14 bg-background border-t border-border">
           <div className="container mx-auto px-6 max-w-4xl">
-            <p className="text-primary/50 tracking-[0.4em] text-[10px] uppercase mb-6 text-center">
-              La tua pratica quotidiana
-            </p>
-            <div className="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px flex-1 bg-border" />
+              <p className="text-primary/50 tracking-[0.35em] text-[10px] uppercase">Meditazione delle Letture</p>
+              <div className="h-px flex-1 bg-border" />
+            </div>
 
-              {/* Lectio Divina */}
+            {!guida.testo && !guida.loading && (
+              <div className="text-center">
+                <p className="text-muted-foreground text-sm font-light leading-relaxed max-w-lg mx-auto mb-8">
+                  Un padre spirituale benedettino traccia il filo comune che unisce tutte le letture di oggi,
+                  portandole nella tua vita concreta.
+                </p>
+                <button
+                  onClick={avviaAnalisi}
+                  className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3.5 text-xs uppercase tracking-widest hover:bg-primary/85 transition-colors"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Ricevi la meditazione del giorno
+                </button>
+              </div>
+            )}
+
+            {guida.loading && !guida.testo && (
+              <div className="flex flex-col items-center gap-3 py-8">
+                <Loader2 className="w-5 h-5 text-primary/50 animate-spin" />
+                <p className="text-muted-foreground text-xs uppercase tracking-widest">Il padre sta meditando…</p>
+              </div>
+            )}
+
+            {(guida.testo || guida.loading) && (
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-card border border-primary/15 px-8 py-8">
+                  <div className="flex items-start gap-3 mb-6">
+                    <span className="font-serif text-2xl text-primary/25 leading-none">❝</span>
+                    <p className="text-[10px] uppercase tracking-widest text-primary/60 mt-1">Padre spirituale benedettino</p>
+                  </div>
+                  <div className="font-serif text-base md:text-lg text-foreground/90 leading-loose whitespace-pre-wrap">
+                    {guida.testo}
+                    {guida.loading && (
+                      <span className="inline-block w-0.5 h-4 bg-primary/50 animate-pulse ml-0.5 align-middle" />
+                    )}
+                  </div>
+                  {guida.loading && (
+                    <button
+                      onClick={guida.annulla}
+                      className="mt-6 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <StopCircle className="w-3.5 h-3.5" /> Interrompi
+                    </button>
+                  )}
+                  {!guida.loading && guida.testo && (
+                    <button
+                      onClick={() => { guida.reset(); }}
+                      className="mt-6 text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      ↺ Rigenera
+                    </button>
+                  )}
+                </div>
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  <button
+                    onClick={() => navigate(`/liturgia/pratica?data=${selectedData}&tipo=lectio`)}
+                    className="flex items-center gap-2 border border-primary text-primary px-5 py-2.5 text-xs uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" /> Apri Lectio Divina
+                  </button>
+                  <button
+                    onClick={() => navigate(`/liturgia/pratica?data=${selectedData}&tipo=ignaziana`)}
+                    className="flex items-center gap-2 border border-border text-muted-foreground px-5 py-2.5 text-xs uppercase tracking-widest hover:border-primary/40 hover:text-foreground transition-all"
+                  >
+                    <Flame className="w-3.5 h-3.5" /> Esercizi Ignaziani
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {guida.errore && (
+              <p className="text-center text-muted-foreground text-sm">{guida.errore}</p>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* ── CTA PRATICA ── */}
+      {!isLoading && !isError && liturgia && (
+        <section className="py-14 bg-card border-t border-border">
+          <div className="container mx-auto px-6 max-w-4xl">
+            <p className="text-primary/50 tracking-[0.4em] text-[10px] uppercase mb-6 text-center">La tua pratica quotidiana</p>
+            <div className="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
               <button
                 onClick={() => navigate(`/liturgia/pratica?data=${selectedData}&tipo=lectio`)}
-                className={`relative group flex flex-col gap-3 p-6 border text-left transition-all hover:border-primary/60 ${
-                  haLectio ? "border-primary/40 bg-primary/3" : "border-border"
-                }`}
+                className={`relative group flex flex-col gap-3 p-6 border text-left transition-all hover:border-primary/60 ${haLectio ? "border-primary/40 bg-primary/3" : "border-border"}`}
               >
                 {haLectio && (
                   <div className="absolute top-3 right-3 text-[9px] uppercase tracking-widest text-primary border border-primary/30 px-2 py-0.5">
@@ -266,21 +317,15 @@ export default function LiturgiaIndex() {
                 )}
                 <BookOpen className="w-5 h-5 text-primary/60" />
                 <div>
-                  <h3 className="font-serif text-lg text-foreground mb-1 group-hover:text-primary transition-colors">
-                    Lectio Divina
-                  </h3>
+                  <h3 className="font-serif text-lg text-foreground mb-1 group-hover:text-primary transition-colors">Lectio Divina</h3>
                   <p className="text-muted-foreground text-xs leading-relaxed font-light">
-                    Quattro passi monastici: Lectio, Meditatio, Oratio, Contemplatio. La tradizione benedettina per nutrirsi della Parola.
+                    Quattro passi monastici: Lectio, Meditatio, Oratio, Contemplatio. Con guida spirituale AI per ogni passo.
                   </p>
                 </div>
               </button>
-
-              {/* Esercizi Ignaziani */}
               <button
                 onClick={() => navigate(`/liturgia/pratica?data=${selectedData}&tipo=ignaziana`)}
-                className={`relative group flex flex-col gap-3 p-6 border text-left transition-all hover:border-primary/60 ${
-                  haIgnaziana ? "border-primary/40 bg-primary/3" : "border-border"
-                }`}
+                className={`relative group flex flex-col gap-3 p-6 border text-left transition-all hover:border-primary/60 ${haIgnaziana ? "border-primary/40 bg-primary/3" : "border-border"}`}
               >
                 {haIgnaziana && (
                   <div className="absolute top-3 right-3 text-[9px] uppercase tracking-widest text-primary border border-primary/30 px-2 py-0.5">
@@ -289,30 +334,26 @@ export default function LiturgiaIndex() {
                 )}
                 <Flame className="w-5 h-5 text-primary/60" />
                 <div>
-                  <h3 className="font-serif text-lg text-foreground mb-1 group-hover:text-primary transition-colors">
-                    Esercizi Ignaziani
-                  </h3>
+                  <h3 className="font-serif text-lg text-foreground mb-1 group-hover:text-primary transition-colors">Esercizi Ignaziani</h3>
                   <p className="text-muted-foreground text-xs leading-relaxed font-light">
-                    Il metodo di Ignazio di Loyola: Composizione di luogo, Colloquio e Esame di coscienza. Per trovare Dio in tutte le cose.
+                    Il metodo di Ignazio di Loyola con accompagnamento AI che risponde alla tua riflessione in tempo reale.
                   </p>
                 </div>
               </button>
             </div>
-
             {!user && (
               <p className="text-center text-muted-foreground text-xs font-light mt-8">
-                <Link href="/login" className="text-primary hover:underline">Accedi</Link>
-                {" "}per salvare la tua pratica quotidiana e guadagnare XP.
+                <Link href="/login" className="text-primary hover:underline">Accedi</Link>{" "}
+                per salvare la tua pratica quotidiana e guadagnare XP.
               </p>
             )}
           </div>
         </section>
       )}
 
-      {/* ── NOTE SPIRITUALI ─────────────────────────────────────────── */}
-      <section className="py-14 bg-card border-t border-border">
+      {/* ── NOTA ── */}
+      <section className="py-14 bg-background border-t border-border">
         <div className="container mx-auto px-6 max-w-4xl text-center">
-          <p className="text-primary/40 tracking-[0.3em] text-[10px] uppercase mb-6">Nota bene</p>
           <p className="text-muted-foreground font-light text-sm leading-relaxed max-w-xl mx-auto">
             Le letture seguono il Lezionario CEI conforme al Rito Romano.
             La fonte è Evangelizo.org — un servizio gratuito per la comunità cattolica mondiale.

@@ -13,7 +13,12 @@ function todayDate(): string {
 
 interface EvangelizoReading {
   type?: string;
+  // Evangelizo uses reference_displayed + book, not reference
   reference?: string;
+  reference_displayed?: string;
+  book?: { code?: string; short_title?: string; full_title?: string };
+  title?: string;
+  before_reading?: string;
   intro?: string;
   text?: string;
   content?: string;
@@ -22,7 +27,6 @@ interface EvangelizoReading {
 interface EvangelizoResponse {
   data?: {
     liturgic_title?: string;
-    readable_day_of_year?: string;
     color?: string;
     readings?: EvangelizoReading[];
     gospel?: EvangelizoReading;
@@ -40,8 +44,8 @@ interface Lettura {
   testo: string;
 }
 
-const TYPE_MAP: Record<string, { tipo: string; label: string; ordine: number }> = {
-  reading:        { tipo: "prima_lettura",   label: "Prima Lettura",       ordine: 1 },
+// Static map for unambiguous types
+const STATIC_TYPE_MAP: Record<string, { tipo: string; label: string; ordine: number }> = {
   first_reading:  { tipo: "prima_lettura",   label: "Prima Lettura",       ordine: 1 },
   psalm:          { tipo: "salmo",           label: "Salmo Responsoriale", ordine: 2 },
   second_reading: { tipo: "seconda_lettura", label: "Seconda Lettura",     ordine: 3 },
@@ -87,20 +91,43 @@ async function fetchEvangelizo(data: string): Promise<{ titoloLiturgico: string;
       if (d.gospel)         rawReadings.push({ ...d.gospel,        type: "gospel" });
     }
 
+    // Assign meta dynamically: Evangelizo uses type="reading" for both
+    // Prima Lettura and Seconda Lettura. The first occurrence is Prima, the second is Seconda.
+    let readingCount = 0;
     const letture: Lettura[] = rawReadings
-      .filter((r) => r.type && TYPE_MAP[r.type])
-      .map((r) => {
-        const meta = TYPE_MAP[r.type!]!;
-        return {
+      .filter((r) => !!r.type)
+      .flatMap((r): Lettura[] => {
+        let meta: { tipo: string; label: string; ordine: number } | undefined;
+
+        if (r.type === "reading") {
+          readingCount++;
+          if (readingCount === 1) {
+            meta = { tipo: "prima_lettura", label: "Prima Lettura", ordine: 1 };
+          } else if (readingCount === 2) {
+            meta = { tipo: "seconda_lettura", label: "Seconda Lettura", ordine: 3 };
+          }
+          // 3+ readings: ignore (shouldn't happen in standard Roman Rite)
+        } else {
+          meta = STATIC_TYPE_MAP[r.type!];
+        }
+
+        if (!meta) return [];
+
+        // Build reference: prefer book.short_title + reference_displayed, fall back to reference
+        const ref = r.reference_displayed
+          ? [r.book?.short_title ?? r.book?.full_title, r.reference_displayed].filter(Boolean).join(" ")
+          : (r.reference ?? "");
+
+        return [{
           tipo: meta.tipo,
           label: meta.label,
           ordine: meta.ordine,
-          riferimento: r.reference ?? "",
-          intro: r.intro ?? "",
+          riferimento: ref,
+          intro: r.before_reading ?? r.intro ?? "",
           testo: (r.text ?? r.content ?? "").replace(/\[\[.*?\]\]/g, "").trim(),
-        };
+        }];
       })
-      .sort((a, b) => (a as unknown as { ordine: number }).ordine - (b as unknown as { ordine: number }).ordine);
+      .sort((a, b) => a.ordine - b.ordine);
 
     if (letture.length === 0) return null;
     return { titoloLiturgico, colore, letture };

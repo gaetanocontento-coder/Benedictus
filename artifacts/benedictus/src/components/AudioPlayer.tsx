@@ -1,189 +1,198 @@
-import { useState, useEffect, useRef } from "react";
-import { Music, X, Play, Pause, SkipBack, SkipForward, List, ChevronDown } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Music, X, Play, Pause, SkipBack, SkipForward, List } from "lucide-react";
 
-declare global {
-  interface Window {
-    YT: {
-      Player: new (
-        el: HTMLDivElement,
-        opts: {
-          videoId: string;
-          playerVars?: Record<string, number | string>;
-          events?: {
-            onReady?: () => void;
-            onStateChange?: (e: { data: number }) => void;
-            onError?: () => void;
-          };
-        }
-      ) => {
-        playVideo: () => void;
-        pauseVideo: () => void;
-        loadVideoById: (videoId: string) => void;
-      };
-      PlayerState: { PLAYING: number; ENDED: number };
-    };
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
+// ── Playlist ──────────────────────────────────────────────────────────────────
+// All audio sourced from Internet Archive (archive.org) — public domain
+// recordings from real monasteries. URLs verified via archive.org metadata API.
 
-// ── Playlist ─────────────────────────────────────────────────────────────────
-
-type Categoria = "Gregoriano" | "Polifonia" | "Meditazione" | "Lodi";
+type Categoria = "Gregoriano" | "Lodi" | "Meditazione";
 
 interface Track {
-  id: string;
-  titolo: string;
-  autore: string;
-  durata: string;
+  url:      string;
+  titolo:   string;
+  autore:   string;
   categoria: Categoria;
 }
 
+const DL = "https://archive.org/download";
+
+// Abbreviations for the archive.org item identifiers
+const SA  = "BenedictimosdeSanAnselmo-CantosGregorianosMisaAngelis";
+const KG  = "gregorianchantkergonan";
+const LM_CC = "lost-in-meditation2/Classical Chamber Music - Meditative Gregorian Chants";
+const LM_BM = "lost-in-meditation2/Benedictine Monks Of St. Michael Of Lourdes - The Best Of The Benedictine Monks Of St. Michael%27s";
+const SR  = "78_salve-regina-tantum-ergo_benedictine-monks_gbia0455052b";
+
+function u(item: string, file: string) {
+  return `${DL}/${item}/${encodeURIComponent(file)}`;
+}
+
 const PLAYLIST: Track[] = [
-  // ── Gregoriano ──────────────────────────────────────────────────────────────
-  { id: "djkLm3WpUOE", titolo: "Kyrie Eleison",                     autore: "Canto Gregoriano",            durata: "2 h",    categoria: "Gregoriano"  },
-  { id: "0ddLO5VT2jg", titolo: "Salve Regina",                      autore: "Canto Gregoriano Solenne",    durata: "8 min",  categoria: "Gregoriano"  },
-  { id: "F4MhIw1jaBw", titolo: "Ave Maria",                         autore: "Canto Gregoriano Monastico",  durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "JrZiC8Zajh4", titolo: "Pater Noster",                      autore: "Canto Gregoriano",            durata: "5 min",  categoria: "Gregoriano"  },
-  { id: "5GrQJGQWfd8", titolo: "Veni Creator Spiritus",             autore: "Canto Gregoriano",            durata: "6 min",  categoria: "Gregoriano"  },
-  { id: "OsR1V2boSQk", titolo: "Gloria in Excelsis Deo",            autore: "Canto Gregoriano Monastico",  durata: "10 min", categoria: "Gregoriano"  },
-  { id: "hFbajU8a2RI", titolo: "Alleluia — Specie Tua",             autore: "Monaci Benedettini",          durata: "4 min",  categoria: "Gregoriano"  },
-  { id: "XjqpedsTrLk", titolo: "O Salutaris Hostia",                autore: "Canto Gregoriano",            durata: "5 min",  categoria: "Gregoriano"  },
-  { id: "c2cEzberbXM", titolo: "Tantum Ergo",                       autore: "Canto Gregoriano",            durata: "5 min",  categoria: "Gregoriano"  },
-  { id: "j1rHt7MylVQ", titolo: "Abbazia di Chiaravalle",            autore: "Liturgia delle Ore",          durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "f-Ei_0nkRlw", titolo: "Canto Gregoriano — Meditazione",    autore: "Schola Gregoriana",           durata: "3 h",    categoria: "Gregoriano"  },
-  // ── Lodi ────────────────────────────────────────────────────────────────────
-  { id: "Iu_QLG_LLvU", titolo: "Vespri Gregoriani",                 autore: "Schola Cantorum",             durata: "1 h",    categoria: "Lodi"        },
-  { id: "dD43qthEdec", titolo: "Compieta Monastica",                autore: "Monaci Benedettini",          durata: "40 min", categoria: "Lodi"        },
-  // ── Polifonia ───────────────────────────────────────────────────────────────
-  { id: "iT-ZAAi4UQQ", titolo: "Spem in Alium",                     autore: "Thomas Tallis",               durata: "12 min", categoria: "Polifonia"   },
-  { id: "BRfF7W4El60", titolo: "Missa Papae Marcelli",              autore: "Palestrina",                  durata: "50 min", categoria: "Polifonia"   },
-  { id: "_NGTsdL2YzE", titolo: "A Feather on the Breath of God",    autore: "Hildegard von Bingen",        durata: "1 h",    categoria: "Polifonia"   },
-  { id: "qzOmPUu-F_M", titolo: "Stabat Mater",                      autore: "Pergolesi",                   durata: "35 min", categoria: "Polifonia"   },
-  { id: "BDdZZgDJ5Tw", titolo: "Requiem",                           autore: "Tomás Luis de Victoria",      durata: "45 min", categoria: "Polifonia"   },
-  { id: "wB35pHMACrI", titolo: "Laudate Dominum",                   autore: "W. A. Mozart",                durata: "5 min",  categoria: "Polifonia"   },
-  // ── Meditazione ─────────────────────────────────────────────────────────────
-  { id: "AiuC_CaObbI", titolo: "Agnus Dei",                         autore: "Samuel Barber",               durata: "10 min", categoria: "Meditazione" },
-  { id: "7YqF69HLkj8", titolo: "Tabula Rasa",                       autore: "Arvo Pärt",                   durata: "55 min", categoria: "Meditazione" },
-  { id: "Yq0vmweRfh4", titolo: "Komm, süsser Tod",                  autore: "J. S. Bach",                  durata: "30 min", categoria: "Meditazione" },
-  { id: "hOMQvuDgbcc", titolo: "Sancta Tenebrae",                   autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
-  { id: "NhrV6H78CCc", titolo: "Dies Irae — Canto Sacro",           autore: "Dark Monastic Chant",         durata: "1 h",    categoria: "Meditazione" },
-  { id: "_8s6srDYCJQ", titolo: "Meditazione Sacra Gregoriana",      autore: "Sacred Gregorian Ambient",    durata: "2 h",    categoria: "Meditazione" },
+  // ── Ordinario della Messa ──────────────────────────────────────────────────
+  { url: u(SA, "Kyrie.mp3"),                          titolo: "Kyrie",                      autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "Gloria.mp3"),                         titolo: "Gloria in Excelsis Deo",     autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "Credo.mp3"),                          titolo: "Credo",                      autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "Sanctus.mp3"),                        titolo: "Sanctus",                    autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "Agnus Dei.mp3"),                      titolo: "Agnus Dei",                  autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  // ── Mariani ────────────────────────────────────────────────────────────────
+  { url: u(SR,  '"SALVE REGINA"; "TANTUM ERGO" - BENEDICTINE MONKS.mp3'), titolo: "Salve Regina & Tantum Ergo", autore: "Monaci Benedettini (78 rpm)", categoria: "Gregoriano" },
+  { url: u(SA, "Regina coeli.mp3"),                   titolo: "Regina Coeli",               autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "Ave Maris Stella.mp3"),               titolo: "Ave Maris Stella",           autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "Ave Verum.mp3"),                      titolo: "Ave Verum",                  autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(LM_CC, "15 Anon- Ave Maria.mp3"),          titolo: "Ave Maria",                  autore: "Canto Gregoriano Monastico",  categoria: "Lodi"        },
+  // ── Ore canoniche & Inni ───────────────────────────────────────────────────
+  { url: u(SA, "Magnificat.mp3"),                     titolo: "Magnificat",                 autore: "Benedettini di San Anselmo",  categoria: "Lodi"        },
+  { url: u(SA, "Paternoster.mp3"),                    titolo: "Pater Noster",               autore: "Benedettini di San Anselmo",  categoria: "Lodi"        },
+  { url: u(SA, "Te Deum.mp3"),                        titolo: "Te Deum",                    autore: "Benedettini di San Anselmo",  categoria: "Lodi"        },
+  { url: u(SA, "Veni Creator.mp3"),                   titolo: "Veni Creator Spiritus",      autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(KG,  "19 Hymn - Ave maris stella (Mode 1).mp3"), titolo: "Ave Maris Stella — Inno", autore: "Monaci di Kergonan",     categoria: "Lodi"        },
+  { url: u(LM_BM, "07 Anon- Te Lucis Ante Terminum.mp3"), titolo: "Te Lucis Ante Terminum", autore: "Monaci di San Michele",    categoria: "Lodi"        },
+  // ── Eucaristia & adorazione ────────────────────────────────────────────────
+  { url: u(SA, "Tantum ergo.mp3"),                    titolo: "Tantum Ergo",                autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "O salutaris Hostia.mp3"),             titolo: "O Salutaris Hostia",         autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(SA, "Adoro Te devote.mp3"),                titolo: "Adoro Te Devote",            autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  // ── Alleluia & offici ──────────────────────────────────────────────────────
+  { url: u(SA, "Aleluia.mp3"),                        titolo: "Alleluia",                   autore: "Benedettini di San Anselmo",  categoria: "Gregoriano"  },
+  { url: u(KG,  "05 Alleluia - Te martyrum (Mode 5).mp3"), titolo: "Alleluia — Te Martyrum", autore: "Monaci di Kergonan",      categoria: "Gregoriano"  },
+  { url: u(KG,  "01 Introit - Salus autem (Mode 1).mp3"), titolo: "Introito — Salus Autem", autore: "Monaci di Kergonan",       categoria: "Gregoriano"  },
+  // ── Meditazione ────────────────────────────────────────────────────────────
+  { url: u(LM_CC, "02 Anon- Miserere.mp3"),           titolo: "Miserere",                   autore: "Canto Gregoriano Monastico",  categoria: "Meditazione" },
+  { url: u(LM_CC, "06 Anon- Pange Lingua.mp3"),       titolo: "Pange Lingua",               autore: "Canto Gregoriano Monastico",  categoria: "Meditazione" },
+  { url: u(LM_BM, "15 Anon- Veni Sancte Spiritus.mp3"), titolo: "Veni Sancte Spiritus",     autore: "Monaci di San Michele",       categoria: "Meditazione" },
+  { url: u(LM_CC, "14 Anon- Tota Pulchra Es.mp3"),    titolo: "Tota Pulchra Es",            autore: "Canto Gregoriano Monastico",  categoria: "Meditazione" },
+  { url: u(LM_BM, "03 Anon- In Paradisum Angeli.mp3"), titolo: "In Paradisum",              autore: "Monaci di San Michele",       categoria: "Meditazione" },
 ];
 
 const CATEGORIA_COLORE: Record<Categoria, string> = {
   Gregoriano:  "text-amber-300/80",
-  Polifonia:   "text-rose-300/80",
-  Meditazione: "text-sky-300/80",
   Lodi:        "text-emerald-300/80",
+  Meditazione: "text-sky-300/80",
 };
 
 const BARS = [8, 14, 6, 18, 10, 16, 8, 13, 7, 15, 9, 17];
 
-// ── Component ────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function fmtTime(sec: number): string {
+  if (!isFinite(sec) || sec < 0) return "--:--";
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export function AudioPlayer() {
   const [open, setOpen]               = useState(false);
   const [showPlaylist, setShowPlaylist] = useState(false);
   const [playing, setPlaying]         = useState(false);
-  const [ready, setReady]             = useState(false);
   const [trackIndex, setTrackIndex]   = useState(0);
-  const divRef                        = useRef<HTMLDivElement>(null);
-  const playerRef                     = useRef<InstanceType<typeof window.YT.Player> | null>(null);
+  const [progress, setProgress]       = useState(0);   // 0–1
+  const [duration, setDuration]       = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const audioRef                      = useRef<HTMLAudioElement | null>(null);
   const playlistRef                   = useRef<HTMLDivElement>(null);
-  // Ref that always holds the current trackIndex — avoids stale closures
-  // inside the YouTube API callbacks which are created only once at mount.
-  const trackIndexRef                 = useRef(0);
-  // Counts consecutive errors to break the cascade loop: if every track in
-  // the playlist is unavailable / not embeddable we stop trying automatically.
-  const errorStreakRef                = useRef(0);
 
-  // Keep trackIndexRef in sync whenever the state changes
+  // ── Audio element setup ───────────────────────────────────────────────────
+  useEffect(() => {
+    const audio = new Audio();
+    audio.crossOrigin = "anonymous";
+    audio.preload = "metadata";
+    audio.src = PLAYLIST[0].url;
+    audioRef.current = audio;
+
+    const onPlay     = () => setPlaying(true);
+    const onPause    = () => setPlaying(false);
+    const onEnded    = () => goTo(trackIndex + 1);
+    const onError    = () => goTo(trackIndex + 1);
+    const onMeta     = () => setDuration(audio.duration);
+    const onProgress = () => {
+      setCurrentTime(audio.currentTime);
+      if (audio.duration > 0) setProgress(audio.currentTime / audio.duration);
+    };
+
+    audio.addEventListener("play",        onPlay);
+    audio.addEventListener("pause",       onPause);
+    audio.addEventListener("ended",       onEnded);
+    audio.addEventListener("error",       onError);
+    audio.addEventListener("loadedmetadata", onMeta);
+    audio.addEventListener("timeupdate",  onProgress);
+
+    return () => {
+      audio.pause();
+      audio.removeEventListener("play",        onPlay);
+      audio.removeEventListener("pause",       onPause);
+      audio.removeEventListener("ended",       onEnded);
+      audio.removeEventListener("error",       onError);
+      audio.removeEventListener("loadedmetadata", onMeta);
+      audio.removeEventListener("timeupdate",  onProgress);
+      audioRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Rebuild "ended/error" listeners when trackIndex changes (avoid stale closure)
+  const trackIndexRef = useRef(0);
   useEffect(() => { trackIndexRef.current = trackIndex; }, [trackIndex]);
 
-  // fromUser = true when the user explicitly picks a track (click, skip btn)
-  // so we reset the error streak and give the new track a fresh chance.
-  const goTo = (idx: number, fromUser = false) => {
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onEnded = () => goTo(trackIndexRef.current + 1);
+    const onError = () => goTo(trackIndexRef.current + 1);
+    audio.addEventListener("ended", onEnded);
+    audio.addEventListener("error", onError);
+    return () => {
+      audio.removeEventListener("ended", onEnded);
+      audio.removeEventListener("error", onError);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Navigation ────────────────────────────────────────────────────────────
+  const goTo = useCallback((idx: number) => {
     const next = ((idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
-    if (fromUser) errorStreakRef.current = 0;
     setTrackIndex(next);
     trackIndexRef.current = next;
-    playerRef.current?.loadVideoById(PLAYLIST[next].id);
-    // scroll active track into view
+    setProgress(0);
+    setCurrentTime(0);
+    setDuration(0);
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.src = PLAYLIST[next].url;
+    audio.load();
+    audio.play().catch(() => {});
     setTimeout(() => {
       const el = playlistRef.current?.querySelector(`[data-idx="${next}"]`);
       el?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, 50);
-  };
-
-  // ── YouTube API init
-  useEffect(() => {
-    const init = () => {
-      if (!divRef.current) return;
-      playerRef.current = new window.YT.Player(divRef.current, {
-        videoId: PLAYLIST[0].id,
-        playerVars: { autoplay: 0, controls: 0, rel: 0 },
-        events: {
-          onReady: () => setReady(true),
-          onStateChange: (e) => {
-            setPlaying(e.data === window.YT.PlayerState.PLAYING);
-            if (e.data === window.YT.PlayerState.PLAYING) {
-              // Successful play — reset the error streak counter
-              errorStreakRef.current = 0;
-            }
-            if (e.data === window.YT.PlayerState.ENDED) {
-              errorStreakRef.current = 0;
-              goTo(trackIndexRef.current + 1);
-            }
-          },
-          onError: () => {
-            // Increment streak; skip only if we haven't tried every track yet
-            errorStreakRef.current += 1;
-            if (errorStreakRef.current < PLAYLIST.length) {
-              goTo(trackIndexRef.current + 1);
-            }
-            // else: all tracks failed (all non-embeddable) — stop silently
-          },
-        },
-      });
-    };
-
-    if (window.YT?.Player) {
-      init();
-    } else {
-      window.onYouTubeIframeAPIReady = init;
-      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-        const s   = document.createElement("script");
-        s.src     = "https://www.youtube.com/iframe_api";
-        document.head.appendChild(s);
-      }
-    }
-
-    return () => {
-      // Destroy the player on unmount / HMR so the next mount gets a fresh
-      // instance. Without this, hot-reload leaves a stale player object in the
-      // ref whose DOM node has been replaced, causing "playVideo is not a
-      // function" errors.
-      try { (playerRef.current as unknown as { destroy(): void })?.destroy(); } catch {}
-      playerRef.current = null;
-      setReady(false);
-      setPlaying(false);
-    };
   }, []);
 
-  const toggle = () => {
-    if (!ready || !playerRef.current) return;
-    if (playing) playerRef.current.pauseVideo();
-    else         playerRef.current.playVideo();
-  };
+  const toggle = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (playing) {
+      audio.pause();
+    } else {
+      audio.play().catch(() => {});
+    }
+  }, [playing]);
+
+  const seek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !isFinite(audio.duration)) return;
+    const t = Number(e.target.value) * audio.duration;
+    audio.currentTime = t;
+    setCurrentTime(t);
+    setProgress(Number(e.target.value));
+  }, []);
 
   const track = PLAYLIST[trackIndex];
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
-      {/* Hidden YT div */}
-      <div ref={divRef} className="sr-only" />
 
-      {/* ── Panel ───────────────────────────────────────────────────── */}
+      {/* ── Panel ─────────────────────────────────────────────────────── */}
       {open && (
         <div className="w-80 bg-[#1c1409] border border-[#3a2e1a] shadow-2xl flex flex-col animate-in slide-in-from-bottom-2 fade-in duration-200 overflow-hidden">
 
@@ -229,11 +238,11 @@ export function AudioPlayer() {
               {track.titolo}
             </p>
             <p className="text-[11px] text-amber-100/50 mb-3">
-              {track.autore} · {track.durata}
+              {track.autore}
             </p>
 
             {/* Waveform visualizer */}
-            <div className="flex items-end gap-[3px] h-6 mb-4">
+            <div className="flex items-end gap-[3px] h-6 mb-3">
               {BARS.map((h, i) => (
                 <div
                   key={i}
@@ -241,9 +250,7 @@ export function AudioPlayer() {
                     playing ? "bg-amber-300/50" : "bg-[#3a2e1a]"
                   }`}
                   style={{
-                    height: playing
-                      ? `${h}px`
-                      : `${Math.round(h * 0.35)}px`,
+                    height: playing ? `${h}px` : `${Math.round(h * 0.35)}px`,
                     animation: playing
                       ? `barDance ${0.5 + i * 0.07}s ease-in-out infinite alternate`
                       : "none",
@@ -252,20 +259,45 @@ export function AudioPlayer() {
               ))}
             </div>
 
+            {/* Progress bar */}
+            <div className="mb-3">
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.001}
+                value={progress}
+                onChange={seek}
+                className="w-full h-[2px] appearance-none bg-[#3a2e1a] cursor-pointer
+                           [&::-webkit-slider-thumb]:appearance-none
+                           [&::-webkit-slider-thumb]:w-2
+                           [&::-webkit-slider-thumb]:h-2
+                           [&::-webkit-slider-thumb]:rounded-full
+                           [&::-webkit-slider-thumb]:bg-amber-300
+                           [&::-webkit-slider-thumb]:cursor-pointer
+                           accent-amber-300"
+                style={{
+                  background: `linear-gradient(to right, rgba(217,190,120,0.6) ${progress * 100}%, #3a2e1a ${progress * 100}%)`,
+                }}
+              />
+              <div className="flex justify-between mt-1">
+                <span className="text-[9px] text-amber-100/30 font-mono">{fmtTime(currentTime)}</span>
+                <span className="text-[9px] text-amber-100/30 font-mono">{fmtTime(duration)}</span>
+              </div>
+            </div>
+
             {/* Controls */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => goTo(trackIndex - 1, true)}
-                disabled={!ready}
-                className="w-9 h-9 flex items-center justify-center border border-[#3a2e1a] text-amber-100/50 hover:border-amber-300/30 hover:text-amber-100 transition-colors disabled:opacity-30"
+                onClick={() => goTo(trackIndex - 1)}
+                className="w-9 h-9 flex items-center justify-center border border-[#3a2e1a] text-amber-100/50 hover:border-amber-300/30 hover:text-amber-100 transition-colors"
               >
                 <SkipBack className="w-3.5 h-3.5" />
               </button>
 
               <button
                 onClick={toggle}
-                disabled={!ready}
-                className={`flex-1 h-9 flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest transition-all border disabled:opacity-30 ${
+                className={`flex-1 h-9 flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest transition-all border ${
                   playing
                     ? "border-amber-300/40 bg-amber-300/8 text-amber-300 hover:bg-amber-300/12"
                     : "border-[#3a2e1a] text-amber-100/60 hover:border-amber-300/30 hover:text-amber-100"
@@ -274,36 +306,30 @@ export function AudioPlayer() {
                 {playing ? (
                   <><Pause className="w-3.5 h-3.5" /> Pausa</>
                 ) : (
-                  <><Play  className="w-3.5 h-3.5" /> {ready ? "Ascolta" : "…"}</>
+                  <><Play className="w-3.5 h-3.5" /> Ascolta</>
                 )}
               </button>
 
               <button
-                onClick={() => goTo(trackIndex + 1, true)}
-                disabled={!ready}
-                className="w-9 h-9 flex items-center justify-center border border-[#3a2e1a] text-amber-100/50 hover:border-amber-300/30 hover:text-amber-100 transition-colors disabled:opacity-30"
+                onClick={() => goTo(trackIndex + 1)}
+                className="w-9 h-9 flex items-center justify-center border border-[#3a2e1a] text-amber-100/50 hover:border-amber-300/30 hover:text-amber-100 transition-colors"
               >
                 <SkipForward className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
-          {/* ── Playlist panel ────────────────────────────────────── */}
+          {/* ── Playlist panel ─────────────────────────────────────────── */}
           {showPlaylist && (
             <div className="border-t border-[#2e2410]">
-              <div
-                ref={playlistRef}
-                className="max-h-64 overflow-y-auto overscroll-contain"
-              >
+              <div ref={playlistRef} className="max-h-64 overflow-y-auto overscroll-contain">
                 {PLAYLIST.map((t, i) => (
                   <button
-                    key={t.id}
+                    key={i}
                     data-idx={i}
-                    onClick={() => goTo(i, true)}
+                    onClick={() => goTo(i)}
                     className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors border-b border-[#251d0e] last:border-0 ${
-                      i === trackIndex
-                        ? "bg-amber-300/8"
-                        : "hover:bg-[#251d0e]"
+                      i === trackIndex ? "bg-amber-300/8" : "hover:bg-[#251d0e]"
                     }`}
                   >
                     {/* Play indicator */}
@@ -338,10 +364,9 @@ export function AudioPlayer() {
                       <p className="text-[9px] text-amber-100/30 truncate">{t.autore}</p>
                     </div>
 
-                    {/* Category + duration */}
+                    {/* Category */}
                     <div className="flex-none text-right">
                       <p className={`text-[8px] ${CATEGORIA_COLORE[t.categoria]}`}>{t.categoria}</p>
-                      <p className="text-[8px] text-amber-100/25">{t.durata}</p>
                     </div>
                   </button>
                 ))}
@@ -361,7 +386,7 @@ export function AudioPlayer() {
         </div>
       )}
 
-      {/* ── FAB ─────────────────────────────────────────────────────── */}
+      {/* ── FAB ──────────────────────────────────────────────────────── */}
       <button
         onClick={() => setOpen(!open)}
         title="Musica Sacra"
@@ -372,7 +397,7 @@ export function AudioPlayer() {
         }`}
       >
         <Music className={`w-4 h-4 transition-colors duration-300 ${
-          playing ? "text-amber-300" : "text-amber-100/50 group-hover:text-amber-100"
+          playing ? "text-amber-300" : "text-amber-100/50"
         }`} />
         {playing && (
           <span className="absolute inset-0 rounded-full border border-amber-300/20 animate-ping opacity-40" />

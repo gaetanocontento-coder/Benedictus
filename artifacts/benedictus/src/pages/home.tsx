@@ -28,7 +28,7 @@ export default function Home() {
         </div>
 
         {/* Hero text — always on dark photo, hardcoded light colors */}
-        <div className="relative z-10 container mx-auto px-8 lg:px-16 pb-28 max-w-5xl">
+        <div className="relative z-10 container mx-auto px-8 lg:px-16 pb-44 max-w-5xl">
           <p
             className="text-amber-300/70 tracking-[0.2em] md:tracking-[0.5em] text-[10px] md:text-[11px] uppercase mb-6 animate-in fade-in duration-1000 font-display"
             style={{ animationDelay: "300ms" }}

@@ -36,6 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {[
               { href: "/chi-siamo",   label: "Chi Siamo"    },
               { href: "/la-regula",   label: "La Regula"    },
+              { href: "/liturgia",    label: "Liturgia"     },
               { href: "/lectio",      label: "Lectio"       },
               { href: "/scriptorium", label: "Scriptorium"  },
               { href: "/percorso",    label: "Percorso"     },

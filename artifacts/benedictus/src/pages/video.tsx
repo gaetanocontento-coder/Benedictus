@@ -145,10 +145,10 @@ const VIDEO: Video[] = [
 ];
 
 function getThumbnail(id: string) {
-  return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+  return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 }
 function getFallbackThumbnail(id: string) {
-  return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
 }
 
 function VideoCard({ video, onClick }: { video: Video; onClick: () => void }) {

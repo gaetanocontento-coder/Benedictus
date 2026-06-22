@@ -39,26 +39,22 @@ interface Track {
 }
 
 const PLAYLIST: Track[] = [
-  { id: "HFZImNz4BrE", titolo: "Credo",                       autore: "Monaci Benedettini",              durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "qi3eMo88oT4", titolo: "Sanctus",                     autore: "Monaci Benedettini",              durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "eGw5O62N2dE", titolo: "Antologia Gregoriana",        autore: "Coro Monastico Latino",           durata: "2 h",    categoria: "Gregoriano"  },
-  { id: "Ed90FUyE4rM", titolo: "Messa in Canto Gregoriano",   autore: "Sacra Musica Corale",             durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "Cd0DniJLwDw", titolo: "Canti dal Monastero",         autore: "Canti Cattolici per la Preghiera", durata: "1 h",   categoria: "Gregoriano"  },
-  { id: "D_jRfYPWNT0", titolo: "Alleluia di Pasqua",          autore: "Canti di Risurrezione",           durata: "90 min", categoria: "Lodi"        },
-  { id: "s0rXNmu4jrg", titolo: "Kyrie Eleison",               autore: "Schola Gregoriana",               durata: "1 h",    categoria: "Gregoriano"  },
-  { id: "Ic0fXJ_QvE0", titolo: "Ave Maria Gregoriana",        autore: "Coro Monastico",                  durata: "45 min", categoria: "Lodi"        },
-  { id: "3Ls3_V5RtdU", titolo: "Vespri Monastici",            autore: "Benedettini di Solesmes",         durata: "1 h",    categoria: "Lodi"        },
-  { id: "YPiTTB_H6Yk", titolo: "Hildegard von Bingen — Canti", autore: "Hildegard von Bingen",          durata: "1 h",    categoria: "Meditazione" },
-  { id: "gW_d5b6f3RE", titolo: "Missa Papae Marcelli",        autore: "Palestrina",                      durata: "50 min", categoria: "Polifonia"   },
-  { id: "wVIf0pEe52c", titolo: "Spem in Alium",               autore: "Thomas Tallis",                   durata: "12 min", categoria: "Polifonia"   },
-  { id: "7xjZ2_yLmfA", titolo: "Lamentazioni di Geremia",     autore: "Charpentier",                     durata: "1 h",    categoria: "Meditazione" },
-  { id: "5sAX9-4ZHb4", titolo: "Tabula Rasa",                 autore: "Arvo Pärt",                       durata: "55 min", categoria: "Meditazione" },
-  { id: "4iOG3qQ8jzg", titolo: "Salve Regina",                autore: "Schola Cantorum",                 durata: "30 min", categoria: "Lodi"        },
-  { id: "U75OV8lHFw4", titolo: "Completa — Notte Monastica",  autore: "Monaci di Norcia",                durata: "40 min", categoria: "Lodi"        },
-  { id: "EG9hhk8JYEM", titolo: "Stabat Mater",                autore: "Pergolesi",                       durata: "35 min", categoria: "Polifonia"   },
-  { id: "8gNrVHGF3sA", titolo: "Requiem",                     autore: "Tomás Luis de Victoria",          durata: "45 min", categoria: "Polifonia"   },
-  { id: "i0EWm0GObXk", titolo: "Dies Irae",                   autore: "Canto Medievale",                 durata: "1 h",    categoria: "Meditazione" },
-  { id: "3D5cIBiAiys", titolo: "Komm, süsser Tod",            autore: "J. S. Bach",                      durata: "30 min", categoria: "Meditazione" },
+  { id: "_MOChTLdO9E", titolo: "Monaci di Santo Domingo de Silos",  autore: "Benedettini di Silos",        durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "VNmxfy_wEYg", titolo: "10 Canti Gregoriani",               autore: "Monaci Benedettini",          durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "YMxY21UJR-8", titolo: "Canti Gregoriani del Monastero",    autore: "Monaci del Monastero",        durata: "2 h",    categoria: "Gregoriano"  },
+  { id: "5_pVFhhC-Vc", titolo: "Canti Gregoriani — Abbazia",        autore: "Coro Benedettino",            durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "eXwSZkMiyIg", titolo: "Masters of Chant",                  autore: "Gregorian",                   durata: "1 h",    categoria: "Gregoriano"  },
+  { id: "Iu_QLG_LLvU", titolo: "Vespri Gregoriani",                 autore: "Schola Cantorum",             durata: "1 h",    categoria: "Lodi"        },
+  { id: "vNzsu_-rFe0", titolo: "Salve Regina Gregoriana",           autore: "Coro Monastico",              durata: "30 min", categoria: "Lodi"        },
+  { id: "dD43qthEdec", titolo: "Compieta Monastica",                autore: "Monaci Benedettini",          durata: "40 min", categoria: "Lodi"        },
+  { id: "_NGTsdL2YzE", titolo: "A Feather on the Breath of God",    autore: "Hildegard von Bingen",        durata: "1 h",    categoria: "Meditazione" },
+  { id: "BRfF7W4El60", titolo: "Missa Papae Marcelli",              autore: "Palestrina",                  durata: "50 min", categoria: "Polifonia"   },
+  { id: "iT-ZAAi4UQQ", titolo: "Spem in Alium",                     autore: "Thomas Tallis",               durata: "12 min", categoria: "Polifonia"   },
+  { id: "qzOmPUu-F_M", titolo: "Stabat Mater",                      autore: "Pergolesi",                   durata: "35 min", categoria: "Polifonia"   },
+  { id: "qDHsLs6eOIs", titolo: "Lamentazioni di Geremia",           autore: "Charpentier",                 durata: "1 h",    categoria: "Meditazione" },
+  { id: "7YqF69HLkj8", titolo: "Tabula Rasa",                       autore: "Arvo Pärt",                   durata: "55 min", categoria: "Meditazione" },
+  { id: "BDdZZgDJ5Tw", titolo: "Requiem",                           autore: "Tomás Luis de Victoria",      durata: "45 min", categoria: "Polifonia"   },
+  { id: "Yq0vmweRfh4", titolo: "Komm, süsser Tod",                  autore: "J. S. Bach",                  durata: "30 min", categoria: "Meditazione" },
 ];
 
 const CATEGORIA_COLORE: Record<Categoria, string> = {
@@ -81,6 +77,24 @@ export function AudioPlayer() {
   const divRef                        = useRef<HTMLDivElement>(null);
   const playerRef                     = useRef<InstanceType<typeof window.YT.Player> | null>(null);
   const playlistRef                   = useRef<HTMLDivElement>(null);
+  // Ref that always holds the current trackIndex — avoids stale closures
+  // inside the YouTube API callbacks which are created only once at mount.
+  const trackIndexRef                 = useRef(0);
+
+  // Keep trackIndexRef in sync whenever the state changes
+  useEffect(() => { trackIndexRef.current = trackIndex; }, [trackIndex]);
+
+  const goTo = (idx: number) => {
+    const next = ((idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
+    setTrackIndex(next);
+    trackIndexRef.current = next;
+    playerRef.current?.loadVideoById(PLAYLIST[next].id);
+    // scroll active track into view
+    setTimeout(() => {
+      const el = playlistRef.current?.querySelector(`[data-idx="${next}"]`);
+      el?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }, 50);
+  };
 
   // ── YouTube API init
   useEffect(() => {
@@ -93,9 +107,10 @@ export function AudioPlayer() {
           onReady: () => setReady(true),
           onStateChange: (e) => {
             setPlaying(e.data === window.YT.PlayerState.PLAYING);
-            if (e.data === window.YT.PlayerState.ENDED) goTo(trackIndex + 1);
+            // Use the ref (not the closed-over state) to get the current index
+            if (e.data === window.YT.PlayerState.ENDED) goTo(trackIndexRef.current + 1);
           },
-          onError: () => goTo(trackIndex + 1),
+          onError: () => goTo(trackIndexRef.current + 1),
         },
       });
     };
@@ -111,17 +126,6 @@ export function AudioPlayer() {
       }
     }
   }, []);
-
-  const goTo = (idx: number) => {
-    const next = ((idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
-    setTrackIndex(next);
-    playerRef.current?.loadVideoById(PLAYLIST[next].id);
-    // scroll active track into view
-    setTimeout(() => {
-      const el = playlistRef.current?.querySelector(`[data-idx="${next}"]`);
-      el?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }, 50);
-  };
 
   const toggle = () => {
     if (!ready || !playerRef.current) return;

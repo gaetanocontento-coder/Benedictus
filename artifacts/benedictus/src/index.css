@@ -42,50 +42,52 @@
 
   --font-sans: var(--app-font-sans);
   --font-serif: var(--app-font-serif);
-  
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root, .dark {
-  --background: 33 52% 9%; /* #1a1208 */
-  --foreground: 40 60% 87%; /* #f5e6c8 */
+/* ── Light parchment theme ─────────────────────────────────────── */
+:root {
+  --background:         42 38% 96%;    /* #f7f3eb — pergamena calda */
+  --foreground:         28 55% 11%;    /* #2c1808 — seppia scuro */
 
-  --card: 33 45% 12%; 
-  --card-foreground: 40 60% 87%;
-  --card-border: 33 40% 18%;
+  --card:               40 28% 91%;    /* #ede6d8 — pergamena media */
+  --card-foreground:    28 55% 11%;
+  --card-border:        38 22% 82%;    /* #d9ccb8 */
 
-  --popover: 33 52% 9%;
-  --popover-foreground: 40 60% 87%;
-  --popover-border: 33 40% 18%;
+  --popover:            42 38% 96%;
+  --popover-foreground: 28 55% 11%;
+  --popover-border:     38 22% 82%;
 
-  --primary: 40 60% 87%;
-  --primary-foreground: 33 52% 9%;
-  --primary-border: 40 60% 87%;
+  /* Primary = rich monastery brown */
+  --primary:            32 62% 28%;    /* #742c0e */
+  --primary-foreground: 42 38% 96%;   /* pergamena su bruno */
+  --primary-border:     32 62% 28%;
 
-  --secondary: 33 40% 18%;
-  --secondary-foreground: 40 60% 87%;
-  --secondary-border: 33 40% 25%;
+  --secondary:          38 22% 88%;
+  --secondary-foreground: 28 55% 11%;
+  --secondary-border:   38 18% 78%;
 
-  --muted: 33 40% 15%;
-  --muted-foreground: 40 40% 70%;
-  --muted-border: 33 40% 22%;
+  --muted:              40 18% 91%;
+  --muted-foreground:   28 22% 44%;   /* #7a6350 — grigio-bruno caldo */
+  --muted-border:       38 16% 84%;
 
-  --accent: 33 40% 18%;
-  --accent-foreground: 40 60% 87%;
-  --accent-border: 33 40% 25%;
+  --accent:             38 25% 88%;
+  --accent-foreground:  28 55% 11%;
+  --accent-border:      38 20% 80%;
 
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 40 60% 87%;
-  --destructive-border: 0 62% 30%;
+  --destructive:        0 62% 38%;
+  --destructive-foreground: 42 38% 96%;
+  --destructive-border: 0 62% 38%;
 
-  --border: 33 40% 18%;
-  --input: 33 40% 18%;
-  --ring: 40 60% 87%;
+  --border:             38 20% 82%;   /* #d9ccb8 */
+  --input:              38 20% 82%;
+  --ring:               32 62% 28%;
 
-  --app-font-sans: 'Inter', sans-serif;
+  --app-font-sans:  'Inter', sans-serif;
   --app-font-serif: 'Playfair Display', serif;
   --radius: 0.25rem;
 }
@@ -96,51 +98,50 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground;
+    @apply font-sans antialiased bg-background text-foreground
+           selection:bg-primary selection:text-primary-foreground;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-normal tracking-tight;
   }
 
-  /* Global grain texture overlay */
+  /* Subtle parchment grain */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 128px 128px;
-    opacity: 0.032;
+    opacity: 0.025;
     pointer-events: none;
     z-index: 9998;
-    mix-blend-mode: overlay;
+    mix-blend-mode: multiply;
   }
 }
 
-/* Audio waveform bar animation */
+/* ── Animations ────────────────────────────────────────────────── */
+
 @keyframes barDance {
   0%   { transform: scaleY(0.3); }
   100% { transform: scaleY(1); }
 }
 
-/* Candlelight text glow for primary elements */
 @keyframes candleGlow {
-  0%, 100% { text-shadow: 0 0 12px rgba(245, 230, 200, 0.15); }
-  50%       { text-shadow: 0 0 22px rgba(245, 230, 200, 0.25), 0 0 4px rgba(245, 230, 200, 0.1); }
+  0%, 100% { text-shadow: 0 0 12px rgba(116, 44, 14, 0.12); }
+  50%       { text-shadow: 0 0 20px rgba(116, 44, 14, 0.22); }
 }
 
-/* Gentle flicker on lit elements */
 @keyframes flicker {
   0%, 89%, 91%, 93%, 100% { opacity: 1; }
   90%                      { opacity: 0.92; }
   92%                      { opacity: 0.96; }
 }
 
-/* Vellum / parchment section tint */
-.vellum {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='parchment'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch' result='noise'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0 0.02  0 0 0 0.04 0' in='noise'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23parchment)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
+/* Photo sections that are always dark (hero, corridors) */
+.photo-section-light {
+  color: #f0e6d4;
 }

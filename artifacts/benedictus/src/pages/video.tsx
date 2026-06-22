@@ -173,12 +173,12 @@ const VIDEO: Video[] = [
     luogo: "Grande Chartreuse, Alpi Francesi",
   },
   {
-    id: "rI1w1DDdH1I",
-    titolo: "Il Grande Silenzio — I Monaci",
-    sottotitolo: "Monaci Certosini in Solitudine",
+    id: "eT3SoRkzabY",
+    titolo: "Il Grande Silenzio — I Monaci sulla Neve",
+    sottotitolo: "Certosini alla Grande Chartreuse, 2005",
     categoria: "eremi",
     descrizione:
-      "Una sequenza del documentario di Gröning: la vita quotidiana dei monaci certosini nella Grande Chartreuse. Preghiera, lavoro manuale, isolamento assoluto. Il silenzio come lingua madre dell'anima contemplativa.",
+      "Sequenza autentica del documentario di Gröning: i monaci certosini della Grande Chartreuse scendono scivolando sulla neve tra le Alpi francesi. Uno dei momenti più insoliti e toccanti del film — la gioia silenziosa di chi vive fuori dal mondo.",
     durata: "Estratto",
     luogo: "Grande Chartreuse, Alpi Francesi",
   },

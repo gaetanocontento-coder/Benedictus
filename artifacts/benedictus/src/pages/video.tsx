@@ -282,7 +282,7 @@ export default function VideoPage() {
     <div className="w-full min-h-screen">
 
       {/* ── HERO ── */}
-      <section className="relative bg-stone-950 py-24 overflow-hidden">
+      <section className="relative bg-background py-24 overflow-hidden">
         <div
           className="absolute inset-0 opacity-25"
           style={{
@@ -292,15 +292,15 @@ export default function VideoPage() {
             filter: "sepia(0.4) brightness(0.6)",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-stone-950/50 via-stone-950/30 to-stone-950" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/30 to-background" />
         <div className="relative container mx-auto px-6 max-w-3xl text-center">
-          <p className="text-[9px] uppercase tracking-[0.4em] text-stone-400 mb-4">
+          <p className="text-[9px] uppercase tracking-[0.25em] md:tracking-[0.4em] text-muted-foreground mb-4">
             Biblioteca Visiva · Benedictus
           </p>
-          <h1 className="font-serif text-4xl md:text-5xl text-stone-100 mb-5">
+          <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-5">
             Visioni dal Monastero
           </h1>
-          <p className="text-stone-300/80 font-light text-base leading-relaxed max-w-xl mx-auto">
+          <p className="text-foreground/70 font-light text-base leading-relaxed max-w-xl mx-auto">
             Documentari, canti liturgici e testimonianze filmati nelle abbazie e
             negli eremi d'Europa. La vita monastica benedettina e il silenzio
             contemplativo nella loro forma più autentica.
@@ -310,8 +310,9 @@ export default function VideoPage() {
 
       {/* ── FILTRI CATEGORIA ── */}
       <section className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="flex items-center gap-1.5 overflow-x-auto py-4">
+        <div className="relative">
+          <div className="container mx-auto px-6 max-w-6xl">
+          <div className="flex items-center gap-1.5 overflow-x-auto py-4 scrollbar-none" style={{ WebkitOverflowScrolling: "touch" }}>
             {CATEGORIE.map((c) => (
               <button
                 key={c.id}
@@ -334,6 +335,7 @@ export default function VideoPage() {
                 </span>
               </button>
             ))}
+          </div>
           </div>
         </div>
       </section>

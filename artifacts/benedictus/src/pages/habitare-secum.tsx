@@ -116,7 +116,7 @@ export default function HabitareSecum() {
         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-stone-700/40 to-transparent -translate-x-1/2" />
 
         <div className="relative z-10 container mx-auto px-6 max-w-3xl text-center py-24">
-          <p className="text-[9px] uppercase tracking-[0.5em] text-stone-500 mb-8">
+          <p className="text-[9px] uppercase tracking-[0.2em] md:tracking-[0.5em] text-stone-500 mb-8">
             Spiritualità Benedettina · Regula Humanitatis
           </p>
 

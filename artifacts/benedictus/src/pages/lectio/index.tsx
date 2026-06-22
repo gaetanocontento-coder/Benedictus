@@ -43,20 +43,21 @@ function RegolaGiorno() {
   return (
     <div className="border border-primary/20 bg-card">
       {/* Header */}
-      <div className="border-b border-border/50 px-8 py-5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="border-b border-border/50 px-4 md:px-8 py-4 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 shrink-0">
           <BookOpen className="w-4 h-4 text-primary flex-shrink-0" />
-          <p className="text-xs uppercase tracking-[0.25em] text-primary">
-            Regola di San Benedetto — Oggi
+          <p className="text-[10px] uppercase tracking-[0.15em] text-primary">
+            <span className="sm:hidden">Regola</span>
+            <span className="hidden sm:inline">Regola di San Benedetto — Oggi</span>
           </p>
         </div>
-        <span className="text-xs text-muted-foreground font-mono border border-border px-2 py-0.5">
+        <span className="text-[10px] text-muted-foreground font-mono border border-border px-2 py-0.5 flex-shrink-0 max-w-[180px] truncate sm:max-w-none">
           {data.etichetta}
         </span>
       </div>
 
       {/* Body */}
-      <div className="px-8 py-6">
+      <div className="px-4 md:px-8 py-6">
         <h3 className="text-xl font-serif text-foreground mb-1">
           {data.capitolo === 0 ? "Prologo" : `Capitolo ${data.capitolo}`}
         </h3>

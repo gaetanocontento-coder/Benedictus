@@ -185,17 +185,19 @@ export default function Piani() {
             >
               Mensile
             </button>
-            <button
-              onClick={() => setBilling("annual")}
-              className={`px-6 py-3 text-sm uppercase tracking-widest transition-colors relative ${
-                billing === "annual"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Annuale
+            <div className="relative">
+              <button
+                onClick={() => setBilling("annual")}
+                className={`px-6 py-3 text-sm uppercase tracking-widest transition-colors ${
+                  billing === "annual"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Annuale
+              </button>
               <span
-                className={`absolute -top-2.5 -right-2 text-[9px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm font-medium ${
+                className={`absolute -top-3 -right-3 z-10 text-[9px] uppercase tracking-wide px-1.5 py-0.5 rounded-sm font-medium pointer-events-none ${
                   billing === "annual"
                     ? "bg-foreground text-background"
                     : "bg-primary text-primary-foreground"
@@ -203,7 +205,7 @@ export default function Piani() {
               >
                 −2 mesi
               </span>
-            </button>
+            </div>
           </div>
         </div>
       </section>

@@ -162,6 +162,26 @@ const VIDEO: Video[] = [
     durata: "Suite",
     luogo: "Colonna Sonora Originale, 1986",
   },
+  {
+    id: "aClOJzUFIvs",
+    titolo: "Il Grande Silenzio",
+    sottotitolo: "Philip Gröning, 2005 — Trailer",
+    categoria: "eremi",
+    descrizione:
+      "Trailer del documentario capolavoro di Philip Gröning girato nell'arco di sei mesi dentro la Grande Chartreuse, monastero dei Certosini sulle Alpi francesi. Nessuna musica aggiunta, nessun commento: solo il silenzio, la luce e la preghiera dei monaci.",
+    durata: "Trailer",
+    luogo: "Grande Chartreuse, Alpi Francesi",
+  },
+  {
+    id: "rI1w1DDdH1I",
+    titolo: "Il Grande Silenzio — I Monaci",
+    sottotitolo: "Monaci Certosini in Solitudine",
+    categoria: "eremi",
+    descrizione:
+      "Una sequenza del documentario di Gröning: la vita quotidiana dei monaci certosini nella Grande Chartreuse. Preghiera, lavoro manuale, isolamento assoluto. Il silenzio come lingua madre dell'anima contemplativa.",
+    durata: "Estratto",
+    luogo: "Grande Chartreuse, Alpi Francesi",
+  },
 ];
 
 function getThumbnail(id: string) {

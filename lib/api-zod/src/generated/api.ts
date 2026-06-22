@@ -1122,3 +1122,112 @@ export const BGetEsameDomandeResponse = zod.object({
 })
 
 
+/**
+ * @summary Get liturgical readings for a given date (default today)
+ */
+export const BGetLiturgiaGiornoQueryParams = zod.object({
+  "data": zod.coerce.string().optional()
+})
+
+export const BGetLiturgiaGiornoResponse = zod.object({
+  "data": zod.string(),
+  "titoloLiturgico": zod.string(),
+  "colore": zod.string(),
+  "letture": zod.array(zod.object({
+  "tipo": zod.string(),
+  "label": zod.string(),
+  "riferimento": zod.string(),
+  "intro": zod.string(),
+  "testo": zod.string()
+})),
+  "cached": zod.boolean().optional()
+})
+
+
+/**
+ * @summary List user's spiritual practice journal entries (last 30)
+ */
+export const BListPraticheResponseItem = zod.object({
+  "id": zod.number(),
+  "data": zod.string(),
+  "tipo": zod.string(),
+  "passaggioRef": zod.string().nullish(),
+  "passaggioTesto": zod.string().nullish(),
+  "lectio": zod.string().nullish(),
+  "meditatio": zod.string().nullish(),
+  "oratio": zod.string().nullish(),
+  "contemplatio": zod.string().nullish(),
+  "composizioneLuogo": zod.string().nullish(),
+  "colloquio": zod.string().nullish(),
+  "esameConscienza": zod.string().nullish(),
+  "frutti": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const BListPraticheResponse = zod.array(BListPraticheResponseItem)
+
+
+/**
+ * @summary Save (upsert) a spiritual practice entry
+ */
+export const BSavePraticaBody = zod.object({
+  "data": zod.string(),
+  "tipo": zod.string(),
+  "passaggioRef": zod.string().optional(),
+  "passaggioTesto": zod.string().optional(),
+  "lectio": zod.string().optional(),
+  "meditatio": zod.string().optional(),
+  "oratio": zod.string().optional(),
+  "contemplatio": zod.string().optional(),
+  "composizioneLuogo": zod.string().optional(),
+  "colloquio": zod.string().optional(),
+  "esameConscienza": zod.string().optional(),
+  "frutti": zod.string().optional()
+})
+
+export const BSavePraticaResponse = zod.object({
+  "id": zod.number(),
+  "data": zod.string(),
+  "tipo": zod.string(),
+  "passaggioRef": zod.string().nullish(),
+  "passaggioTesto": zod.string().nullish(),
+  "lectio": zod.string().nullish(),
+  "meditatio": zod.string().nullish(),
+  "oratio": zod.string().nullish(),
+  "contemplatio": zod.string().nullish(),
+  "composizioneLuogo": zod.string().nullish(),
+  "colloquio": zod.string().nullish(),
+  "esameConscienza": zod.string().nullish(),
+  "frutti": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Get user's practices for a specific date
+ */
+export const BGetPraticheByDateParams = zod.object({
+  "data": zod.coerce.string()
+})
+
+export const BGetPraticheByDateResponseItem = zod.object({
+  "id": zod.number(),
+  "data": zod.string(),
+  "tipo": zod.string(),
+  "passaggioRef": zod.string().nullish(),
+  "passaggioTesto": zod.string().nullish(),
+  "lectio": zod.string().nullish(),
+  "meditatio": zod.string().nullish(),
+  "oratio": zod.string().nullish(),
+  "contemplatio": zod.string().nullish(),
+  "composizioneLuogo": zod.string().nullish(),
+  "colloquio": zod.string().nullish(),
+  "esameConscienza": zod.string().nullish(),
+  "frutti": zod.string().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const BGetPraticheByDateResponse = zod.array(BGetPraticheByDateResponseItem)
+
+

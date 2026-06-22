@@ -32,6 +32,7 @@ import type {
   BEpisode,
   BEpisodeInput,
   BEsameDomande,
+  BGetLiturgiaGiornoParams,
   BGraduate,
   BLectio,
   BLectioInput,
@@ -39,6 +40,7 @@ import type {
   BLibroCuoreEntry,
   BLibroCuoreInput,
   BListLectioParams,
+  BLiturgiaGiorno,
   BLoginInput,
   BLogout200,
   BModuleProgress,
@@ -47,6 +49,8 @@ import type {
   BOblatoProfilo,
   BOfficiumCheckIn,
   BPlan,
+  BPraticaInput,
+  BPraticaSpirituale,
   BRegisterInput,
   BRegisterWorkshop200,
   BSigillo,
@@ -5018,6 +5022,315 @@ export function useBGetEsameDomande<TData = Awaited<ReturnType<typeof bGetEsameD
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getBGetEsameDomandeQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBGetLiturgiaGiornoUrl = (params?: BGetLiturgiaGiornoParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/b/liturgia?${stringifiedParams}` : `/api/b/liturgia`
+}
+
+/**
+ * @summary Get liturgical readings for a given date (default today)
+ */
+export const bGetLiturgiaGiorno = async (params?: BGetLiturgiaGiornoParams, options?: RequestInit): Promise<BLiturgiaGiorno> => {
+
+  return customFetch<BLiturgiaGiorno>(getBGetLiturgiaGiornoUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetLiturgiaGiornoQueryKey = (params?: BGetLiturgiaGiornoParams,) => {
+    return [
+    `/api/b/liturgia`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getBGetLiturgiaGiornoQueryOptions = <TData = Awaited<ReturnType<typeof bGetLiturgiaGiorno>>, TError = ErrorType<void>>(params?: BGetLiturgiaGiornoParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLiturgiaGiorno>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetLiturgiaGiornoQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetLiturgiaGiorno>>> = ({ signal }) => bGetLiturgiaGiorno(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetLiturgiaGiorno>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetLiturgiaGiornoQueryResult = NonNullable<Awaited<ReturnType<typeof bGetLiturgiaGiorno>>>
+export type BGetLiturgiaGiornoQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get liturgical readings for a given date (default today)
+ */
+
+export function useBGetLiturgiaGiorno<TData = Awaited<ReturnType<typeof bGetLiturgiaGiorno>>, TError = ErrorType<void>>(
+ params?: BGetLiturgiaGiornoParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetLiturgiaGiorno>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetLiturgiaGiornoQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBListPraticheUrl = () => {
+
+
+
+
+  return `/api/b/pratiche`
+}
+
+/**
+ * @summary List user's spiritual practice journal entries (last 30)
+ */
+export const bListPratiche = async ( options?: RequestInit): Promise<BPraticaSpirituale[]> => {
+
+  return customFetch<BPraticaSpirituale[]>(getBListPraticheUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBListPraticheQueryKey = () => {
+    return [
+    `/api/b/pratiche`
+    ] as const;
+    }
+
+
+export const getBListPraticheQueryOptions = <TData = Awaited<ReturnType<typeof bListPratiche>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListPratiche>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBListPraticheQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bListPratiche>>> = ({ signal }) => bListPratiche({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bListPratiche>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BListPraticheQueryResult = NonNullable<Awaited<ReturnType<typeof bListPratiche>>>
+export type BListPraticheQueryError = ErrorType<void>
+
+
+/**
+ * @summary List user's spiritual practice journal entries (last 30)
+ */
+
+export function useBListPratiche<TData = Awaited<ReturnType<typeof bListPratiche>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bListPratiche>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBListPraticheQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getBSavePraticaUrl = () => {
+
+
+
+
+  return `/api/b/pratiche`
+}
+
+/**
+ * @summary Save (upsert) a spiritual practice entry
+ */
+export const bSavePratica = async (bPraticaInput: BPraticaInput, options?: RequestInit): Promise<BPraticaSpirituale> => {
+
+  return customFetch<BPraticaSpirituale>(getBSavePraticaUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bPraticaInput,)
+  }
+);}
+
+
+
+
+export const getBSavePraticaMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bSavePratica>>, TError,{data: BodyType<BPraticaInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof bSavePratica>>, TError,{data: BodyType<BPraticaInput>}, TContext> => {
+
+const mutationKey = ['bSavePratica'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bSavePratica>>, {data: BodyType<BPraticaInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bSavePratica(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BSavePraticaMutationResult = NonNullable<Awaited<ReturnType<typeof bSavePratica>>>
+    export type BSavePraticaMutationBody = BodyType<BPraticaInput>
+    export type BSavePraticaMutationError = ErrorType<void>
+
+    /**
+ * @summary Save (upsert) a spiritual practice entry
+ */
+export const useBSavePratica = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bSavePratica>>, TError,{data: BodyType<BPraticaInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof bSavePratica>>,
+        TError,
+        {data: BodyType<BPraticaInput>},
+        TContext
+      > => {
+      return useMutation(getBSavePraticaMutationOptions(options));
+    }
+
+export const getBGetPraticheByDateUrl = (data: string,) => {
+
+
+
+
+  return `/api/b/pratiche/${data}`
+}
+
+/**
+ * @summary Get user's practices for a specific date
+ */
+export const bGetPraticheByDate = async (data: string, options?: RequestInit): Promise<BPraticaSpirituale[]> => {
+
+  return customFetch<BPraticaSpirituale[]>(getBGetPraticheByDateUrl(data),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBGetPraticheByDateQueryKey = (data: string,) => {
+    return [
+    `/api/b/pratiche/${data}`
+    ] as const;
+    }
+
+
+export const getBGetPraticheByDateQueryOptions = <TData = Awaited<ReturnType<typeof bGetPraticheByDate>>, TError = ErrorType<void>>(data: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetPraticheByDate>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBGetPraticheByDateQueryKey(data);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof bGetPraticheByDate>>> = ({ signal }) => bGetPraticheByDate(data, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(data), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof bGetPraticheByDate>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BGetPraticheByDateQueryResult = NonNullable<Awaited<ReturnType<typeof bGetPraticheByDate>>>
+export type BGetPraticheByDateQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get user's practices for a specific date
+ */
+
+export function useBGetPraticheByDate<TData = Awaited<ReturnType<typeof bGetPraticheByDate>>, TError = ErrorType<void>>(
+ data: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof bGetPraticheByDate>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBGetPraticheByDateQueryOptions(data,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

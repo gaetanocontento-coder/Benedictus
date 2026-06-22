@@ -253,3 +253,53 @@ export const insertBLibroCuoreSchema = createInsertSchema(bLibroCuoreTable).omit
 });
 export type InsertBLibroCuore = z.infer<typeof insertBLibroCuoreSchema>;
 export type BLibroCuore = typeof bLibroCuoreTable.$inferSelect;
+
+// ── Liturgia del Giorno ──────────────────────────────────────────────────────
+
+/** Cache delle letture liturgiche giornaliere (fonte: evangelizo.org) */
+export const bLiturgiaGiornoTable = pgTable("b_liturgia_giorno", {
+  id: serial("id").primaryKey(),
+  data: date("data", { mode: "string" }).notNull().unique(), // YYYY-MM-DD
+  titoloLiturgico: text("titolo_liturgico").notNull(),
+  colore: text("colore").notNull().default("verde"), // verde | viola | rosso | bianco
+  letture: text("letture").notNull(), // JSON: BLettura[]
+  fetchedAt: timestamp("fetched_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type BLiturgiaGiorno = typeof bLiturgiaGiornoTable.$inferSelect;
+
+/** Pratica spirituale personale (Lectio Divina o Esercizi Ignaziani) */
+export const bPraticaSpiritualeTable = pgTable(
+  "b_pratica_spirituale",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").notNull(),
+    data: date("data", { mode: "string" }).notNull(), // YYYY-MM-DD
+    tipo: text("tipo").notNull(), // "lectio" | "ignaziana"
+    passaggioRef: text("passaggio_ref"), // es. "Lc 10, 38-42"
+    passaggioTesto: text("passaggio_testo"), // testo del brano scelto
+    // Lectio Divina (4 passi)
+    lectio: text("lectio"),           // lettura lenta, parola/frase che colpisce
+    meditatio: text("meditatio"),     // riflessione, cosa dice il testo
+    oratio: text("oratio"),           // preghiera spontanea
+    contemplatio: text("contemplatio"), // silenzio, ciò che rimane
+    // Esercizi Ignaziani
+    composizioneLuogo: text("composizione_luogo"), // scena immaginata
+    colloquio: text("colloquio"),                  // dialogo con Dio/Cristo
+    esameConscienza: text("esame_conscienza"),      // esame: grazie / peccati / propositi
+    frutti: text("frutti"),                         // frutti raccolti
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+  },
+  (t) => [
+    uniqueIndex("b_pratica_spirituale_user_data_tipo_idx").on(t.userId, t.data, t.tipo),
+  ]
+);
+
+export const insertBPraticaSpiritualeSchema = createInsertSchema(bPraticaSpiritualeTable).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertBPraticaSpirituale = z.infer<typeof insertBPraticaSpiritualeSchema>;
+export type BPraticaSpirituale = typeof bPraticaSpiritualeTable.$inferSelect;

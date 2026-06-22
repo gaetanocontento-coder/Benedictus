@@ -32,6 +32,8 @@ import OfficiumPage from "@/pages/officium";
 import CapitoloPage from "@/pages/capitolo";
 import EsamePage from "@/pages/esame";
 import LibroCuorePage from "@/pages/libro-cuore";
+import LiturgiaIndex from "@/pages/liturgia/index";
+import PraticaSpirituale from "@/pages/liturgia/pratica";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +68,8 @@ function Router() {
         <Route path="/capitolo" component={CapitoloPage} />
         <Route path="/esame" component={EsamePage} />
         <Route path="/libro-cuore" component={LibroCuorePage} />
+        <Route path="/liturgia" component={LiturgiaIndex} />
+        <Route path="/liturgia/pratica" component={PraticaSpirituale} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

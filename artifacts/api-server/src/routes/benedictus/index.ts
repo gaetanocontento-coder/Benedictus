@@ -11,6 +11,7 @@ import statsRouter from "./stats";
 import adminRouter from "./admin";
 import percorsoRouter from "./percorso";
 import oblatoRouter from "./oblato";
+import liturgiaRouter from "./liturgia";
 
 const router: IRouter = Router();
 
@@ -26,5 +27,6 @@ router.use("/b", statsRouter);
 router.use("/b", adminRouter);
 router.use("/b", percorsoRouter);
 router.use("/b", oblatoRouter);
+router.use("/b", liturgiaRouter);
 
 export default router;

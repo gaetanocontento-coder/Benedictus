@@ -50,6 +50,8 @@ tags:
     description: Admin panel operations
   - name: b-percorso
     description: Percorso del Custode — module progress tracking
+  - name: b-liturgia
+    description: Liturgia del Giorno, Lectio Divina e Esercizi Ignaziani
 
 paths:
   /healthz:
@@ -1272,6 +1274,88 @@ paths:
         "401":
           description: Unauthorized
 
+  /b/liturgia:
+    get:
+      operationId: bGetLiturgiaGiorno
+      tags: [b-liturgia]
+      summary: Get liturgical readings for a given date (default today)
+      parameters:
+        - name: data
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Liturgical readings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BLiturgiaGiorno"
+        "503":
+          description: External readings source unavailable
+
+  /b/pratiche:
+    get:
+      operationId: bListPratiche
+      tags: [b-liturgia]
+      summary: List user's spiritual practice journal entries (last 30)
+      responses:
+        "200":
+          description: List of practices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BPraticaSpirituale"
+        "401":
+          description: Unauthorized
+    post:
+      operationId: bSavePratica
+      tags: [b-liturgia]
+      summary: Save (upsert) a spiritual practice entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BPraticaInput"
+      responses:
+        "200":
+          description: Saved practice
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BPraticaSpirituale"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+
+  /b/pratiche/{data}:
+    get:
+      operationId: bGetPraticheByDate
+      tags: [b-liturgia]
+      summary: Get user's practices for a specific date
+      parameters:
+        - name: data
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Practices for the date
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BPraticaSpirituale"
+        "401":
+          description: Unauthorized
+
 components:
   schemas:
     HealthStatus:
@@ -2243,4 +2327,102 @@ components:
           items:
             type: string
         data:
+          type: string
+
+    BLettura:
+      type: object
+      required: [tipo, label, riferimento, intro, testo]
+      properties:
+        tipo:
+          type: string
+        label:
+          type: string
+        riferimento:
+          type: string
+        intro:
+          type: string
+        testo:
+          type: string
+
+    BLiturgiaGiorno:
+      type: object
+      required: [data, titoloLiturgico, colore, letture]
+      properties:
+        data:
+          type: string
+        titoloLiturgico:
+          type: string
+        colore:
+          type: string
+        letture:
+          type: array
+          items:
+            $ref: "#/components/schemas/BLettura"
+        cached:
+          type: boolean
+
+    BPraticaSpirituale:
+      type: object
+      required: [id, data, tipo, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        data:
+          type: string
+        tipo:
+          type: string
+        passaggioRef:
+          type: ["string", "null"]
+        passaggioTesto:
+          type: ["string", "null"]
+        lectio:
+          type: ["string", "null"]
+        meditatio:
+          type: ["string", "null"]
+        oratio:
+          type: ["string", "null"]
+        contemplatio:
+          type: ["string", "null"]
+        composizioneLuogo:
+          type: ["string", "null"]
+        colloquio:
+          type: ["string", "null"]
+        esameConscienza:
+          type: ["string", "null"]
+        frutti:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BPraticaInput:
+      type: object
+      required: [data, tipo]
+      properties:
+        data:
+          type: string
+        tipo:
+          type: string
+        passaggioRef:
+          type: string
+        passaggioTesto:
+          type: string
+        lectio:
+          type: string
+        meditatio:
+          type: string
+        oratio:
+          type: string
+        contemplatio:
+          type: string
+        composizioneLuogo:
+          type: string
+        colloquio:
+          type: string
+        esameConscienza:
+          type: string
+        frutti:
           type: string

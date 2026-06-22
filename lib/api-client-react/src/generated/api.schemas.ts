@@ -664,6 +664,65 @@ export interface BEsameDomande {
   data: string;
 }
 
+export interface BLettura {
+  tipo: string;
+  label: string;
+  riferimento: string;
+  intro: string;
+  testo: string;
+}
+
+export interface BLiturgiaGiorno {
+  data: string;
+  titoloLiturgico: string;
+  colore: string;
+  letture: BLettura[];
+  cached?: boolean;
+}
+
+export interface BPraticaSpirituale {
+  id: number;
+  data: string;
+  tipo: string;
+  /** @nullable */
+  passaggioRef?: string | null;
+  /** @nullable */
+  passaggioTesto?: string | null;
+  /** @nullable */
+  lectio?: string | null;
+  /** @nullable */
+  meditatio?: string | null;
+  /** @nullable */
+  oratio?: string | null;
+  /** @nullable */
+  contemplatio?: string | null;
+  /** @nullable */
+  composizioneLuogo?: string | null;
+  /** @nullable */
+  colloquio?: string | null;
+  /** @nullable */
+  esameConscienza?: string | null;
+  /** @nullable */
+  frutti?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BPraticaInput {
+  data: string;
+  tipo: string;
+  passaggioRef?: string;
+  passaggioTesto?: string;
+  lectio?: string;
+  meditatio?: string;
+  oratio?: string;
+  contemplatio?: string;
+  composizioneLuogo?: string;
+  colloquio?: string;
+  esameConscienza?: string;
+  frutti?: string;
+}
+
 export type ListLeadsParams = {
 stato?: string;
 fonte?: string;
@@ -712,5 +771,9 @@ export type BStartModule200 = {
 
 export type BCompleteModule200 = {
   success: boolean;
+};
+
+export type BGetLiturgiaGiornoParams = {
+data?: string;
 };
 

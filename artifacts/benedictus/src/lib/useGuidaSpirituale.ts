@@ -30,8 +30,7 @@ export function useGuidaSpirituale() {
     setLoading(true);
 
     try {
-      const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-      const resp = await fetch(`${base}/api/b/guida-spirituale`, {
+      const resp = await fetch(`/api/b/guida-spirituale`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),

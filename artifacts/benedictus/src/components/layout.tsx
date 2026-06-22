@@ -138,7 +138,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <LiturgiaOre />
       <AudioPlayer />
 
-      <footer className="bg-card border-t border-border/60 py-16 text-center">
+      <footer className="bg-card border-t border-border/60 pt-16 pb-28 md:pb-16 text-center">
         <div className="container mx-auto px-6">
           <h2 className="font-display text-2xl mb-2 text-primary tracking-[0.3em] uppercase">Benedictvs</h2>
           <p className="text-muted-foreground tracking-[0.25em] text-[10px] uppercase mb-8">

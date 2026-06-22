@@ -23,12 +23,15 @@ function formatDateIT(iso: string) {
   return dt.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 }
 
-function todayISO() { return new Date().toISOString().slice(0, 10); }
+function todayISO() {
+  const dt = new Date();
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+}
 
 function addDays(iso: string, delta: number): string {
   const [y, m, d] = iso.split("-").map(Number);
   const dt = new Date(y, m - 1, d + delta);
-  return dt.toISOString().slice(0, 10);
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
 }
 
 const TIPO_ICONA: Record<string, string> = {

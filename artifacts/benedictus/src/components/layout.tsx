@@ -12,30 +12,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col w-full relative">
       <header
-        className={`w-full z-50 py-6 transition-colors duration-300 ${
+        className={`w-full z-50 py-5 transition-colors duration-500 ${
           isHome
-            ? "absolute top-0 left-0 bg-transparent"
-            : "bg-background border-b border-border"
+            ? "absolute top-0 left-0 bg-transparent border-b border-transparent"
+            : "bg-background/95 border-b border-border/60 backdrop-blur-sm"
         }`}
       >
         <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
-          {/* Logo — always cream on home (dark photo), brown on light pages */}
+          {/* Logo — Cinzel maiuscoletto, sempre crema/oro */}
           <Link
             href="/"
-            className={`font-serif text-2xl tracking-widest uppercase transition-colors ${
-              isHome
-                ? "text-[#f0e6d4] hover:text-white"
-                : "text-primary hover:text-primary/80"
-            }`}
+            className="font-display text-lg tracking-[0.3em] uppercase transition-colors text-primary hover:text-primary/80"
           >
-            Benedictus
+            Benedictvs
           </Link>
 
           {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest">
+          <nav className="hidden md:flex items-center gap-7 text-[11px] uppercase tracking-[0.2em]">
             {[
               { href: "/chi-siamo",   label: "Chi Siamo"    },
-              { href: "/la-regula",   label: "La Regula"    },
+              { href: "/la-regula",   label: "La Regola"    },
               { href: "/liturgia",    label: "Liturgia"     },
               { href: "/lectio",      label: "Lectio"       },
               { href: "/scriptorium", label: "Scriptorium"  },
@@ -48,8 +44,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 href={href}
                 className={`transition-colors ${
                   isHome
-                    ? "text-[#e8d9c2] hover:text-white"
-                    : "text-foreground/70 hover:text-primary"
+                    ? "text-foreground/70 hover:text-primary"
+                    : "text-foreground/60 hover:text-primary"
                 }`}
               >
                 {label}
@@ -58,36 +54,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </nav>
 
           {/* Auth */}
-          <div className="flex items-center gap-6 text-sm uppercase tracking-widest">
+          <div className="flex items-center gap-6 text-[11px] uppercase tracking-[0.2em]">
             {user ? (
               <>
                 <Link
                   href="/oblato"
-                  className={`transition-colors hidden md:block ${
-                    isHome
-                      ? "text-[#e8d9c2] hover:text-white"
-                      : "text-foreground/70 hover:text-primary"
-                  }`}
+                  className="transition-colors hidden md:block text-foreground/60 hover:text-primary"
                 >
                   Cursus Oblati
                 </Link>
                 <Link
                   href="/admin"
-                  className={`transition-colors hidden md:block ${
-                    isHome
-                      ? "text-[#e8d9c2] hover:text-white"
-                      : "text-foreground/70 hover:text-primary"
-                  }`}
+                  className="transition-colors hidden md:block text-foreground/60 hover:text-primary"
                 >
                   Sanctuarium
                 </Link>
                 <button
                   onClick={logout}
-                  className={`transition-colors ${
-                    isHome
-                      ? "text-[#e8d9c2] hover:text-white"
-                      : "text-foreground/70 hover:text-primary"
-                  }`}
+                  className="transition-colors text-foreground/60 hover:text-primary"
                 >
                   Esci
                 </button>
@@ -95,11 +79,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ) : (
               <Link
                 href="/login"
-                className={`transition-colors ${
-                  isHome
-                    ? "text-[#e8d9c2] hover:text-white"
-                    : "text-foreground/70 hover:text-primary"
-                }`}
+                className="transition-colors text-foreground/60 hover:text-primary"
               >
                 Accedi
               </Link>
@@ -115,18 +95,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <LiturgiaOre />
       <AudioPlayer />
 
-      <footer className="bg-card border-t border-border py-16 text-center">
+      <footer className="bg-card border-t border-border/60 py-16 text-center">
         <div className="container mx-auto px-6">
-          <h2 className="font-serif text-3xl mb-8 text-primary">Benedictus</h2>
-          <p className="text-muted-foreground uppercase tracking-widest text-sm mb-4">
+          <h2 className="font-display text-2xl mb-2 text-primary tracking-[0.3em] uppercase">Benedictvs</h2>
+          <p className="text-muted-foreground tracking-[0.25em] text-[10px] uppercase mb-8">
             Anno Domini MCCCXXVII
           </p>
-          <div className="flex justify-center gap-8 text-sm uppercase tracking-widest mb-12">
-            <Link href="/contatti"     className="text-foreground/60 hover:text-primary transition-colors">Contatti</Link>
-            <Link href="/il-manifesto" className="text-foreground/60 hover:text-primary transition-colors">Il Manifesto</Link>
-            <Link href="/testimonianze" className="text-foreground/60 hover:text-primary transition-colors">Testimonianze</Link>
+          <div className="w-16 h-px bg-primary/30 mx-auto mb-8" />
+          <div className="flex justify-center gap-8 text-[11px] uppercase tracking-widest mb-10">
+            <Link href="/contatti"     className="text-foreground/40 hover:text-primary transition-colors">Contatti</Link>
+            <Link href="/il-manifesto" className="text-foreground/40 hover:text-primary transition-colors">Il Manifesto</Link>
+            <Link href="/testimonianze" className="text-foreground/40 hover:text-primary transition-colors">Testimonianze</Link>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[11px] text-muted-foreground/50">
             &copy; {new Date().getFullYear()} Regula Humanitatis. Un cammino per il custode moderno.
           </p>
         </div>

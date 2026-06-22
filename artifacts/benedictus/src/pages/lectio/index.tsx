@@ -144,23 +144,23 @@ export default function LectioIndex() {
       </section>
 
       {/* ── HABITARE SECUM ── */}
-      <section className="bg-stone-950 border-b border-stone-900 py-0">
+      <section className="bg-card border-b border-border/60 py-0">
         <div className="container mx-auto px-6 max-w-3xl">
           <Link href="/habitare-secum" className="group flex items-stretch gap-0 py-10">
-            <div className="w-px bg-gradient-to-b from-transparent via-stone-600/60 to-transparent mr-8 flex-shrink-0" />
+            <div className="w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent mr-8 flex-shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-[9px] uppercase tracking-[0.45em] text-stone-600 mb-3">
+              <p className="text-[9px] uppercase tracking-[0.45em] text-muted-foreground/60 mb-3">
                 Approfondimento · Spiritualità Benedettina
               </p>
-              <h2 className="font-serif text-2xl md:text-3xl text-stone-200 italic mb-3 group-hover:text-stone-100 transition-colors">
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground italic mb-3 group-hover:text-primary transition-colors">
                 Habitare Secum
               </h2>
-              <p className="text-stone-400/80 font-light text-sm leading-relaxed max-w-xl mb-5">
+              <p className="text-muted-foreground font-light text-sm leading-relaxed max-w-xl mb-5">
                 Abitare con se stessi. Il principio fondante della tradizione monastica, dalla
                 custodia cordis dei Padri del Deserto alla cella interiore di Benedetto — con le
                 otto voci dei maestri e le quattro soglie della pratica quotidiana.
               </p>
-              <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-stone-500 group-hover:text-stone-300 transition-colors">
+              <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground/50 group-hover:text-primary transition-colors">
                 Entra nella meditazione <ArrowRight className="w-3 h-3" />
               </span>
             </div>

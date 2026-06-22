@@ -180,37 +180,37 @@ export default function HabitareSecum() {
       </section>
 
       {/* ── VOCI DAL SILENZIO ── */}
-      <section className="py-0 bg-stone-950 overflow-hidden">
+      <section className="py-0 bg-card border-t border-border overflow-hidden">
         <div className="container mx-auto px-6 max-w-5xl">
-          <div className="py-14 border-b border-stone-800/60">
-            <p className="text-[9px] uppercase tracking-[0.4em] text-stone-600 mb-2">
+          <div className="py-14 border-b border-border/60">
+            <p className="text-[9px] uppercase tracking-[0.4em] text-primary/50 mb-2">
               Voci dal Silenzio
             </p>
-            <h2 className="font-serif text-3xl text-stone-200">
+            <h2 className="font-serif text-3xl text-foreground">
               Otto voci, una sola direzione
             </h2>
           </div>
 
-          <div className="divide-y divide-stone-800/40">
+          <div className="divide-y divide-border/40">
             {VOCI.map((v, i) => (
               <div
                 key={i}
                 className="py-12 grid md:grid-cols-12 gap-8 items-start group"
               >
-                <div className="md:col-span-1 text-stone-700 font-serif text-4xl select-none leading-none">
+                <div className="md:col-span-1 text-primary/20 font-serif text-4xl select-none leading-none">
                   {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="md:col-span-8">
-                  <p className="font-serif text-xl md:text-2xl text-stone-200 italic leading-relaxed">
+                  <p className="font-serif text-xl md:text-2xl text-foreground italic leading-relaxed">
                     "{v.testo}"
                   </p>
                 </div>
                 <div className="md:col-span-3 md:text-right">
-                  <p className="text-stone-400 text-sm font-light">{v.fonte}</p>
-                  <p className="text-stone-600 text-xs mt-1 uppercase tracking-widest">
+                  <p className="text-muted-foreground text-sm font-light">{v.fonte}</p>
+                  <p className="text-muted-foreground/50 text-xs mt-1 uppercase tracking-widest">
                     {v.opera}
                   </p>
-                  <p className="text-stone-700 text-[9px] mt-1 italic">{v.lingua}</p>
+                  <p className="text-muted-foreground/30 text-[9px] mt-1 italic">{v.lingua}</p>
                 </div>
               </div>
             ))}
@@ -276,18 +276,18 @@ export default function HabitareSecum() {
       </section>
 
       {/* ── GIORNATA DEL CUSTODE ── */}
-      <section className="py-0 bg-stone-950 border-t border-stone-900">
+      <section className="py-0 bg-card border-t border-border">
         <div className="container mx-auto px-6 max-w-5xl">
-          <div className="py-14 border-b border-stone-800/60">
-            <p className="text-[9px] uppercase tracking-[0.4em] text-stone-600 mb-2">
+          <div className="py-14 border-b border-border/60">
+            <p className="text-[9px] uppercase tracking-[0.4em] text-primary/50 mb-2">
               Il Ritmo
             </p>
-            <h2 className="font-serif text-3xl text-stone-200">
+            <h2 className="font-serif text-3xl text-foreground">
               La Giornata di chi abita con se stesso
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-stone-800/40 py-0">
+          <div className="grid md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border/40 py-0">
             {[
               {
                 ora: "Alba",
@@ -320,15 +320,15 @@ export default function HabitareSecum() {
             ].map((momento, i) => (
               <div key={i} className="py-12 px-8 flex flex-col gap-4">
                 <div>
-                  <p className="text-stone-600 text-[9px] uppercase tracking-widest italic mb-0.5">
+                  <p className="text-primary/40 text-[9px] uppercase tracking-widest italic mb-0.5">
                     {momento.latino}
                   </p>
-                  <p className="text-stone-300 font-serif text-xl">{momento.ora}</p>
-                  <p className="text-stone-500 text-[10px] uppercase tracking-widest mt-1">
+                  <p className="text-foreground font-serif text-xl">{momento.ora}</p>
+                  <p className="text-muted-foreground/60 text-[10px] uppercase tracking-widest mt-1">
                     {momento.azione}
                   </p>
                 </div>
-                <p className="text-stone-400/80 font-light text-sm leading-relaxed">
+                <p className="text-muted-foreground font-light text-sm leading-relaxed">
                   {momento.testo}
                 </p>
               </div>
@@ -388,13 +388,13 @@ export default function HabitareSecum() {
       </section>
 
       {/* ── CHIUSURA ── */}
-      <section className="py-16 bg-stone-950 border-t border-stone-900">
+      <section className="py-16 bg-background border-t border-border">
         <div className="container mx-auto px-6 max-w-xl text-center">
-          <p className="font-serif text-3xl md:text-4xl text-stone-300 italic leading-relaxed mb-6">
+          <p className="font-serif text-3xl md:text-4xl text-foreground/80 italic leading-relaxed mb-6">
             "Non cercare fuori ciò che puoi trovare dentro.
             La casa è già costruita. Impara ad abitarla."
           </p>
-          <div className="w-10 h-px bg-stone-700 mx-auto" />
+          <div className="w-10 h-px bg-primary/30 mx-auto" />
         </div>
       </section>
 

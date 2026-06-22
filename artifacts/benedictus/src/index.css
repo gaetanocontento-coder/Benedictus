@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -42,6 +42,7 @@
 
   --font-sans: var(--app-font-sans);
   --font-serif: var(--app-font-serif);
+  --font-display: var(--app-font-display);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -49,47 +50,49 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* ── Light parchment theme ─────────────────────────────────────── */
+/* ── Dark monastery theme ──────────────────────────────────────── */
 :root {
-  --background:         42 38% 96%;    /* #f7f3eb — pergamena calda */
-  --foreground:         28 55% 11%;    /* #2c1808 — seppia scuro */
+  /* Deep dark — quasi nero con calore bruno */
+  --background:         24 18% 7%;     /* #131009 — nero caldo */
+  --foreground:         38 45% 88%;    /* #ede0c4 — crema antica */
 
-  --card:               40 28% 91%;    /* #ede6d8 — pergamena media */
-  --card-foreground:    28 55% 11%;
-  --card-border:        38 22% 82%;    /* #d9ccb8 */
+  --card:               24 15% 10%;   /* #1a1610 — marrone notte */
+  --card-foreground:    38 45% 88%;
+  --card-border:        36 20% 18%;   /* #322a1e */
 
-  --popover:            42 38% 96%;
-  --popover-foreground: 28 55% 11%;
-  --popover-border:     38 22% 82%;
+  --popover:            24 18% 7%;
+  --popover-foreground: 38 45% 88%;
+  --popover-border:     36 20% 18%;
 
-  /* Primary = rich monastery brown */
-  --primary:            32 62% 28%;    /* #742c0e */
-  --primary-foreground: 42 38% 96%;   /* pergamena su bruno */
-  --primary-border:     32 62% 28%;
+  /* Primary = oro monastico / ambra */
+  --primary:            38 72% 52%;   /* #c89b3c — oro antico */
+  --primary-foreground: 24 18% 7%;    /* nero su oro */
+  --primary-border:     38 72% 52%;
 
-  --secondary:          38 22% 88%;
-  --secondary-foreground: 28 55% 11%;
-  --secondary-border:   38 18% 78%;
+  --secondary:          24 12% 14%;
+  --secondary-foreground: 38 35% 78%;
+  --secondary-border:   36 16% 20%;
 
-  --muted:              40 18% 91%;
-  --muted-foreground:   28 22% 44%;   /* #7a6350 — grigio-bruno caldo */
-  --muted-border:       38 16% 84%;
+  --muted:              24 12% 12%;
+  --muted-foreground:   36 20% 55%;   /* grigio-oro spento */
+  --muted-border:       36 14% 18%;
 
-  --accent:             38 25% 88%;
-  --accent-foreground:  28 55% 11%;
-  --accent-border:      38 20% 80%;
+  --accent:             38 50% 20%;   /* oro scuro */
+  --accent-foreground:  38 60% 82%;
+  --accent-border:      38 40% 28%;
 
-  --destructive:        0 62% 38%;
-  --destructive-foreground: 42 38% 96%;
-  --destructive-border: 0 62% 38%;
+  --destructive:        0 60% 42%;
+  --destructive-foreground: 38 45% 88%;
+  --destructive-border: 0 60% 42%;
 
-  --border:             38 20% 82%;   /* #d9ccb8 */
-  --input:              38 20% 82%;
-  --ring:               32 62% 28%;
+  --border:             36 18% 18%;   /* #2e251a — bordo quasi invisibile */
+  --input:              36 18% 18%;
+  --ring:               38 72% 52%;
 
-  --app-font-sans:  'Inter', sans-serif;
-  --app-font-serif: 'Playfair Display', serif;
-  --radius: 0.25rem;
+  --app-font-sans:    'Inter', sans-serif;
+  --app-font-serif:   'Cormorant Garamond', serif;
+  --app-font-display: 'Cinzel', serif;
+  --radius: 0.125rem;
 }
 
 @layer base {
@@ -99,14 +102,14 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground
-           selection:bg-primary selection:text-primary-foreground;
+           selection:bg-primary/30 selection:text-primary;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-normal tracking-tight;
   }
 
-  /* Subtle parchment grain */
+  /* Sottile grana dark — quasi impercettibile */
   body::after {
     content: '';
     position: fixed;
@@ -116,10 +119,10 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 128px 128px;
-    opacity: 0.025;
+    opacity: 0.04;
     pointer-events: none;
     z-index: 9998;
-    mix-blend-mode: multiply;
+    mix-blend-mode: screen;
   }
 }
 
@@ -131,8 +134,8 @@
 }
 
 @keyframes candleGlow {
-  0%, 100% { text-shadow: 0 0 12px rgba(116, 44, 14, 0.12); }
-  50%       { text-shadow: 0 0 20px rgba(116, 44, 14, 0.22); }
+  0%, 100% { text-shadow: 0 0 18px rgba(200,155,60,0.18); }
+  50%       { text-shadow: 0 0 32px rgba(200,155,60,0.34); }
 }
 
 @keyframes flicker {
@@ -141,7 +144,12 @@
   92%                      { opacity: 0.96; }
 }
 
-/* Photo sections that are always dark (hero, corridors) */
+/* Utility: sezioni con foto sempre scure */
 .photo-section-light {
-  color: #f0e6d4;
+  color: #ede0c4;
+}
+
+/* Font display (Cinzel) utility */
+.font-display {
+  font-family: var(--app-font-display);
 }

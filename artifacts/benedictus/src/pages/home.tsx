@@ -27,24 +27,24 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-background/35 via-transparent to-transparent" />
         </div>
 
-        {/* Hero text — hardcoded dark sepia (sits on the parchment gradient at the bottom) */}
-        <div className="relative z-10 container mx-auto px-8 lg:px-16 pb-24 max-w-5xl">
+        {/* Hero text — always on dark photo, hardcoded light colors */}
+        <div className="relative z-10 container mx-auto px-8 lg:px-16 pb-28 max-w-5xl">
           <p
-            className="text-primary/70 tracking-[0.4em] text-xs uppercase mb-5 animate-in fade-in duration-1000"
+            className="text-amber-300/70 tracking-[0.5em] text-[11px] uppercase mb-6 animate-in fade-in duration-1000 font-display"
             style={{ animationDelay: "300ms" }}
           >
             Regula Humanitatis · Est. MCM
           </p>
           <h1
-            className="text-5xl md:text-7xl lg:text-8xl font-serif text-foreground leading-[1.05] mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000"
+            className="text-5xl md:text-7xl lg:text-[90px] font-serif text-amber-50 leading-[1.05] mb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000"
             style={{ animationDelay: "500ms" }}
           >
             Un rifugio per<br />
-            il <em className="text-primary not-italic">custode</em><br />
+            il <em className="text-amber-300 not-italic">custode</em><br />
             moderno.
           </h1>
           <p
-            className="text-lg md:text-xl text-foreground/60 font-light leading-relaxed max-w-lg mb-10 animate-in fade-in duration-1000"
+            className="text-lg md:text-xl text-amber-100/60 font-light leading-relaxed max-w-lg mb-10 animate-in fade-in duration-1000"
             style={{ animationDelay: "800ms" }}
           >
             1500 anni di saggezza monastica tradotti in un cammino
@@ -56,13 +56,13 @@ export default function Home() {
           >
             <Link
               href="/la-chiamata"
-              className="bg-primary text-primary-foreground px-9 py-4 tracking-widest uppercase text-sm hover:bg-primary/85 transition-all duration-300 shadow-lg"
+              className="bg-amber-500 text-stone-950 px-9 py-4 tracking-[0.2em] uppercase text-[12px] font-medium hover:bg-amber-400 transition-all duration-300 shadow-lg shadow-amber-900/30"
             >
               Ascolta la Chiamata
             </Link>
             <Link
               href="/piani"
-              className="text-foreground/60 hover:text-primary transition-colors tracking-widest text-xs uppercase border-b border-foreground/20 hover:border-primary pb-0.5"
+              className="text-amber-200/70 hover:text-amber-100 transition-colors tracking-[0.2em] text-[11px] uppercase"
             >
               Vedi i Piani →
             </Link>

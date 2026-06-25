@@ -38,6 +38,8 @@ import VideoPage from "@/pages/video";
 import HabitareSecum from "@/pages/habitare-secum";
 import MensaPage from "@/pages/mensa";
 import PadreBenedetto from "@/pages/padre-benedetto";
+import RegulaOperis from "@/pages/regula-operis";
+import RegulaOperisModulo from "@/pages/regula-operis/modulo";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +80,8 @@ function Router() {
         <Route path="/habitare-secum" component={HabitareSecum} />
         <Route path="/refettorio" component={MensaPage} />
         <Route path="/padre-benedetto" component={PadreBenedetto} />
+        <Route path="/regula-operis" component={RegulaOperis} />
+        <Route path="/regula-operis/:id" component={RegulaOperisModulo} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

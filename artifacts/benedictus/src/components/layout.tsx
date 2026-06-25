@@ -11,9 +11,7 @@ const NAV_LINKS = [
   { href: "/liturgia",         label: "Liturgia"       },
   { href: "/lectio",           label: "Lectio"         },
   { href: "/padre-benedetto",  label: "Padre Benedetto"},
-  { href: "/scriptorium",      label: "Scriptorium"    },
-  { href: "/video",            label: "Video"          },
-  { href: "/refettorio",       label: "Refettorio"     },
+  { href: "/regula-operis",    label: "Regula Operis"  },
   { href: "/percorso",         label: "Percorso"       },
   { href: "/piani",            label: "Piani"          },
 ];

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { CheckCircle, Circle, ArrowRight, Dot } from "lucide-react";
+import { CheckCircle, Circle, ArrowRight } from "lucide-react";
+
+const B = import.meta.env.BASE_URL;
 
 export const MODULI_RO = [
   {
@@ -57,7 +59,7 @@ export const MODULI_RO = [
     titolo: "Ars Abbatis",
     sottotitolo: "L'abate non è il più bravo: è il più disponibile all'ascolto.",
     descrizione:
-      "Folador dedica il cuore del suo lavoro alla figura dell'abate come modello di leadership contemporanea. L'abate benedettino non è il più competente tecnicamente: è colui che sa leggere le anime, che porta il peso della comunità, che decide dopo aver ascoltato. Un leadership che serve, non che si serve.",
+      "Folador dedica il cuore del suo lavoro alla figura dell'abate come modello di leadership contemporanea. L'abate benedettino non è il più competente tecnicamente: è colui che sa leggere le anime, che porta il peso della comunità, che decide dopo aver ascoltato. Una leadership che serve, non che si serve.",
     versetto: {
       testo: "Abbas qui praeesse dignus est monasterio semper meminisse debet quod dicitur et nomen maioris factis implere.",
       traduzione: "L'Abate che è degno di presiedere un monastero deve sempre ricordarsi del nome che porta e adempierlo con le opere.",
@@ -168,6 +170,22 @@ function loadProgress(): ModuleProgress[] {
   }
 }
 
+// ── Pillar row component ──────────────────────────────────────────────────────
+
+function Pillar({ lat, it }: { lat: string; it: string }) {
+  return (
+    <div className="flex items-start gap-3 border-b border-border/30 pb-3 last:border-0 last:pb-0">
+      <span className="text-primary/50 mt-0.5 text-xs flex-none">✦</span>
+      <div className="min-w-0">
+        <span className="text-primary font-serif italic text-sm">{lat}</span>
+        <span className="text-muted-foreground/50 text-xs ml-2 leading-relaxed">— {it}</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
+
 export default function RegulaOperis() {
   const [progress, setProgress] = useState<ModuleProgress[]>([]);
 
@@ -175,9 +193,8 @@ export default function RegulaOperis() {
     setProgress(loadProgress());
   }, []);
 
-  const getStatus = (id: number) => {
-    return progress.find((p) => p.moduleId === id)?.status ?? "idle";
-  };
+  const getStatus = (id: number) =>
+    progress.find((p) => p.moduleId === id)?.status ?? "idle";
 
   const completedCount = progress.filter((p) => p.status === "completed").length;
   const startedCount   = progress.filter((p) => p.status !== "idle").length;
@@ -185,68 +202,67 @@ export default function RegulaOperis() {
   return (
     <div className="w-full">
 
-      {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="py-24 bg-background border-b border-border">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <p className="text-primary tracking-[0.4em] text-[10px] uppercase mb-6">
+      {/* ── Hero con immagine ─────────────────────────────────────────── */}
+      <section className="relative h-[380px] md:h-[460px] flex items-end overflow-hidden border-b border-border">
+        <div className="absolute inset-0">
+          <img
+            src={`${B}rule-book.png`}
+            alt="Regula Operis"
+            className="w-full h-full object-cover object-center"
+            style={{ filter: "brightness(0.48) contrast(1.14) saturate(0.55) sepia(0.18)" }}
+          />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(110, 60, 10, 0.15)" }} />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 42%, transparent 30%, rgba(4,2,0,0.62) 100%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-background/97" />
+        </div>
+
+        <div className="relative z-10 container mx-auto px-5 md:px-6 max-w-4xl pb-10 md:pb-14">
+          <p className="text-amber-200/55 tracking-[0.35em] text-[10px] uppercase mb-3">
             Regula Operis
           </p>
-          <h1 className="text-5xl md:text-6xl font-serif text-foreground mb-6 leading-tight">
-            L'organizzazione<br />
-            <span className="italic text-primary">come vocazione.</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-foreground leading-tight mb-2">
+            L'organizzazione{" "}
+            <span className="italic text-primary block sm:inline">come vocazione.</span>
           </h1>
-          <p className="text-xl text-muted-foreground font-light max-w-2xl leading-relaxed">
-            Sei settimane per applicare la Regola di Benedetto alla guida
-            della tua organizzazione. Ispirato al lavoro di Massimo Folador
-            su <em>L'Organizzazione Perfetta</em>.
+          <p className="text-sm md:text-base text-muted-foreground/75 font-light max-w-lg leading-relaxed hidden sm:block">
+            Sei settimane per applicare la Regola di Benedetto alla guida della tua organizzazione.
           </p>
         </div>
       </section>
 
-      {/* ── Introduzione ─────────────────────────────────────────────── */}
-      <section className="py-16 bg-card border-b border-border">
-        <div className="container mx-auto px-6 max-w-4xl grid md:grid-cols-2 gap-16 items-start">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-primary/70 mb-5">
-              Il metodo
-            </p>
-            <p className="text-muted-foreground font-light leading-relaxed mb-4">
-              Massimo Folador ha scoperto nella Regola di Benedetto — scritta
-              attorno al 530 d.C. — il più antico manuale di management
-              occidentale. Non una metafora spirituale: un metodo concreto
-              per governare comunità complesse, con risorse limitate e
-              persone diverse.
-            </p>
-            <p className="text-muted-foreground font-light leading-relaxed">
-              Ogni modulo traduce uno dei pilastri benedettini in una pratica
-              settimanale incarnata. Non letture, non teorie: esercizi che
-              cambiano il modo di guidare.
-            </p>
-          </div>
-          <div className="space-y-4">
-            {[
-              { lat: "Ausculta", it: "Ascolta prima di decidere" },
-              { lat: "Stabilitas", it: "Rimani radicato quando tutto accelera" },
-              { lat: "Hospitalitas", it: "Accogli ogni ospite come Cristo" },
-              { lat: "Ora et Labora", it: "Alterna contemplazione e azione" },
-              { lat: "Communitas", it: "Guida al servizio, non al comando" },
-            ].map(({ lat, it }) => (
-              <div key={lat} className="flex items-start gap-3 border-b border-border/40 pb-3">
-                <Dot className="w-4 h-4 text-primary/60 flex-none mt-0.5" />
-                <div>
-                  <span className="text-primary font-serif italic text-sm">{lat}</span>
-                  <span className="text-muted-foreground/60 text-xs ml-2">— {it}</span>
-                </div>
-              </div>
-            ))}
+      {/* ── Intro + Pilastri ──────────────────────────────────────────── */}
+      <section className="py-12 md:py-16 bg-card border-b border-border">
+        <div className="container mx-auto px-5 md:px-6 max-w-4xl">
+
+          {/* Mobile: stacked. Desktop: side-by-side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-primary/70 mb-4">
+                Il metodo
+              </p>
+              <p className="text-muted-foreground font-light leading-relaxed text-sm md:text-base mb-4">
+                Massimo Folador ha scoperto nella Regola di Benedetto — scritta attorno al 530 d.C. — il più antico manuale di management occidentale. Non una metafora spirituale: un metodo concreto per governare comunità complesse.
+              </p>
+              <p className="text-muted-foreground font-light leading-relaxed text-sm md:text-base">
+                Ogni modulo traduce uno dei pilastri benedettini in una pratica settimanale incarnata. Non letture, non teorie: esercizi che cambiano il modo di guidare.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Pillar lat="Ausculta"    it="Ascolta prima di decidere" />
+              <Pillar lat="Stabilitas"  it="Rimani radicato quando tutto accelera" />
+              <Pillar lat="Hospitalitas" it="Accogli ogni ospite come Cristo" />
+              <Pillar lat="Ora et Labora" it="Alterna contemplazione e azione" />
+              <Pillar lat="Communitas"  it="Guida al servizio, non al comando" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Progresso ────────────────────────────────────────────────── */}
+      {/* ── Barra progresso ───────────────────────────────────────────── */}
       {startedCount > 0 && (
-        <section className="py-8 bg-background border-b border-border">
-          <div className="container mx-auto px-6 max-w-4xl">
+        <section className="py-6 bg-background border-b border-border">
+          <div className="container mx-auto px-5 md:px-6 max-w-4xl">
             <div className="flex justify-between text-[10px] uppercase tracking-widest text-muted-foreground mb-3">
               <span>Il tuo cammino</span>
               <span>{completedCount} / 6 completati</span>
@@ -261,25 +277,21 @@ export default function RegulaOperis() {
         </section>
       )}
 
-      {/* ── Moduli ───────────────────────────────────────────────────── */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <div className="space-y-0 border-t border-border">
+      {/* ── Lista moduli ──────────────────────────────────────────────── */}
+      <section className="py-8 md:py-12 bg-background">
+        <div className="container mx-auto px-5 md:px-6 max-w-4xl">
+          <div className="border-t border-border">
             {MODULI_RO.map((modulo) => {
               const status      = getStatus(modulo.id);
               const isCompleted = status === "completed";
               const isStarted   = status === "started";
 
               return (
-                <Link
-                  key={modulo.id}
-                  href={`/regula-operis/${modulo.id}`}
-                  className="group block"
-                >
-                  <div className="flex gap-8 py-10 border-b border-border hover:bg-card/50 transition-colors px-4 -mx-4">
+                <Link key={modulo.id} href={`/regula-operis/${modulo.id}`} className="group block">
+                  <div className="flex gap-4 md:gap-7 py-6 md:py-9 border-b border-border hover:bg-card/50 active:bg-card/70 transition-colors">
 
-                    {/* Status icon */}
-                    <div className="flex flex-col items-center flex-shrink-0 mt-1">
+                    {/* Status icon + connector */}
+                    <div className="flex flex-col items-center flex-shrink-0 mt-0.5">
                       {isCompleted ? (
                         <CheckCircle className="w-5 h-5 text-primary" />
                       ) : isStarted ? (
@@ -290,37 +302,38 @@ export default function RegulaOperis() {
                         <Circle className="w-5 h-5 text-border" />
                       )}
                       {modulo.id < 6 && (
-                        <div className="w-px flex-1 bg-border mt-2 min-h-[2rem]" />
+                        <div className="w-px flex-1 bg-border/60 mt-2 min-h-[1.5rem]" />
                       )}
                     </div>
 
-                    {/* Content */}
+                    {/* Testo */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/50 mb-2">
+                      <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground/45 mb-1.5">
                         {modulo.settimana}
                       </p>
-                      <h2 className="text-2xl font-serif text-foreground mb-1 group-hover:text-primary transition-colors">
+                      <h2 className="text-xl md:text-2xl font-serif text-foreground group-hover:text-primary transition-colors leading-snug mb-1">
                         {modulo.titolo}
                       </h2>
-                      <p className="text-sm text-muted-foreground/70 italic mb-3 font-light">
+                      <p className="text-xs md:text-sm text-muted-foreground/60 italic font-light mb-2">
                         {modulo.sottotitolo}
                       </p>
-                      <p className="text-muted-foreground font-light text-sm leading-relaxed line-clamp-2">
+                      {/* Descrizione visibile solo su schermi md+ */}
+                      <p className="hidden md:block text-muted-foreground font-light text-sm leading-relaxed line-clamp-2">
                         {modulo.descrizione}
                       </p>
 
-                      {/* Versetto */}
-                      <div className="mt-4 flex items-start gap-2">
-                        <span className="text-primary/40 text-xs flex-none mt-0.5">✦</span>
-                        <p className="text-[11px] text-muted-foreground/40 italic font-serif">
-                          «{modulo.versetto.testo.slice(0, 70)}…»
+                      {/* Versetto — sempre visibile */}
+                      <div className="mt-2 md:mt-3 flex items-start gap-1.5">
+                        <span className="text-primary/35 text-[10px] flex-none mt-0.5">✦</span>
+                        <p className="text-[11px] text-muted-foreground/35 italic font-serif leading-snug">
+                          «{modulo.versetto.testo.slice(0, 55)}…»
                         </p>
                       </div>
                     </div>
 
-                    {/* Arrow */}
-                    <div className="flex-none flex items-center">
-                      <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary transition-colors" />
+                    {/* Freccia */}
+                    <div className="flex-none flex items-center pl-1">
+                      <ArrowRight className="w-4 h-4 text-muted-foreground/25 group-hover:text-primary transition-colors" />
                     </div>
                   </div>
                 </Link>
@@ -330,19 +343,19 @@ export default function RegulaOperis() {
         </div>
       </section>
 
-      {/* ── Nota Folador ─────────────────────────────────────────────── */}
-      <section className="py-20 bg-card border-t border-border">
-        <div className="container mx-auto px-6 max-w-2xl text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-primary/60 mb-6">
+      {/* ── Folador quote ─────────────────────────────────────────────── */}
+      <section className="py-14 md:py-20 bg-card border-t border-border">
+        <div className="container mx-auto px-5 md:px-6 max-w-2xl text-center">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-primary/50 mb-6">
             Fonte
           </p>
-          <blockquote className="text-muted-foreground font-serif text-lg italic leading-relaxed mb-6">
+          <blockquote className="text-muted-foreground font-serif text-base md:text-lg italic leading-relaxed mb-5">
             "Benedetto non ha scritto un trattato di management.
             Ha scritto una Regola per vivere. Che sia diventata
             anche un manuale per guidare dice qualcosa di profondo
             sulla natura del lavoro umano."
           </blockquote>
-          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-widest">
+          <p className="text-[10px] text-muted-foreground/35 uppercase tracking-widest">
             Ispirato a Massimo Folador — L'Organizzazione Perfetta
           </p>
         </div>

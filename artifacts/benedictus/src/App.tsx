@@ -37,6 +37,7 @@ import PraticaSpirituale from "@/pages/liturgia/pratica";
 import VideoPage from "@/pages/video";
 import HabitareSecum from "@/pages/habitare-secum";
 import MensaPage from "@/pages/mensa";
+import PadreBenedetto from "@/pages/padre-benedetto";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +77,7 @@ function Router() {
         <Route path="/video" component={VideoPage} />
         <Route path="/habitare-secum" component={HabitareSecum} />
         <Route path="/refettorio" component={MensaPage} />
+        <Route path="/padre-benedetto" component={PadreBenedetto} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

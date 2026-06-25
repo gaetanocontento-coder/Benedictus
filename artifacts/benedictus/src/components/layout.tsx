@@ -6,15 +6,16 @@ import { AudioPlayer } from "@/components/AudioPlayer";
 import { LiturgiaOre } from "@/components/LiturgiaOre";
 
 const NAV_LINKS = [
-  { href: "/chi-siamo",   label: "Chi Siamo"   },
-  { href: "/la-regula",   label: "La Regola"   },
-  { href: "/liturgia",    label: "Liturgia"    },
-  { href: "/lectio",      label: "Lectio"      },
-  { href: "/scriptorium", label: "Scriptorium" },
-  { href: "/video",       label: "Video"       },
-  { href: "/refettorio",  label: "Refettorio"  },
-  { href: "/percorso",    label: "Percorso"    },
-  { href: "/piani",       label: "Piani"       },
+  { href: "/chi-siamo",        label: "Chi Siamo"      },
+  { href: "/la-regula",        label: "La Regola"      },
+  { href: "/liturgia",         label: "Liturgia"       },
+  { href: "/lectio",           label: "Lectio"         },
+  { href: "/padre-benedetto",  label: "Padre Benedetto"},
+  { href: "/scriptorium",      label: "Scriptorium"    },
+  { href: "/video",            label: "Video"          },
+  { href: "/refettorio",       label: "Refettorio"     },
+  { href: "/percorso",         label: "Percorso"       },
+  { href: "/piani",            label: "Piani"          },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {

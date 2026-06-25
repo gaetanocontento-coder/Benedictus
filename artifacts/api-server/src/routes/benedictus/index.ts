@@ -13,6 +13,7 @@ import percorsoRouter from "./percorso";
 import oblatoRouter from "./oblato";
 import liturgiaRouter from "./liturgia";
 import guidaSpirituale from "./guida-spirituale";
+import padreBenedettoRouter from "./padre-benedetto";
 import regolaRouter from "./regola";
 
 const router: IRouter = Router();
@@ -31,6 +32,7 @@ router.use("/b", percorsoRouter);
 router.use("/b", oblatoRouter);
 router.use("/b", liturgiaRouter);
 router.use("/b", guidaSpirituale);
+router.use("/b", padreBenedettoRouter);
 router.use("/b", regolaRouter);
 
 export default router;

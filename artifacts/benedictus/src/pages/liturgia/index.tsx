@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { BookOpen, Flame, ChevronLeft, ChevronRight, Loader2, AlertCircle, Sparkles, StopCircle } from "lucide-react";
+import { BookOpen, Flame, ChevronLeft, ChevronRight, Loader2, AlertCircle, Sparkles, StopCircle, TriangleAlert, ExternalLink } from "lucide-react";
 import {
   useBGetLiturgiaGiorno,
   getBGetLiturgiaGiornoQueryKey,
@@ -52,6 +52,18 @@ export default function LiturgiaIndex() {
     { data: selectedData },
     { query: { queryKey: getBGetLiturgiaGiornoQueryKey({ data: selectedData }) } }
   );
+
+  // Rilevamento sfasamento: controlla se ieri era una solennità/festa
+  // Le feste hanno una seconda_lettura (epistola) oltre alla prima_lettura + vangelo
+  const dataIeri = addDays(selectedData, -1);
+  const { data: liturgiaIeri } = useBGetLiturgiaGiorno(
+    { data: dataIeri },
+    { query: { queryKey: getBGetLiturgiaGiornoQueryKey({ data: dataIeri }), staleTime: 1000 * 60 * 60 * 24 } }
+  );
+  const ieriEraFesta = liturgiaIeri
+    ? liturgiaIeri.letture.some((l: { tipo: string }) => l.tipo === "seconda_lettura")
+    : false;
+  const possibileSfasamento = ieriEraFesta;
 
   const { data: pratiche = [] } = useBGetPraticheByDate(selectedData, {
     query: { enabled: !!user, queryKey: getBGetPraticheByDateQueryKey(selectedData) },
@@ -118,6 +130,28 @@ export default function LiturgiaIndex() {
               <span className="text-muted-foreground text-xs uppercase tracking-widest">{colore.label}</span>
               <span className="text-border">·</span>
               <span className="text-muted-foreground text-xs capitalize font-light">{liturgia.titoloLiturgico}</span>
+            </div>
+          )}
+
+          {/* Banner sfasamento solennità */}
+          {possibileSfasamento && liturgia && (
+            <div className="border border-amber-700/40 bg-amber-950/30 px-5 py-4 flex gap-3 items-start mt-2">
+              <TriangleAlert className="w-4 h-4 text-amber-500/80 flex-none mt-0.5" />
+              <div className="min-w-0">
+                <p className="text-amber-200/80 text-xs leading-relaxed">
+                  <span className="font-medium">Attenzione:</span> ieri era una solennità o festa liturgica.
+                  La fonte esterna (Evangelizo) potrebbe non allinearsi al lezionario CEI per i giorni successivi a feste che sostituiscono le letture feriali.
+                  Prima lettura e salmo potrebbero risultare sfasati di un giorno.
+                </p>
+                <a
+                  href="https://www.lachiesa.it/calendario/liturgico/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-amber-400/80 text-xs hover:text-amber-300 transition-colors mt-1.5 underline underline-offset-2"
+                >
+                  Verifica le letture ufficiali CEI <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
             </div>
           )}
         </div>
@@ -354,17 +388,39 @@ export default function LiturgiaIndex() {
         </section>
       )}
 
-      {/* ── NOTA ── */}
-      <section className="py-14 bg-background border-t border-border">
-        <div className="container mx-auto px-6 max-w-4xl text-center">
-          <p className="text-muted-foreground font-light text-sm leading-relaxed max-w-xl mx-auto">
-            Le letture seguono il Lezionario CEI conforme al Rito Romano.
-            La fonte è Evangelizo.org — un servizio gratuito per la comunità cattolica mondiale.
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <div className="h-px w-12 bg-primary/15" />
-            <div className="w-1.5 h-1.5 bg-primary/20 rotate-45" />
-            <div className="h-px w-12 bg-primary/15" />
+      {/* ── NOTA FONTE ── */}
+      <section className="py-10 bg-background border-t border-border">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p className="text-muted-foreground/50 text-xs leading-relaxed max-w-md">
+              Letture dal Lezionario CEI (Rito Romano) via{" "}
+              <a
+                href="https://evangelizo.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground/70 hover:text-primary transition-colors underline underline-offset-2"
+              >
+                Evangelizo.ws
+              </a>
+              . In caso di discordanza, la fonte autorevole è la{" "}
+              <a
+                href="https://www.lachiesa.it/calendario/liturgico/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground/70 hover:text-primary transition-colors underline underline-offset-2"
+              >
+                Conferenza Episcopale Italiana
+              </a>
+              .
+            </p>
+            <a
+              href="https://www.lachiesa.it/calendario/liturgico/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-none inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-muted-foreground/40 hover:text-primary transition-colors border border-border/50 hover:border-primary/40 px-3 py-2"
+            >
+              Letture ufficiali CEI <ExternalLink className="w-3 h-3" />
+            </a>
           </div>
         </div>
       </section>

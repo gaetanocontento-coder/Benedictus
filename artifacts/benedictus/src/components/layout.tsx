@@ -13,18 +13,6 @@ const NAV_LINKS = [
   { href: "/chi-siamo",        label: "Per i Team"     },
 ];
 
-function LeafIcon() {
-  return (
-    <svg viewBox="0 0 22 22" fill="none" className="w-5 h-5" aria-hidden="true">
-      <path
-        d="M11 19V11M11 11C11 11 7.5 8 7 4.5C6.6 2.2 8.5 1 11 1C13.5 1 15.4 2.2 15 4.5C14.5 8 11 11 11 11Z"
-        stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"
-      />
-      <path d="M8 16.5C8 16.5 6 14.5 4 14" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M14 16.5C14 16.5 16 14.5 18 14" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
@@ -41,10 +29,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Link
             href="/"
             onClick={closeMobile}
-            className="flex items-center gap-2 text-foreground hover:text-accent transition-colors"
+            className="font-serif text-[15px] tracking-[0.28em] uppercase text-foreground hover:text-accent transition-colors"
           >
-            <LeafIcon />
-            <span className="font-serif text-[17px] font-medium tracking-wide">Benedictus</span>
+            Benedictvs
           </Link>
 
           {/* Desktop nav */}
@@ -145,9 +132,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <footer className="bg-card border-t border-border/60 pt-16 pb-28 md:pb-16 text-center">
         <div className="container mx-auto px-6">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <LeafIcon />
-            <h2 className="font-serif text-xl font-medium text-foreground">Benedictus</h2>
+          <div className="mb-2">
+            <h2 className="font-serif text-[15px] tracking-[0.28em] uppercase text-foreground">Benedictvs</h2>
           </div>
           <p className="text-muted-foreground text-[11px] uppercase tracking-widest mb-8">
             Regula Humanitatis · Est. MCM

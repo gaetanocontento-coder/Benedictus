@@ -6,11 +6,16 @@ import { AudioPlayer } from "@/components/AudioPlayer";
 import { LiturgiaOre } from "@/components/LiturgiaOre";
 
 const NAV_LINKS = [
-  { href: "/percorso",         label: "Cammino"        },
-  { href: "/la-regula",        label: "La Regola"      },
-  { href: "/lectio",           label: "Lectio"         },
-  { href: "/scriptorium",      label: "Scriptorium"    },
-  { href: "/chi-siamo",        label: "Per i Team"     },
+  { href: "/chi-siamo",        label: "Chi Siamo"       },
+  { href: "/la-regula",        label: "La Regola"       },
+  { href: "/liturgia",         label: "Liturgia"        },
+  { href: "/lectio",           label: "Lectio"          },
+  { href: "/padre-benedetto",  label: "Padre Benedetto" },
+  { href: "/scriptorium",      label: "Scriptorium"     },
+  { href: "/video",            label: "Video"           },
+  { href: "/refettorio",       label: "Refettorio"      },
+  { href: "/percorso",         label: "Percorso"        },
+  { href: "/piani",            label: "Piani"           },
 ];
 
 
@@ -53,6 +58,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <>
                 <Link href="/oblato" className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
                   Cursus Oblati
+                </Link>
+                <Link href="/admin" className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
+                  Sanctuarium
                 </Link>
                 <button onClick={logout} className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
                   Esci
@@ -100,6 +108,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <>
                     <Link href="/oblato" onClick={closeMobile} className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
                       Cursus Oblati
+                    </Link>
+                    <Link href="/admin" onClick={closeMobile} className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
+                      Sanctuarium
                     </Link>
                     <button onClick={() => { logout(); closeMobile(); }} className="text-left text-[13px] text-foreground/60 hover:text-foreground transition-colors">
                       Esci

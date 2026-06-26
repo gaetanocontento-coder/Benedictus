@@ -2,7 +2,10 @@
 type ModuleMap = Record<string, () => Promise<Record<string, unknown>>>;
 export const modules: ModuleMap = {
   "./components/mockups/benedictus-redesign/Caldo.tsx": () => import("../components/mockups/benedictus-redesign/Caldo.tsx"),
+  "./components/mockups/benedictus-redesign/Citazione.tsx": () => import("../components/mockups/benedictus-redesign/Citazione.tsx"),
   "./components/mockups/benedictus-redesign/SacroChiaro.tsx": () => import("../components/mockups/benedictus-redesign/SacroChiaro.tsx"),
+  "./components/mockups/benedictus-redesign/ScriptoriumCta.tsx": () => import("../components/mockups/benedictus-redesign/ScriptoriumCta.tsx"),
+  "./components/mockups/benedictus-redesign/TreSoglie.tsx": () => import("../components/mockups/benedictus-redesign/TreSoglie.tsx"),
   "./components/mockups/intessuto-dashboard/CommandCenter.tsx": () => import("../components/mockups/intessuto-dashboard/CommandCenter.tsx"),
   "./components/mockups/intessuto-dashboard/DenseGrid.tsx": () => import("../components/mockups/intessuto-dashboard/DenseGrid.tsx"),
   "./components/mockups/intessuto-dashboard/Editorial.tsx": () => import("../components/mockups/intessuto-dashboard/Editorial.tsx")

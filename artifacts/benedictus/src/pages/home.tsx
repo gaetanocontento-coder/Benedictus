@@ -8,31 +8,24 @@ export default function Home() {
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="container mx-auto px-6 lg:px-12 pt-12 pb-0">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[calc(100vh-4rem)] lg:min-h-[auto] lg:h-[82vh]">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center lg:h-[82vh] min-h-[640px]">
 
           {/* LEFT — copy */}
           <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 pb-12 lg:pb-0">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 border border-border rounded-full px-4 py-1.5 text-[11px] tracking-widest uppercase text-foreground/60 mb-8 self-start">
+            <div className="inline-flex items-center gap-2 border border-border rounded-full px-4 py-1.5 text-[11px] tracking-widest uppercase text-foreground/55 mb-8 self-start">
               <span className="w-1.5 h-1.5 rounded-full bg-accent/70 flex-shrink-0" />
               Regula Humanitatis · Est. MCM
             </div>
-
-            {/* Headline */}
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-[62px] xl:text-[72px] text-foreground leading-[1.06] mb-6">
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-[64px] xl:text-[72px] text-foreground leading-[1.06] mb-6">
               Un rifugio per il<br />
               <em className="not-italic" style={{ color: "hsl(var(--accent))" }}>custode</em>{" "}
               moderno.
             </h1>
-
-            {/* Subtitle */}
             <p className="text-[15px] text-muted-foreground font-light leading-relaxed max-w-[440px] mb-8">
               1500 anni di saggezza monastica tradotti in un cammino di
               leadership contemplativa e rigenerazione interiore. Inizia
               in silenzio.
             </p>
-
-            {/* CTAs */}
             <div className="flex items-center gap-5 mb-8">
               <Link
                 href="/la-chiamata"
@@ -40,19 +33,14 @@ export default function Home() {
               >
                 Ascolta la Chiamata
               </Link>
-              <Link
-                href="/piani"
-                className="text-[13px] text-foreground/60 hover:text-foreground transition-colors"
-              >
+              <Link href="/piani" className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
                 Vedi i Piani →
               </Link>
             </div>
-
-            {/* Social proof */}
             <div className="flex items-center gap-2.5">
               <div className="flex items-center gap-0.5">
                 {[0,1,2,3,4].map((i) => (
-                  <svg key={i} viewBox="0 0 16 16" className="w-4 h-4 text-accent" fill="currentColor">
+                  <svg key={i} viewBox="0 0 16 16" className="w-4 h-4" style={{ color: "hsl(var(--accent))" }} fill="currentColor">
                     <path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.5l-3.7 1.8.7-4.1-3-2.9 4.2-.7z" />
                   </svg>
                 ))}
@@ -67,25 +55,19 @@ export default function Home() {
           {/* RIGHT — monk photo + floating cards */}
           <div className="lg:col-span-7 relative order-1 lg:order-2 flex justify-center lg:justify-end">
             <div className="relative w-full max-w-[560px] lg:max-w-none">
-              {/* Main photo */}
               <div className="rounded-3xl overflow-hidden aspect-[4/5] lg:aspect-[3/4] w-full max-h-[68vh]">
                 <img
                   src={`${B}benedictine-monk.jpg`}
                   alt="Monaco benedettino in preghiera"
                   className="w-full h-full object-cover object-center"
-                  style={{
-                    filter: "brightness(0.92) contrast(1.06) saturate(0.72) sepia(0.28)",
-                  }}
+                  style={{ filter: "brightness(0.92) contrast(1.06) saturate(0.72) sepia(0.28)" }}
                 />
               </div>
-
-              {/* Floating card — top left — LAUDS */}
-              <div
-                className="absolute -left-4 md:-left-10 top-8 bg-white rounded-2xl shadow-lg shadow-black/10 px-4 py-3 min-w-[160px]"
-              >
+              {/* LAUDS card — top left */}
+              <div className="absolute -left-4 md:-left-10 top-8 bg-white rounded-2xl shadow-lg shadow-black/8 px-4 py-3 min-w-[160px]">
                 <div className="flex items-center gap-2 mb-1.5">
                   <div className="w-6 h-6 rounded-full bg-background border border-border/60 flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 22 22" fill="none" className="w-3 h-3 text-foreground/50">
+                    <svg viewBox="0 0 22 22" fill="none" className="w-3 h-3 text-foreground/40">
                       <path d="M11 19V11M11 11C11 11 7.5 8 7 4.5C6.6 2.2 8.5 1 11 1C13.5 1 15.4 2.2 15 4.5C14.5 8 11 11 11 11Z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
                     </svg>
                   </div>
@@ -93,14 +75,11 @@ export default function Home() {
                 </div>
                 <p className="font-serif text-[15px] text-foreground italic mb-2">Silentium</p>
                 <div className="h-1 bg-border rounded-full overflow-hidden">
-                  <div className="h-full w-2/5 bg-accent/60 rounded-full" />
+                  <div className="h-full w-2/5 rounded-full" style={{ background: "hsl(var(--accent) / 0.5)" }} />
                 </div>
               </div>
-
-              {/* Floating card — bottom right — LECTIO DIVINA */}
-              <div
-                className="absolute -right-4 md:-right-8 bottom-10 bg-white rounded-2xl shadow-lg shadow-black/10 px-4 py-4 max-w-[220px]"
-              >
+              {/* LECTIO DIVINA card — bottom right */}
+              <div className="absolute -right-4 md:-right-8 bottom-10 bg-white rounded-2xl shadow-lg shadow-black/8 px-4 py-4 max-w-[220px]">
                 <p className="text-[9px] uppercase tracking-[0.22em] text-muted-foreground mb-2">· Lectio Divina ·</p>
                 <blockquote className="font-serif text-[14px] italic text-foreground leading-snug mb-2">
                   «Ausculta, o fili, præcepta magistri.»
@@ -109,12 +88,11 @@ export default function Home() {
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
       {/* ── STATS STRIP ──────────────────────────────────────────────── */}
-      <section className="container mx-auto px-6 lg:px-12 pb-16">
+      <section className="container mx-auto px-6 lg:px-12 pb-20">
         <div className="bg-card rounded-2xl border border-border/60 shadow-sm">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border/50 divide-y md:divide-y-0">
             {[
@@ -132,197 +110,245 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── OPENING VERSE ────────────────────────────────────────────── */}
-      <section className="py-28 bg-background relative overflow-hidden border-t border-border/40">
-        <div className="container mx-auto px-6 max-w-3xl text-center relative">
-          <p className="text-muted-foreground/70 tracking-[0.4em] text-[10px] uppercase mb-10">
-            · Prologo · Regula Sancti Benedicti ·
-          </p>
-          <blockquote className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight mb-8 italic">
-            «Ausculta, o fili,
-            <br />
-            <span style={{ color: "hsl(var(--accent))" }}>præcepta magistri,</span>
-            <br />
-            et inclina aurem
-            <br />
-            cordis tui.»
-          </blockquote>
-          <p className="text-muted-foreground font-light text-sm tracking-widest uppercase">
-            San Benedetto da Norcia · ca. 530 d.C.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <div className="h-px w-16 bg-border" />
-            <div className="w-1.5 h-1.5 bg-border rotate-45" />
-            <div className="h-px w-16 bg-border" />
+      {/* ── MANUSCRIPT + QUOTE ───────────────────────────────────────── */}
+      <section className="container mx-auto px-6 lg:px-12 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+          {/* Left — circular manuscript photo + floating card */}
+          <div className="relative flex justify-center">
+            <div className="relative">
+              <div className="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden">
+                <img
+                  src={`${B}manuscript-hours.jpg`}
+                  alt="Manoscritto illuminato"
+                  className="w-full h-full object-cover"
+                  style={{ filter: "brightness(0.9) contrast(1.08) saturate(0.80) sepia(0.22)" }}
+                />
+              </div>
+              {/* Floating label card */}
+              <div className="absolute -bottom-4 right-4 md:right-0 bg-white rounded-2xl shadow-md shadow-black/8 px-5 py-3">
+                <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-0.5">· Prologo ·</p>
+                <p className="font-serif text-[14px] text-foreground">Regula Sancti Benedicti</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right — quote */}
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-6">
+              Capitulum Primum
+            </p>
+            <blockquote className="font-serif text-3xl md:text-4xl lg:text-[44px] text-foreground italic leading-tight mb-8">
+              «Ascolta, o figlio, i precetti del maestro, e inclina l'orecchio del tuo cuore.»
+            </blockquote>
+            <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground/70">
+              — San Benedetto da Norcia · ca. 530 d.C.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ── IL CAMMINO — 3 sfide ─────────────────────────────────────── */}
-      <section className="py-0 border-t border-border/40 overflow-hidden">
-        <div className="flex flex-col lg:flex-row min-h-[580px]">
-
-          {/* Photo column */}
-          <div className="lg:w-5/12 relative min-h-[300px] lg:min-h-full overflow-hidden">
-            <img
-              src={`${B}monk-manuscript.png`}
-              alt="Monaco che scrive un manoscritto"
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{ filter: "brightness(0.72) contrast(1.12) saturate(0.62) sepia(0.18)" }}
-            />
-            <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(130, 75, 15, 0.10)" }} />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background lg:block hidden" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background lg:hidden" />
+      {/* ── TRE SOGLIE ───────────────────────────────────────────────── */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="text-center mb-16">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-6">
+              · Il Cammino ·
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-5">
+              Tre soglie da <em className="not-italic" style={{ color: "hsl(var(--accent))" }}>attraversare</em>.
+            </h2>
+            <p className="text-[15px] text-muted-foreground font-light max-w-xl mx-auto">
+              Prima della Regola, riconosciamo dove abita la fatica del custode contemporaneo.
+            </p>
           </div>
 
-          {/* Content column */}
-          <div className="lg:w-7/12 bg-background px-8 md:px-16 py-20 flex flex-col justify-center">
-            <p className="text-accent tracking-[0.3em] text-xs uppercase mb-10 font-medium">
-              Il Cammino
-            </p>
-            <div className="space-y-10">
-              {[
-                {
-                  n: "I.",
-                  title: "Disconnessione",
-                  body: "Le organizzazioni crescono, ma il senso di appartenenza svanisce. Il leader moderno è spesso un custode solitario.",
-                },
-                {
-                  n: "II.",
-                  title: "Esaurimento",
-                  body: "Il ritmo della performance senza il ritmo del riposo porta al vuoto. L'azione senza contemplazione è cieca.",
-                },
-                {
-                  n: "III.",
-                  title: "Frammentazione",
-                  body: "Informazioni ovunque, saggezza rara. Manca uno spazio dove ricostruire l'unità della persona.",
-                },
-              ].map((item) => (
-                <div key={item.n} className="flex gap-6 group">
-                  <span className="text-2xl font-serif text-border flex-shrink-0 w-8 pt-0.5">
-                    {item.n}
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                num: "I",
+                title: "Disconnessione",
+                body: "Le organizzazioni crescono, ma il senso di appartenenza svanisce. Il leader moderno è spesso un custode solitario.",
+              },
+              {
+                num: "II",
+                title: "Esaurimento",
+                body: "Il ritmo della performance senza il ritmo del riposo porta al vuoto. L'azione senza contemplazione è cieca.",
+              },
+              {
+                num: "III",
+                title: "Frammentazione",
+                body: "Informazioni ovunque, saggezza rara. Manca uno spazio dove ricostruire l'unità della persona.",
+              },
+            ].map((item) => (
+              <div key={item.num} className="bg-card border border-border/50 rounded-2xl p-7 shadow-sm">
+                <div className="flex items-start justify-between mb-5">
+                  <span className="font-serif text-4xl italic text-foreground/30">{item.num}</span>
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground border border-border/60 rounded-full px-3 py-1">
+                    Capitulum
                   </span>
+                </div>
+                <h3 className="font-serif text-xl text-foreground mb-3">{item.title}</h3>
+                <p className="text-[13px] text-muted-foreground font-light leading-relaxed">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── LA REGOLA — Non è un corso ───────────────────────────────── */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+            {/* Left — text + checklist */}
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-6">
+                · La Regola ·
+              </p>
+              <h2 className="font-serif text-4xl md:text-5xl text-foreground leading-tight mb-6">
+                Non è un corso.<br />
+                È un{" "}
+                <em className="not-italic" style={{ color: "hsl(var(--accent))" }}>cammino</em>.
+              </h2>
+              <p className="text-[15px] text-muted-foreground font-light leading-relaxed mb-10 max-w-[420px]">
+                Unisciti a una comunità di pellegrini e custodi che hanno
+                scelto di guidare partendo dal silenzio.
+              </p>
+              <div className="space-y-5">
+                {[
+                  { title: "Liturgia delle ore", body: "Sette momenti al giorno per ritornare al respiro." },
+                  { title: "Lectio personale",   body: "Un testo sacro alla settimana. Lentamente." },
+                  { title: "Capitolo comunitario", body: "Una volta al mese con gli altri custodi del percorso." },
+                ].map((item) => (
+                  <div key={item.title} className="flex gap-4">
+                    <div className="w-5 h-5 rounded-full border border-border/60 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg viewBox="0 0 12 12" className="w-3 h-3" style={{ color: "hsl(var(--accent))" }} fill="none">
+                        <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[14px] font-medium text-foreground mb-0.5">{item.title}</p>
+                      <p className="text-[13px] text-muted-foreground font-light">{item.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — circular monks photo */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-80 h-80 md:w-[420px] md:h-[420px] rounded-full overflow-hidden">
+                <img
+                  src={`${B}hero-cloister.png`}
+                  alt="Monaci in cammino"
+                  className="w-full h-full object-cover"
+                  style={{ filter: "brightness(0.88) contrast(1.08) saturate(0.78) sepia(0.20)" }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SCRIPTORIUM ──────────────────────────────────────────────── */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+            {/* Left — text */}
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-6">
+                · Scriptorium ·
+              </p>
+              <h2 className="font-serif text-4xl md:text-5xl text-foreground leading-tight mb-6">
+                I testi del{" "}
+                <em className="not-italic" style={{ color: "hsl(var(--accent))" }}>cammino</em>.
+              </h2>
+              <p className="text-[15px] text-muted-foreground font-light leading-relaxed mb-8 max-w-[380px]">
+                14 fonti certificate, dalla Regola di San Benedetto a Thomas
+                Merton. Ogni autore è reale. Ogni testo è verificato.
+              </p>
+              <Link
+                href="/scriptorium"
+                className="text-[11px] uppercase tracking-widest text-foreground/60 hover:text-foreground transition-colors border-b border-border hover:border-foreground/40 pb-0.5"
+              >
+                Entra nello Scriptorium →
+              </Link>
+            </div>
+
+            {/* Right — cloister image + floating card */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative max-w-[440px] w-full">
+                <div className="rounded-2xl overflow-hidden aspect-[4/3]">
+                  <img
+                    src={`${B}ancient-library.png`}
+                    alt="Chiostro dello Scriptorium"
+                    className="w-full h-full object-cover object-center"
+                    style={{ filter: "brightness(0.85) contrast(1.08) saturate(0.80) sepia(0.16)" }}
+                  />
+                </div>
+                {/* Floating author card */}
+                <div className="absolute -bottom-5 left-4 bg-white rounded-2xl shadow-lg shadow-black/8 px-5 py-3.5 flex items-center gap-4">
                   <div>
-                    <h3 className="font-serif text-lg text-foreground mb-2 group-hover:text-accent transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-muted-foreground font-light leading-relaxed text-sm">
-                      {item.body}
-                    </p>
+                    <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-0.5">XIV Testi</p>
+                    <p className="font-serif text-[14px] text-foreground italic">Voci verificate</p>
+                  </div>
+                  <div className="flex items-center">
+                    {["B", "M", "G", "T"].map((l, i) => (
+                      <div
+                        key={l}
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-medium text-primary-foreground border-2 border-white"
+                        style={{
+                          background: "hsl(var(--primary))",
+                          marginLeft: i === 0 ? 0 : -8,
+                          zIndex: 4 - i,
+                          position: "relative",
+                        }}
+                      >
+                        {l}
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-            <Link
-              href="/chi-siamo"
-              className="mt-12 self-start text-xs uppercase tracking-widest text-foreground/50 hover:text-foreground transition-colors border-b border-border hover:border-foreground/40 pb-0.5"
-            >
-              La nostra storia →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STONE CORRIDOR FULL-BLEED ────────────────────────────────── */}
-      <section className="relative min-h-[520px] flex items-center justify-center overflow-hidden border-t border-border/40">
-        <div className="absolute inset-0">
-          <img
-            src={`${B}stone-corridor.png`}
-            alt="Corridoio in pietra"
-            className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.38) contrast(1.15) saturate(0.48) sepia(0.22)" }}
-          />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(80, 40, 8, 0.20)" }} />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, transparent 28%, rgba(5,3,1,0.68) 100%)" }} />
-        </div>
-        <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">
-          <p className="text-amber-200/50 tracking-[0.4em] text-xs uppercase mb-6">
-            La Regola
-          </p>
-          <h2 className="text-3xl md:text-5xl font-serif text-amber-50 mb-6 leading-tight">
-            Non è un corso.<br />
-            <span className="italic text-amber-200/90">È un cammino.</span>
-          </h2>
-          <p className="text-amber-100/55 font-light mb-10 leading-relaxed">
-            Unisciti a una comunità di pellegrini e custodi che hanno scelto
-            di guidare partendo dal silenzio.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-            <Link
-              href="/percorso"
-              className="border border-amber-200/50 text-amber-100 px-10 py-4 hover:bg-amber-200/10 hover:border-amber-200 transition-all duration-300 tracking-widest uppercase text-xs rounded-full"
-            >
-              Il Percorso
-            </Link>
-            <Link
-              href="/piani"
-              className="text-amber-200/60 hover:text-amber-100 transition-colors tracking-widest text-xs uppercase"
-            >
-              I Piani →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── ANCIENT LIBRARY ──────────────────────────────────────────── */}
-      <section className="relative min-h-[420px] flex items-center overflow-hidden border-t border-border/40">
-        <div className="absolute inset-0">
-          <img
-            src={`${B}ancient-library.png`}
-            alt="Biblioteca antica"
-            className="w-full h-full object-cover object-top"
-            style={{ filter: "brightness(0.40) contrast(1.14) saturate(0.46) sepia(0.24)" }}
-          />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "rgba(90, 50, 10, 0.16)" }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/10 to-transparent" />
-        </div>
-        <div className="relative z-10 container mx-auto px-8 md:px-16 max-w-5xl">
-          <div className="max-w-sm">
-            <p className="text-amber-200/50 tracking-[0.3em] text-xs uppercase mb-4">
-              Scriptorium
-            </p>
-            <h2 className="text-3xl md:text-4xl font-serif text-amber-50 mb-4 leading-tight">
-              I testi del<br />
-              <span className="italic text-amber-200/90">cammino.</span>
-            </h2>
-            <p className="text-amber-100/50 font-light text-sm leading-relaxed mb-7">
-              14 fonti certificate — dalla Regola di San Benedetto a Thomas Merton.
-              Ogni autore è reale. Ogni testo è verificato.
-            </p>
-            <Link
-              href="/scriptorium"
-              className="text-xs uppercase tracking-widest text-amber-200/70 hover:text-amber-100 transition-colors border-b border-amber-200/25 hover:border-amber-100/50 pb-0.5"
-            >
-              Entra nello Scriptorium →
-            </Link>
           </div>
         </div>
       </section>
 
       {/* ── FINAL CTA ────────────────────────────────────────────────── */}
-      <section className="py-28 bg-background border-t border-border/40 text-center">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <div className="flex items-center justify-center gap-4 mb-10">
-            <div className="h-px flex-1 bg-border/60" />
-            <div className="w-2 h-2 bg-border rotate-45" />
-            <div className="h-px flex-1 bg-border/60" />
-          </div>
-          <p className="text-muted-foreground/70 tracking-[0.4em] text-xs uppercase mb-6">
-            Ora et Labora
-          </p>
-          <h2 className="text-3xl md:text-5xl font-serif text-foreground mb-6 leading-tight">
-            Il silenzio è il punto<br />
-            <em className="not-italic" style={{ color: "hsl(var(--accent))" }}>di partenza.</em>
-          </h2>
-          <p className="text-muted-foreground font-light mb-10 leading-relaxed">
-            Inizia gratuitamente. Nessuna carta di credito richiesta.
-          </p>
-          <Link
-            href="/registrazione"
-            className="inline-block bg-primary text-primary-foreground px-12 py-4 rounded-full hover:bg-primary/85 transition-all duration-300 tracking-[0.14em] uppercase text-[12px]"
+      <section className="py-12 px-6 lg:px-12 pb-24">
+        <div className="container mx-auto max-w-5xl">
+          <div
+            className="rounded-3xl px-8 py-20 text-center"
+            style={{
+              background: "linear-gradient(135deg, hsl(25 60% 88%) 0%, hsl(33 70% 82%) 50%, hsl(20 50% 78%) 100%)",
+            }}
           >
-            Inizia il Cammino
-          </Link>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/55 mb-6">
+              · Ora et Labora ·
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-6">
+              Il silenzio è il punto<br />
+              di{" "}
+              <em className="not-italic" style={{ color: "hsl(var(--accent))" }}>partenza</em>.
+            </h2>
+            <p className="text-[15px] text-foreground/60 font-light mb-10">
+              Inizia gratuitamente. Nessuna carta di credito richiesta.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+              <Link
+                href="/registrazione"
+                className="bg-primary text-primary-foreground text-[11px] uppercase tracking-[0.18em] font-medium px-9 py-4 rounded-full hover:bg-primary/85 transition-colors"
+              >
+                Inizia il Cammino
+              </Link>
+              <Link href="/contatti" className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
+                Parla con un mentore →
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

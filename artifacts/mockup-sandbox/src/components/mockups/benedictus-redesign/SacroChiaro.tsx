@@ -349,7 +349,10 @@ export function SacroChiaro() {
         <div style={{ display: "flex", gap: "32px" }}>
           {["Privacy", "Termini", "Contatti"].map(v => <a key={v} href="#" className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.1em", color: "#9A7248", textDecoration: "none" }}>{v.toUpperCase()}</a>)}
         </div>
-        <span className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.15em", color: "#C4A875" }}>REGULA HUMANITATIS · EST. MCM</span>
+        <div style={{ textAlign: "right" }}>
+          <div className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.15em", color: "#C4A875" }}>REGULA HUMANITATIS · EST. MCM</div>
+          <div className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.1em", color: "#C4A875", opacity: 0.6, marginTop: "4px" }}>Made in Never Before Italia</div>
+        </div>
       </footer>
     </div>
   );

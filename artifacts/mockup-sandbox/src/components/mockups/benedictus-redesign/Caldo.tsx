@@ -319,7 +319,10 @@ export function Caldo() {
         <div style={{ display: "flex", gap: "32px" }}>
           {["Privacy", "Termini", "Contatti"].map(v => <a key={v} href="#" style={{ fontSize: "13px", color: "#9A7248", textDecoration: "none" }}>{v}</a>)}
         </div>
-        <span style={{ fontSize: "13px", color: "#C4A875" }}>Regula Humanitatis · Est. MCM</span>
+        <div style={{ textAlign: "right" }}>
+          <span style={{ fontSize: "13px", color: "#C4A875" }}>Regula Humanitatis · Est. MCM</span>
+          <div style={{ fontSize: "11px", color: "#C4A875", opacity: 0.6, marginTop: "4px" }}>Made in Never Before Italia</div>
+        </div>
       </footer>
     </div>
   );

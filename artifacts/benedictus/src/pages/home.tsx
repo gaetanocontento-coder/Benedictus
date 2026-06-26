@@ -317,6 +317,68 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── MASSIMO FOLADOR ──────────────────────────────────────────── */}
+      <section className="py-24 bg-card border-y border-border/60">
+        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+            {/* Left — quote */}
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-6">
+                · Il Metodo ·
+              </p>
+              <blockquote className="font-serif text-2xl md:text-3xl text-foreground italic leading-snug mb-8">
+                "Benedetto non ha scritto un trattato di management.
+                Ha scritto una Regola per vivere. Che sia diventata
+                anche un manuale per guidare dice qualcosa di profondo
+                sulla natura del lavoro umano."
+              </blockquote>
+              <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground/50 mb-10">
+                — Massimo Folador · L'Organizzazione Perfetta
+              </p>
+              <Link
+                href="/regula-operis"
+                className="text-[11px] uppercase tracking-widest text-foreground/60 hover:text-foreground transition-colors border-b border-border hover:border-foreground/40 pb-0.5"
+              >
+                Scopri la Regula Operis →
+              </Link>
+            </div>
+
+            {/* Right — bio card */}
+            <div className="bg-background rounded-3xl border border-border/60 shadow-sm p-8 md:p-10">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-5">
+                Chi è Massimo Folador
+              </p>
+              <p className="text-[15px] text-muted-foreground font-light leading-relaxed mb-6">
+                Massimo Folador ha scoperto nella Regola di Benedetto — scritta
+                attorno al 530 d.C. — il più antico manuale di management
+                occidentale. Non una metafora spirituale: un metodo concreto
+                per governare comunità complesse.
+              </p>
+              <p className="text-[15px] text-muted-foreground font-light leading-relaxed mb-8">
+                Ogni modulo traduce uno dei pilastri benedettini in una pratica
+                settimanale incarnata. Non letture, non teorie: esercizi che
+                cambiano il modo di guidare.
+              </p>
+              <div className="space-y-2.5">
+                {[
+                  { lat: "Ausculta",      it: "Ascolta prima di decidere"           },
+                  { lat: "Stabilitas",    it: "Rimani radicato quando tutto accelera" },
+                  { lat: "Hospitalitas",  it: "Accogli ogni ospite come Cristo"      },
+                  { lat: "Ora et Labora", it: "Alterna contemplazione e azione"      },
+                  { lat: "Communitas",    it: "Guida al servizio, non al comando"    },
+                ].map(({ lat, it }) => (
+                  <div key={lat} className="flex items-baseline gap-3">
+                    <span className="font-serif text-[13px] italic text-foreground/70 min-w-[110px]">{lat}</span>
+                    <span className="text-[12px] text-muted-foreground font-light">{it}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── FINAL CTA ────────────────────────────────────────────────── */}
       <section className="py-12 px-6 lg:px-12 pb-24">
         <div className="container mx-auto max-w-5xl">

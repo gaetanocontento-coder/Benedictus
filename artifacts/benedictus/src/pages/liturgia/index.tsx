@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { BookOpen, Flame, ChevronLeft, ChevronRight, Loader2, AlertCircle, Sparkles, StopCircle, TriangleAlert, ExternalLink } from "lucide-react";
+import { BookOpen, Flame, ChevronLeft, ChevronRight, Loader2, AlertCircle, Sparkles, StopCircle, TriangleAlert, ExternalLink, Send, MessageCircle } from "lucide-react";
 import {
   useBGetLiturgiaGiorno,
   getBGetLiturgiaGiornoQueryKey,
@@ -9,6 +9,7 @@ import {
 } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { useGuidaSpirituale } from "@/lib/useGuidaSpirituale";
+import { useChatPadreBenedetto } from "@/lib/useChatPadreBenedetto";
 
 const COLORE_MAP: Record<string, { bg: string; label: string }> = {
   verde:  { bg: "#2d6a2d", label: "Tempo Ordinario" },
@@ -47,6 +48,9 @@ export default function LiturgiaIndex() {
   const [selectedData, setSelectedData] = useState(todayISO());
   const [expandedLettura, setExpandedLettura] = useState<string | null>("vangelo");
   const guida = useGuidaSpirituale();
+  const chat = useChatPadreBenedetto();
+  const [chatInput, setChatInput] = useState("");
+  const chatBottomRef = useRef<HTMLDivElement>(null);
 
   const { data: liturgia, isLoading, isError } = useBGetLiturgiaGiorno(
     { data: selectedData },
@@ -74,8 +78,16 @@ export default function LiturgiaIndex() {
   const colore = liturgia ? (COLORE_MAP[liturgia.colore] ?? COLORE_MAP.verde) : COLORE_MAP.verde;
   const isToday = selectedData === todayISO();
 
+  // Auto-scroll to the bottom of the chat when new messages arrive
+  useEffect(() => {
+    if (chat.messages.length > 0 || chat.streamingContent) {
+      chatBottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [chat.messages, chat.streamingContent]);
+
   function avviaAnalisi() {
     if (!liturgia) return;
+    chat.reset();
     guida.richiedi({
       tipo: "analisi",
       stepId: "analisi",
@@ -88,6 +100,17 @@ export default function LiturgiaIndex() {
     });
   }
 
+  function inviaAlPadre() {
+    if (!liturgia || !guida.testo || !chatInput.trim()) return;
+    const domanda = chatInput.trim();
+    setChatInput("");
+    chat.invia(domanda, {
+      letture: liturgia.letture.map((l) => ({ tipo: l.tipo, riferimento: l.riferimento, testo: l.testo })),
+      titoloLiturgico: liturgia.titoloLiturgico,
+      meditazioneIniziale: guida.testo,
+    });
+  }
+
   return (
     <div className="w-full">
 
@@ -96,7 +119,7 @@ export default function LiturgiaIndex() {
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="flex items-center justify-between mb-8">
             <button
-              onClick={() => { setSelectedData(addDays(selectedData, -1)); guida.reset(); }}
+              onClick={() => { setSelectedData(addDays(selectedData, -1)); guida.reset(); chat.reset(); setChatInput(""); }}
               className="flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-widest"
             >
               <ChevronLeft className="w-4 h-4" /> Ieri
@@ -108,7 +131,7 @@ export default function LiturgiaIndex() {
               </h1>
               {!isToday && (
                 <button
-                  onClick={() => { setSelectedData(todayISO()); guida.reset(); }}
+                  onClick={() => { setSelectedData(todayISO()); guida.reset(); chat.reset(); setChatInput(""); }}
                   className="mt-2 text-[10px] uppercase tracking-widest text-primary hover:text-foreground transition-colors"
                 >
                   ← Torna ad oggi
@@ -116,7 +139,7 @@ export default function LiturgiaIndex() {
               )}
             </div>
             <button
-              onClick={() => { if (!isToday) { setSelectedData(addDays(selectedData, 1)); guida.reset(); } }}
+              onClick={() => { if (!isToday) { setSelectedData(addDays(selectedData, 1)); guida.reset(); chat.reset(); setChatInput(""); } }}
               disabled={isToday}
               className="flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-widest disabled:opacity-30"
             >
@@ -306,7 +329,7 @@ export default function LiturgiaIndex() {
                   )}
                   {!guida.loading && guida.testo && (
                     <button
-                      onClick={() => { guida.reset(); }}
+                      onClick={() => { guida.reset(); chat.reset(); setChatInput(""); }}
                       className="mt-6 text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
                     >
                       ↺ Rigenera
@@ -327,6 +350,111 @@ export default function LiturgiaIndex() {
                     <Flame className="w-3.5 h-3.5" /> Esercizi Ignaziani
                   </button>
                 </div>
+
+                {/* ── DIALOGO DI APPROFONDIMENTO ── */}
+                {!guida.loading && guida.testo && (
+                  <div className="mt-10">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="h-px flex-1 bg-border/50" />
+                      <div className="flex items-center gap-2 text-primary/40">
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span className="text-[10px] uppercase tracking-widest">Dialogo con il Padre</span>
+                      </div>
+                      <div className="h-px flex-1 bg-border/50" />
+                    </div>
+
+                    {/* Cronologia messaggi */}
+                    {(chat.messages.length > 0 || chat.streamingContent) && (
+                      <div className="space-y-4 mb-6">
+                        {chat.messages.map((msg, i) => (
+                          <div
+                            key={i}
+                            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                          >
+                            {msg.role === "assistant" && (
+                              <div className="flex-none w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
+                                <span className="font-serif text-[9px] text-primary/50">P</span>
+                              </div>
+                            )}
+                            <div
+                              className={`max-w-[85%] px-4 py-3 text-sm leading-relaxed font-light ${
+                                msg.role === "user"
+                                  ? "bg-background border border-primary/20 text-foreground/80 font-sans"
+                                  : "bg-card border border-border font-serif text-foreground/90"
+                              }`}
+                            >
+                              {msg.content}
+                            </div>
+                          </div>
+                        ))}
+
+                        {/* Risposta in streaming */}
+                        {chat.streamingContent && (
+                          <div className="flex justify-start">
+                            <div className="flex-none w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
+                              <span className="font-serif text-[9px] text-primary/50">P</span>
+                            </div>
+                            <div className="max-w-[85%] px-4 py-3 bg-card border border-border font-serif text-sm text-foreground/90 leading-relaxed">
+                              {chat.streamingContent}
+                              <span className="inline-block w-0.5 h-3.5 bg-primary/50 animate-pulse ml-0.5 align-middle" />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Caricamento iniziale (prima parola) */}
+                        {chat.loading && !chat.streamingContent && (
+                          <div className="flex justify-start items-center gap-2 pl-7">
+                            <Loader2 className="w-3.5 h-3.5 text-primary/40 animate-spin" />
+                            <span className="text-muted-foreground text-xs">Il padre riflette…</span>
+                          </div>
+                        )}
+
+                        <div ref={chatBottomRef} />
+                      </div>
+                    )}
+
+                    {/* Input domanda */}
+                    <div className="flex gap-2">
+                      <textarea
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey && !chat.loading) {
+                            e.preventDefault();
+                            inviaAlPadre();
+                          }
+                        }}
+                        placeholder={
+                          chat.messages.length === 0
+                            ? "Chiedi al padre di approfondire la meditazione…"
+                            : "Continua il dialogo…"
+                        }
+                        rows={2}
+                        disabled={chat.loading}
+                        className="flex-1 bg-background border border-border text-foreground/80 text-sm font-light placeholder:text-muted-foreground/40 px-4 py-3 resize-none focus:outline-none focus:border-primary/40 transition-colors disabled:opacity-50"
+                      />
+                      <button
+                        onClick={inviaAlPadre}
+                        disabled={!chatInput.trim() || chat.loading}
+                        className="flex-none flex items-center justify-center w-12 bg-primary text-primary-foreground hover:bg-primary/85 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        aria-label="Invia domanda"
+                      >
+                        {chat.loading
+                          ? <Loader2 className="w-4 h-4 animate-spin" />
+                          : <Send className="w-4 h-4" />
+                        }
+                      </button>
+                    </div>
+
+                    {chat.errore && (
+                      <p className="text-muted-foreground text-xs mt-2">{chat.errore}</p>
+                    )}
+
+                    <p className="text-muted-foreground/30 text-[10px] mt-3 text-center">
+                      Invio con ⏎ · nuova riga con ⇧⏎
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 

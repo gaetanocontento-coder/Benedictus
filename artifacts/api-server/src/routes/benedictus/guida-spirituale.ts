@@ -156,14 +156,16 @@ router.post("/guida-spirituale", async (req: Request, res: Response): Promise<vo
     testoUtente = "",
     letture = [],
     titoloLiturgico = "",
+    meditazioneIniziale,
     messagesHistory,
     messaggioCorrente,
   } = req.body as {
-    tipo: "lectio" | "ignaziana" | "analisi";
+    tipo: "lectio" | "ignaziana" | "analisi" | "dialogo";
     stepId: string;
     testoUtente?: string;
     letture?: { tipo: string; riferimento: string; testo: string }[];
     titoloLiturgico?: string;
+    meditazioneIniziale?: string;
     messagesHistory?: { role: "user" | "assistant"; content: string }[];
     messaggioCorrente?: string | null;
   };
@@ -179,6 +181,55 @@ router.post("/guida-spirituale", async (req: Request, res: Response): Promise<vo
   res.setHeader("X-Accel-Buffering", "no");
 
   try {
+    // ── Dialogo di approfondimento sulla meditazione ──────────────────────────
+    if (tipo === "dialogo" && Array.isArray(messagesHistory) && messaggioCorrente) {
+      const sintesiLetture = letture
+        .map((l) => `${l.riferimento} (${l.tipo}): ${l.testo?.slice(0, 300)}…`)
+        .join("\n\n");
+
+      const systemPrompt = `Sei Padre Benedetto, un padre spirituale benedettino che accompagna un fedele nell'approfondimento della Parola.
+
+Hai appena offerto questa meditazione sulle letture di oggi (${titoloLiturgico}):
+
+---
+${meditazioneIniziale ?? ""}
+---
+
+Le letture del giorno per contesto:
+${sintesiLetture}
+
+Ora il fedele ti pone domande di approfondimento. Rispondi con:
+- La stessa profondità e calore della meditazione — non sei un catechista, sei un padre spirituale
+- Risposte brevi e dense (100–180 parole), mai enciclopediche
+- Una domanda di rimbalzo che aiuti l'interlocutore a scoprire da solo, non che tu spieghi
+- Linguaggio mistico ma concreto, come in un colloquio dopo Compieta
+- Sempre in italiano, seconda persona singolare
+
+Non ripetere la meditazione. Vai in profondità su ciò che il fedele chiede.`;
+
+      type AnthropicRole = "user" | "assistant";
+      const messages: { role: AnthropicRole; content: string }[] = [
+        ...messagesHistory.map((m) => ({ role: m.role as AnthropicRole, content: m.content })),
+        { role: "user", content: messaggioCorrente },
+      ];
+
+      const stream = await anthropic.messages.stream({
+        model: "claude-opus-4-5",
+        max_tokens: 512,
+        system: systemPrompt,
+        messages,
+      });
+
+      for await (const chunk of stream) {
+        if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+          res.write(`data: ${JSON.stringify({ content: chunk.delta.text })}\n\n`);
+        }
+      }
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+      res.end();
+      return;
+    }
+
     // ── Multi-turn ignaziana conversation ──────────────────────────────────────
     if (tipo === "ignaziana" && Array.isArray(messagesHistory)) {
       const vangelo = letture.find((l) => l.tipo === "vangelo") ?? letture[letture.length - 1];

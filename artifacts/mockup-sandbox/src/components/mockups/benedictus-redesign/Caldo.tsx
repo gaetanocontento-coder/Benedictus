@@ -27,13 +27,8 @@ export function Caldo() {
         backdropFilter: "blur(16px)",
         borderBottom: "1px solid rgba(139,100,60,0.10)"
       }}>
-        {/* LOGO — con croce ornamentale e Cinzel 700 */}
         <div style={{ display: "flex", alignItems: "center", gap: "44px" }}>
-          <a href="#" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
-            <svg width="13" height="19" viewBox="0 0 13 19" fill="none">
-              <rect x="5.5" y="0" width="2" height="19" fill="#C4954A"/>
-              <rect x="0"   y="6" width="13" height="2" fill="#C4954A"/>
-            </svg>
+          <a href="#" style={{ textDecoration: "none" }}>
             <span className="ca-display" style={{
               fontSize: "16px", fontWeight: 700,
               letterSpacing: "0.26em", color: "#1A0D05",
@@ -58,73 +53,71 @@ export function Caldo() {
         </div>
       </nav>
 
-      {/* ══ HERO — TESTO CENTRATO SU SFONDO CHIARO + FOTO SOTTO ══════════════ */}
-      {/* ↑ Stessa logica di anapana: headline centrata su fondo chiaro, foto come elemento visivo sotto */}
+      {/* ══ HERO — SPLIT: testo sx / foto dx (layout Meditopia) ═════════════ */}
       <section style={{
-        background: "linear-gradient(180deg, #FDFAF4 0%, #F5EDD8 60%, #E8D9B8 100%)",
-        padding: "72px 52px 0",
-        textAlign: "center",
-        position: "relative", overflow: "hidden"
+        display: "grid",
+        gridTemplateColumns: "1fr 1.15fr",
+        minHeight: "calc(100vh - 64px)",
+        background: "#FDFAF4",
+        overflow: "hidden"
       }}>
-        {/* Background cloister — desat + molto chiaro, solo come texture */}
+        {/* COLONNA SINISTRA — testo */}
         <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: `url(${D}/hero-cloister.png)`,
-          backgroundSize: "cover", backgroundPosition: "center 45%",
-          opacity: 0.07, filter: "saturate(0) contrast(1.2)"
-        }} />
-
-        <div style={{ position: "relative", zIndex: 2 }}>
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          padding: "72px 56px 72px 52px"
+        }}>
           <p className="ca-display" style={{
-            fontSize: "10px", letterSpacing: "0.55em", color: "#9A7248",
-            marginBottom: "28px", textTransform: "uppercase"
+            fontSize: "9px", letterSpacing: "0.55em", color: "#9A7248",
+            marginBottom: "32px"
           }}>
-            Regula Humanitatis · Est. MCM
+            REGULA HUMANITATIS · EST. MCM
           </p>
 
           <h1 className="ca-serif" style={{
-            fontSize: "clamp(56px, 8.5vw, 116px)",
-            fontWeight: 400, lineHeight: 1.06,
-            color: "#1A0D05",
-            maxWidth: "900px", margin: "0 auto 28px"
+            fontSize: "clamp(44px, 5.5vw, 80px)",
+            fontWeight: 400, lineHeight: 1.1,
+            color: "#1A0D05", marginBottom: "24px"
           }}>
-            <em style={{ fontStyle: "italic", fontWeight: 400, color: "#8B5A1E" }}>Custodisci</em> la tua vita<br />
-            con la saggezza monastica.
+            <em style={{ fontStyle: "italic", color: "#8B5A1E" }}>Custodisci</em>{" "}
+            la tua vita<br />con la saggezza<br />monastica.
           </h1>
 
           <p style={{
-            fontSize: "18px", lineHeight: 1.75, color: "#4A2E12",
-            maxWidth: "540px", margin: "0 auto 40px", fontWeight: 400
+            fontSize: "17px", lineHeight: 1.78, color: "#4A2E12",
+            maxWidth: "420px", marginBottom: "40px", fontWeight: 400
           }}>
             1500 anni di Regola benedettina tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.
           </p>
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "64px" }}>
+          <div style={{ display: "flex", gap: "12px", marginBottom: "36px" }}>
             <a href="#" style={{
               background: "#1A0D05", color: "#fff",
-              padding: "16px 36px", borderRadius: "100px",
-              fontSize: "15px", textDecoration: "none", fontWeight: 400
+              padding: "15px 32px", borderRadius: "100px",
+              fontSize: "14px", textDecoration: "none", fontWeight: 500
             }}>Inizia il cammino</a>
             <a href="#" style={{
               background: "transparent", color: "#1A0D05",
-              padding: "16px 36px", borderRadius: "100px",
-              fontSize: "15px", textDecoration: "none", fontWeight: 400,
-              border: "1.5px solid rgba(26,13,5,0.25)"
+              padding: "15px 32px", borderRadius: "100px",
+              fontSize: "14px", textDecoration: "none", fontWeight: 400,
+              border: "1.5px solid rgba(26,13,5,0.22)"
             }}>Vedi i piani</a>
           </div>
 
-          {/* FOTO MONASTICA — come i mockup dei telefoni in anapana */}
-          <div style={{
-            maxWidth: "980px", margin: "0 auto",
-            borderRadius: "12px 12px 0 0", overflow: "hidden",
-            boxShadow: "0 -4px 48px rgba(26,13,5,0.18)"
-          }}>
-            <img
-              src={`${D}/hero-cloister.png`}
-              alt="Chiostro benedettino"
-              style={{ width: "100%", display: "block", height: "420px", objectFit: "cover", objectPosition: "center 40%" }}
-            />
-          </div>
+          {/* Social proof — come Meditopia "Oltre 2.100 prove gratuite" */}
+          <p style={{ fontSize: "13px", color: "#9A7248", fontWeight: 400 }}>
+            <strong style={{ color: "#5C3D1E", fontWeight: 600 }}>Oltre 3.200 persone</strong> stanno già percorrendo la Regola
+          </p>
+        </div>
+
+        {/* COLONNA DESTRA — foto monastica full-height */}
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <img
+            src={`${D}/hero-cloister.png`}
+            alt="Chiostro benedettino"
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%", display: "block" }}
+          />
+          {/* Sfumatura lieve a sx per raccordarsi col testo */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(253,250,244,0.35) 0%, transparent 30%)" }} />
         </div>
       </section>
 

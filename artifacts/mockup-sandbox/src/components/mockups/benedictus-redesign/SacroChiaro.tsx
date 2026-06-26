@@ -26,12 +26,7 @@ export function SacroChiaro() {
         backdropFilter: "blur(14px)",
         borderBottom: "1px solid rgba(100,70,40,0.1)"
       }}>
-        {/* LOGO — croce più grande + Cinzel 700 */}
-        <a href="#" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "11px" }}>
-          <svg width="16" height="23" viewBox="0 0 16 23" fill="none">
-            <rect x="7" y="0"  width="2.5" height="23" fill="#C4954A"/>
-            <rect x="0" y="7"  width="16"  height="2.5" fill="#C4954A"/>
-          </svg>
+        <a href="#" style={{ textDecoration: "none" }}>
           <span className="sc-display" style={{
             fontSize: "17px", fontWeight: 700,
             letterSpacing: "0.24em", color: "#1C1008",
@@ -50,72 +45,69 @@ export function SacroChiaro() {
         </div>
       </nav>
 
-      {/* ══ HERO — testo su sfondo chiaro, foto monastica sotto ══════════════ */}
+      {/* ══ HERO — SPLIT: testo sx / foto dx (layout Meditopia) ═════════════ */}
       <section style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1.15fr",
+        minHeight: "calc(100vh - 64px)",
         background: "#F8F3E8",
-        padding: "80px 52px 0",
-        textAlign: "center",
-        position: "relative", overflow: "hidden"
+        overflow: "hidden"
       }}>
-        {/* Trama chiostro quasi invisibile */}
+        {/* COLONNA SINISTRA — testo */}
         <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: `url(${D}/hero-cloister.png)`,
-          backgroundSize: "cover", backgroundPosition: "center 30%",
-          opacity: 0.05, filter: "saturate(0)"
-        }} />
-
-        <div style={{ position: "relative", zIndex: 2 }}>
-          {/* Ornamento sopra il titolo */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "28px" }}>
-            <div style={{ width: "40px", height: "1px", background: "#C4954A" }} />
-            <span className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.55em", color: "#9A7248" }}>REGULA HUMANITATIS · EST. MCM</span>
-            <div style={{ width: "40px", height: "1px", background: "#C4954A" }} />
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          padding: "72px 56px 72px 52px"
+        }}>
+          {/* Ornamento orizzontale */}
+          <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "32px" }}>
+            <div style={{ width: "32px", height: "1px", background: "#C4954A" }} />
+            <span className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.5em", color: "#9A7248" }}>REGULA HUMANITATIS · EST. MCM</span>
           </div>
 
           <h1 className="sc-serif" style={{
-            fontSize: "clamp(54px, 8vw, 112px)",
-            fontWeight: 400, lineHeight: 1.06,
-            color: "#1C1008", margin: "0 auto 28px",
-            maxWidth: "880px"
+            fontSize: "clamp(44px, 5.5vw, 78px)",
+            fontWeight: 400, lineHeight: 1.1,
+            color: "#1C1008", marginBottom: "24px"
           }}>
             Un rifugio per<br />
-            il <em style={{ fontStyle: "italic", fontWeight: 400, color: "#6B3A10", borderBottom: "3px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
+            il{" "}<em style={{ fontStyle: "italic", color: "#6B3A10", borderBottom: "2px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
             moderno.
           </h1>
 
           <p style={{
-            fontSize: "18px", lineHeight: 1.75, color: "#4A2E12",
-            maxWidth: "520px", margin: "0 auto 44px", fontWeight: 400
+            fontSize: "17px", lineHeight: 1.78, color: "#4A2E12",
+            maxWidth: "400px", marginBottom: "40px", fontWeight: 400
           }}>
             1500 anni di saggezza monastica tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.
           </p>
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "64px" }}>
+          <div style={{ display: "flex", gap: "12px", marginBottom: "36px" }}>
             <a href="#" className="sc-display" style={{
               background: "#1C1008", color: "#fff",
-              padding: "16px 40px", fontSize: "10px", letterSpacing: "0.18em",
+              padding: "15px 32px", fontSize: "9px", letterSpacing: "0.18em",
               textDecoration: "none"
             }}>ASCOLTA LA CHIAMATA</a>
             <a href="#" className="sc-display" style={{
               background: "transparent", color: "#1C1008",
-              padding: "15px 40px", fontSize: "10px", letterSpacing: "0.18em",
-              textDecoration: "none", border: "1.5px solid rgba(28,16,8,0.3)"
+              padding: "14px 32px", fontSize: "9px", letterSpacing: "0.18em",
+              textDecoration: "none", border: "1.5px solid rgba(28,16,8,0.25)"
             }}>VEDI I PIANI</a>
           </div>
 
-          {/* Chiostro come elemento visivo, non sfondo testo */}
-          <div style={{
-            maxWidth: "1000px", margin: "0 auto",
-            borderRadius: "8px 8px 0 0", overflow: "hidden",
-            boxShadow: "0 -8px 56px rgba(28,16,8,0.22)"
-          }}>
-            <img
-              src={`${D}/hero-cloister.png`}
-              alt="Chiostro benedettino"
-              style={{ width: "100%", display: "block", height: "420px", objectFit: "cover", objectPosition: "center 40%" }}
-            />
-          </div>
+          {/* Social proof */}
+          <p style={{ fontSize: "13px", color: "#9A7248", fontWeight: 400 }}>
+            <strong style={{ color: "#5C3D1E", fontWeight: 600 }}>Oltre 3.200 persone</strong> stanno già percorrendo la Regola
+          </p>
+        </div>
+
+        {/* COLONNA DESTRA — foto monastica full-height */}
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <img
+            src={`${D}/hero-cloister.png`}
+            alt="Chiostro benedettino"
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%", display: "block" }}
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(248,243,232,0.38) 0%, transparent 28%)" }} />
         </div>
       </section>
 

@@ -1,192 +1,307 @@
 const D = "https://cab0d778-6425-4a99-ac55-dd2f35aef268-00-1t61zyqaqdg8q.janeway.replit.dev/benedictus";
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   VARIANTE B — SACRO CHIARO
+   Stessa struttura UX di Caldo ma identità più austera:
+   • Cinzel come font display dappertutto (uppercase monastico)
+   • Bottoni rettangolari (no pill)
+   • Griglia foto asimmetrica (1 grande + 2 piccole)
+   • Linee oro come elemento ornamentale invece di badge pill
+───────────────────────────────────────────────────────────────────────────── */
 export function SacroChiaro() {
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#ffffff", color: "#1C1008", minHeight: "100vh", overflowX: "hidden" }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", background: "#fff", color: "#1C1008", minHeight: "100vh", overflowX: "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
         .sc-serif { font-family: 'Cormorant Garamond', serif; }
         .sc-display { font-family: 'Cinzel', serif; }
       `}</style>
 
-      {/* ── NAV — bianco + croce oro ── */}
+      {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
       <nav style={{
-        position: "sticky", top: 0, zIndex: 50,
+        position: "sticky", top: 0, zIndex: 100,
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 56px", height: "64px",
+        padding: "0 52px", height: "64px",
         background: "rgba(255,255,255,0.96)",
-        backdropFilter: "blur(12px)",
+        backdropFilter: "blur(14px)",
         borderBottom: "1px solid rgba(100,70,40,0.1)"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <svg width="14" height="20" viewBox="0 0 14 20" fill="none">
-            <rect x="6" y="0" width="2" height="20" fill="#C4954A" />
-            <rect x="1" y="6" width="12" height="2" fill="#C4954A" />
+          {/* Croce dorata */}
+          <svg width="12" height="18" viewBox="0 0 12 18" fill="none">
+            <rect x="5" y="0" width="2" height="18" fill="#C4954A" />
+            <rect x="0" y="5" width="12" height="2" fill="#C4954A" />
           </svg>
-          <span className="sc-display" style={{ fontSize: "13px", letterSpacing: "0.22em", color: "#1C1008" }}>BENEDICTVS</span>
+          <span className="sc-display" style={{ fontSize: "12px", letterSpacing: "0.24em", color: "#1C1008" }}>BENEDICTVS</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "40px" }}>
-          {["La Regola", "Liturgia", "Percorso", "Piani"].map(item => (
-            <span key={item} className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.2em", color: "#6B4F35", cursor: "pointer", textTransform: "uppercase" }}>{item}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "36px" }}>
+          {["Perché Benedictus?", "Corsi", "Liturgia", "Piani"].map(v => (
+            <a key={v} className="sc-display" href="#" style={{ fontSize: "9px", letterSpacing: "0.18em", color: "#6B4F35", textDecoration: "none" }}>{v.toUpperCase()}</a>
           ))}
-          <div className="sc-display" style={{ background: "#1C1008", color: "#fff", padding: "11px 24px", fontSize: "9px", letterSpacing: "0.18em", cursor: "pointer" }}>
-            INIZIA
-          </div>
+          <a href="#" className="sc-display" style={{
+            background: "#1C1008", color: "#fff",
+            padding: "11px 22px", fontSize: "9px", letterSpacing: "0.18em",
+            textDecoration: "none"
+          }}>SCOPRI L'OFFERTA</a>
         </div>
       </nav>
 
-      {/* ── HERO — chiostro con testo sovrapposto ── */}
-      <section style={{ position: "relative", height: "94vh", overflow: "hidden" }}>
-        <img
-          src={`${D}/hero-cloister.png`}
-          alt="Chiostro benedettino"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%", filter: "saturate(0.78) contrast(1.04)" }}
-        />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.38) 52%, rgba(255,255,255,0.04) 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(255,255,255,0.95) 0%, transparent 28%)" }} />
+      {/* ══ HERO — testo su sfondo chiaro, foto monastica sotto ══════════════ */}
+      <section style={{
+        background: "#F8F3E8",
+        padding: "80px 52px 0",
+        textAlign: "center",
+        position: "relative", overflow: "hidden"
+      }}>
+        {/* Trama chiostro quasi invisibile */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: `url(${D}/hero-cloister.png)`,
+          backgroundSize: "cover", backgroundPosition: "center 30%",
+          opacity: 0.05, filter: "saturate(0)"
+        }} />
 
-        <div style={{ position: "relative", zIndex: 10, height: "100%", display: "flex", alignItems: "center", padding: "0 56px", maxWidth: "1160px", margin: "0 auto" }}>
-          <div>
-            <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.6em", color: "#9A7248", marginBottom: "24px" }}>
-              REGULA HUMANITATIS
-            </p>
-            <h1 className="sc-serif" style={{ fontSize: "clamp(56px, 7.5vw, 106px)", fontWeight: 300, lineHeight: 1.06, marginBottom: "30px", color: "#1C1008" }}>
-              Un rifugio per<br />
-              il{" "}
-              <span style={{ borderBottom: "3px solid #C4954A", paddingBottom: "3px", color: "#6B3A10" }}>custode</span>
-              <br />moderno.
-            </h1>
-            <p style={{ fontSize: "17px", lineHeight: 1.78, color: "#5C3D1E", maxWidth: "420px", marginBottom: "44px", fontWeight: 300 }}>
-              1500 anni di saggezza monastica tradotti in un cammino di leadership contemplativa e rigenerazione interiore.
-            </p>
-            <div style={{ display: "flex", gap: "18px", alignItems: "center" }}>
-              <div className="sc-display" style={{ background: "#1C1008", color: "#fff", padding: "16px 40px", fontSize: "9px", letterSpacing: "0.2em", cursor: "pointer" }}>
-                ASCOLTA LA CHIAMATA
-              </div>
-              <span style={{ fontSize: "13px", color: "#9A7248", cursor: "pointer", borderBottom: "1px solid rgba(154,114,72,0.4)", paddingBottom: "2px" }}>Vedi i piani →</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── VERSE — bianco con linea oro ── */}
-      <section style={{ padding: "80px 56px", background: "#fff" }}>
-        <div style={{ maxWidth: "720px", margin: "0 auto", textAlign: "center" }}>
-          <div style={{ width: "1px", height: "48px", background: "#C4954A", margin: "0 auto 28px" }} />
-          <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.5em", color: "#9A7248", marginBottom: "24px" }}>REGULA BENEDICTI · PROLOGO</p>
-          <blockquote className="sc-serif" style={{ fontSize: "clamp(26px, 3.5vw, 42px)", fontWeight: 300, fontStyle: "italic", color: "#1C1008", lineHeight: 1.55 }}>
-            "Ascolta, figlio, i precetti del maestro<br />e piega l'orecchio del tuo cuore."
-          </blockquote>
-          <div style={{ width: "1px", height: "48px", background: "#C4954A", margin: "28px auto 0" }} />
-        </div>
-      </section>
-
-      {/* ── PHOTO GRID ASIMMETRICA ── */}
-      <section style={{ background: "#fff", maxWidth: "1200px", margin: "0 auto", padding: "0 56px 88px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.35fr 1fr 1fr", gap: "4px" }}>
-          {/* Grande a sinistra — stone corridor */}
-          <div style={{ position: "relative", overflow: "hidden", gridRow: "1 / 3" }}>
-            <img
-              src={`${D}/stone-corridor.png`}
-              alt="Corridoio monastico"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", minHeight: "500px" }}
-            />
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,5,2,0.86) 0%, transparent 50%)" }} />
-            <div style={{ position: "absolute", bottom: "30px", left: "28px", right: "20px" }}>
-              <p className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.4em", color: "#C4954A", marginBottom: "10px" }}>ORA ET LABORA</p>
-              <h3 className="sc-serif" style={{ fontSize: "30px", fontWeight: 300, color: "#fff", marginBottom: "12px" }}>Preghiera e lavoro</h3>
-              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.65)", lineHeight: 1.65, fontWeight: 300 }}>Il ritmo sacro che tiene unita la vita interiore e quella operosa della giornata benedettina.</p>
-            </div>
+        <div style={{ position: "relative", zIndex: 2 }}>
+          {/* Ornamento sopra il titolo */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "28px" }}>
+            <div style={{ width: "40px", height: "1px", background: "#C4954A" }} />
+            <span className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.55em", color: "#9A7248" }}>REGULA HUMANITATIS · EST. MCM</span>
+            <div style={{ width: "40px", height: "1px", background: "#C4954A" }} />
           </div>
 
-          {/* monk-manuscript */}
-          <div style={{ position: "relative", overflow: "hidden", minHeight: "246px" }}>
-            <img src={`${D}/monk-manuscript.png`} alt="Monaco con manoscritto" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,5,2,0.84) 0%, transparent 55%)" }} />
-            <div style={{ position: "absolute", bottom: "20px", left: "20px", right: "12px" }}>
-              <p className="sc-display" style={{ fontSize: "7px", letterSpacing: "0.38em", color: "#C4954A", marginBottom: "6px" }}>LECTIO DIVINA</p>
-              <h3 className="sc-serif" style={{ fontSize: "22px", fontWeight: 300, color: "#fff" }}>La parola viva</h3>
-            </div>
-          </div>
+          <h1 className="sc-serif" style={{
+            fontSize: "clamp(50px, 7.5vw, 108px)",
+            fontWeight: 300, lineHeight: 1.08,
+            color: "#1C1008", margin: "0 auto 28px",
+            maxWidth: "880px"
+          }}>
+            Un rifugio per<br />
+            il <em style={{ fontStyle: "italic", color: "#6B3A10", borderBottom: "3px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
+            moderno.
+          </h1>
 
-          {/* ancient-library */}
-          <div style={{ position: "relative", overflow: "hidden", minHeight: "246px" }}>
-            <img src={`${D}/ancient-library.png`} alt="Biblioteca antica" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,5,2,0.84) 0%, transparent 55%)" }} />
-            <div style={{ position: "absolute", bottom: "20px", left: "20px", right: "12px" }}>
-              <p className="sc-display" style={{ fontSize: "7px", letterSpacing: "0.38em", color: "#C4954A", marginBottom: "6px" }}>SILENZIO</p>
-              <h3 className="sc-serif" style={{ fontSize: "22px", fontWeight: 300, color: "#fff" }}>L'ascolto profondo</h3>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SPLIT — HERO CLOISTER + TESTO ── */}
-      <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-        <div style={{ position: "relative", overflow: "hidden", minHeight: "460px" }}>
-          <img src={`${D}/hero-cloister.png`} alt="Chiostro" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "saturate(0.7)" }} />
-        </div>
-        <div style={{ padding: "72px 60px", background: "#F8F4ED", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.45em", color: "#9A7248", marginBottom: "24px" }}>PADRE BENEDETTO AI</p>
-          <h3 className="sc-serif" style={{ fontSize: "clamp(26px, 3.5vw, 42px)", fontWeight: 300, color: "#1C1008", marginBottom: "20px", lineHeight: 1.38 }}>
-            Una guida spirituale<br /><em style={{ color: "#7A4E1A" }}>sempre presente.</em>
-          </h3>
-          <p style={{ fontSize: "15px", lineHeight: 1.78, color: "#5C3D1E", fontWeight: 300 }}>
-            Padre Benedetto risponde alle tue domande sulla Scrittura, ti accompagna nella meditazione e custodisce il tuo cammino spirituale quotidiano.
+          <p style={{
+            fontSize: "18px", lineHeight: 1.72, color: "#5C3D1E",
+            maxWidth: "520px", margin: "0 auto 44px", fontWeight: 300
+          }}>
+            1500 anni di saggezza monastica tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.
           </p>
-          <div className="sc-display" style={{ marginTop: "36px", display: "inline-block", width: "fit-content", background: "#1C1008", color: "#fff", padding: "14px 34px", fontSize: "9px", letterSpacing: "0.18em", cursor: "pointer" }}>
-            INCONTRA IL PADRE
+
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "64px" }}>
+            <a href="#" className="sc-display" style={{
+              background: "#1C1008", color: "#fff",
+              padding: "16px 40px", fontSize: "10px", letterSpacing: "0.18em",
+              textDecoration: "none"
+            }}>ASCOLTA LA CHIAMATA</a>
+            <a href="#" className="sc-display" style={{
+              background: "transparent", color: "#1C1008",
+              padding: "15px 40px", fontSize: "10px", letterSpacing: "0.18em",
+              textDecoration: "none", border: "1.5px solid rgba(28,16,8,0.3)"
+            }}>VEDI I PIANI</a>
+          </div>
+
+          {/* Chiostro come elemento visivo, non sfondo testo */}
+          <div style={{
+            maxWidth: "1000px", margin: "0 auto",
+            borderRadius: "8px 8px 0 0", overflow: "hidden",
+            boxShadow: "0 -8px 56px rgba(28,16,8,0.22)"
+          }}>
+            <img
+              src={`${D}/hero-cloister.png`}
+              alt="Chiostro benedettino"
+              style={{ width: "100%", display: "block", height: "420px", objectFit: "cover", objectPosition: "center 40%" }}
+            />
           </div>
         </div>
       </section>
 
-      {/* ── CTA — ancient-library ── */}
-      <section style={{ position: "relative", height: "420px", overflow: "hidden" }}>
-        <img src={`${D}/ancient-library.png`} alt="Biblioteca monastica" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.5) saturate(0.6)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "rgba(10,5,2,0.42)" }} />
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-          <div style={{ width: "1px", height: "36px", background: "rgba(196,149,74,0.6)", marginBottom: "24px" }} />
-          <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.55em", color: "#C4954A", marginBottom: "20px" }}>INIZIA OGGI</p>
-          <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4.5vw, 58px)", fontWeight: 300, color: "#fff", marginBottom: "20px" }}>
-            Il monastero è dove<br /><em style={{ fontStyle: "italic", color: "#C4954A" }}>decidi di costruirlo.</em>
-          </h2>
-          <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.6)", marginBottom: "36px", fontWeight: 300 }}>30 giorni di pratica guidata per iniziare.</p>
-          <div className="sc-display" style={{ background: "#fff", color: "#1C1008", padding: "15px 44px", fontSize: "9px", letterSpacing: "0.22em", cursor: "pointer" }}>
-            SCOPRI I PIANI
-          </div>
-        </div>
-      </section>
-
-      {/* ── PIANI — bianco ── */}
-      <section style={{ padding: "88px 56px", background: "#fff" }}>
-        <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.5em", color: "#9A7248", textAlign: "center", marginBottom: "12px" }}>I PIANI</p>
-        <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4vw, 50px)", fontWeight: 300, textAlign: "center", marginBottom: "52px", color: "#1C1008" }}>Scegli il tuo cammino</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2px", maxWidth: "960px", margin: "0 auto", background: "rgba(100,70,40,0.12)" }}>
+      {/* ══ PILLARS NUMERICI ═══════════════════════════════════════════════════ */}
+      <section style={{ background: "#fff", padding: "72px 52px", borderBottom: "1px solid rgba(100,70,40,0.1)" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1px 1fr 1px 1fr", gap: "0" }}>
           {[
-            { name: "Oblato",  price: "9",  desc: "Liturgia, lectio divina, meditazioni quotidiane", gold: false },
-            { name: "Monaco",  price: "29", desc: "Tutto Oblato + esercizi ignaziani e Padre Benedetto AI", gold: true },
-            { name: "Priore",  price: "89", desc: "Tutto Monaco + sessioni con un padre spirituale reale", gold: false },
-          ].map(({ name, price, desc, gold }) => (
-            <div key={name} style={{ padding: "40px 32px", background: gold ? "#1C1008" : "#fff" }}>
-              <p className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.4em", color: "#C4954A", marginBottom: "20px" }}>{name.toUpperCase()}</p>
-              <div className="sc-serif" style={{ fontSize: "52px", fontWeight: 300, color: gold ? "#EDE0C8" : "#1C1008", marginBottom: "4px" }}>€{price}</div>
-              <p style={{ fontSize: "11px", color: gold ? "#9A7A5A" : "#9A7248", marginBottom: "20px" }}>/mese</p>
-              <p style={{ fontSize: "13px", lineHeight: 1.72, color: gold ? "#C8B090" : "#6B4F35", fontWeight: 300 }}>{desc}</p>
-            </div>
+            { n: "1500", u: "anni", l: "di saggezza monastica" },
+            { n: "7",    u: "pilastri", l: "della vita ordinata" },
+            { n: "3",    u: "livelli", l: "di pratica guidata" },
+          ].map(({ n, u, l }, i) => (
+            <>
+              <div key={n} style={{ textAlign: "center", padding: "32px 24px" }}>
+                <div className="sc-serif" style={{ fontSize: "64px", fontWeight: 300, color: "#1C1008", lineHeight: 1 }}>{n}</div>
+                <div className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.45em", color: "#C4954A", margin: "10px 0 6px" }}>{u.toUpperCase()}</div>
+                <div style={{ fontSize: "13px", color: "#9A7248", fontWeight: 300 }}>{l}</div>
+              </div>
+              {i < 2 && <div key={`div-${i}`} style={{ background: "rgba(100,70,40,0.12)", width: "1px" }} />}
+            </>
           ))}
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer style={{ padding: "48px 56px", background: "#fff", borderTop: "1px solid rgba(100,70,40,0.12)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      {/* ══ CITAZIONE — crema ══════════════════════════════════════════════════ */}
+      <section style={{ background: "#F8F3E8", padding: "80px 52px", textAlign: "center" }}>
+        <div style={{ width: "1px", height: "52px", background: "#C4954A", margin: "0 auto 28px" }} />
+        <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.5em", color: "#9A7248", marginBottom: "24px" }}>
+          REGULA BENEDICTI · PROLOGO
+        </p>
+        <blockquote className="sc-serif" style={{
+          fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 300, fontStyle: "italic",
+          color: "#1C1008", maxWidth: "680px", margin: "0 auto 24px", lineHeight: 1.5
+        }}>
+          "Ascolta, figlio, i precetti del maestro<br />e piega l'orecchio del tuo cuore."
+        </blockquote>
+        <div style={{ width: "1px", height: "52px", background: "#C4954A", margin: "24px auto 0" }} />
+      </section>
+
+      {/* ══ GRIGLIA FOTO ASIMMETRICA — sezione scura ══════════════════════════ */}
+      <section style={{ background: "#1C1008", padding: "72px 52px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "40px" }}>
+            <div>
+              <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.45em", color: "#C4954A", marginBottom: "10px" }}>IL CAMMINO</p>
+              <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4vw, 50px)", fontWeight: 300, color: "#EDE0C8" }}>Le pratiche quotidiane</h2>
+            </div>
+            <a href="#" className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.15em", color: "#9A7248", textDecoration: "none" }}>VEDI TUTTO →</a>
+          </div>
+
+          {/* 1 grande + 2 piccole (asimmetrica come editoriale monastico) */}
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr", gap: "12px" }}>
+            {/* Card grande */}
+            <div style={{ background: "#2A1508", borderRadius: "4px", overflow: "hidden", gridRow: "1 / 3" }}>
+              <div style={{ height: "300px", overflow: "hidden" }}>
+                <img src={`${D}/stone-corridor.png`} alt="Corridoio monastico" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              </div>
+              <div style={{ padding: "24px 24px 28px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                  <div style={{ width: "20px", height: "1px", background: "#C4954A" }} />
+                  <span className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.4em", color: "#C4954A" }}>ORA ET LABORA</span>
+                </div>
+                <h3 className="sc-serif" style={{ fontSize: "26px", fontWeight: 400, color: "#EDE0C8", marginBottom: "10px" }}>Preghiera e lavoro</h3>
+                <p style={{ fontSize: "14px", lineHeight: 1.7, color: "#9A7A5A", fontWeight: 300 }}>
+                  Il ritmo sacro che tiene unita la vita interiore e quella operosa. Ogni ora ha il suo nome e la sua preghiera.
+                </p>
+              </div>
+            </div>
+
+            {/* Due card piccole */}
+            {[
+              { img: `${D}/monk-manuscript.png`, tag: "LECTIO DIVINA", title: "La parola viva",     sub: "20 min · ogni mattino" },
+              { img: `${D}/ancient-library.png`, tag: "SILENZIO",      title: "L'ascolto profondo", sub: "10 min · ogni sera"    },
+            ].map(({ img, tag, title, sub }) => (
+              <div key={tag} style={{ background: "#2A1508", borderRadius: "4px", overflow: "hidden" }}>
+                <div style={{ height: "180px", overflow: "hidden" }}>
+                  <img src={img} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                </div>
+                <div style={{ padding: "18px 20px 22px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+                    <div style={{ width: "14px", height: "1px", background: "#C4954A" }} />
+                    <span className="sc-display" style={{ fontSize: "7px", letterSpacing: "0.38em", color: "#C4954A" }}>{tag}</span>
+                  </div>
+                  <h3 className="sc-serif" style={{ fontSize: "22px", fontWeight: 400, color: "#EDE0C8", marginBottom: "6px" }}>{title}</h3>
+                  <p style={{ fontSize: "12px", color: "#9A7A5A" }}>{sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SPLIT — monaco / testo ═════════════════════════════════════════════ */}
+      <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+        <div style={{ overflow: "hidden", minHeight: "480px" }}>
+          <img src={`${D}/monk-manuscript.png`} alt="Monaco" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        </div>
+        <div style={{ padding: "72px 60px", background: "#F8F3E8", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "24px" }}>
+            <div style={{ width: "28px", height: "1px", background: "#C4954A" }} />
+            <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.45em", color: "#9A7248" }}>PADRE BENEDETTO AI</p>
+          </div>
+          <h3 className="sc-serif" style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 300, color: "#1C1008", marginBottom: "20px", lineHeight: 1.35 }}>
+            Una guida spirituale<br /><em style={{ color: "#7A4E1A" }}>sempre presente.</em>
+          </h3>
+          <p style={{ fontSize: "16px", lineHeight: 1.78, color: "#5C3D1E", fontWeight: 300, marginBottom: "36px" }}>
+            Padre Benedetto risponde alle tue domande, ti accompagna nella meditazione quotidiana e custodisce il tuo cammino spirituale — 24 ore su 24.
+          </p>
+          <a href="#" className="sc-display" style={{
+            display: "inline-block", alignSelf: "flex-start",
+            background: "#1C1008", color: "#fff",
+            padding: "14px 32px", fontSize: "9px", letterSpacing: "0.18em",
+            textDecoration: "none"
+          }}>INCONTRA IL PADRE →</a>
+        </div>
+      </section>
+
+      {/* ══ PIANI ══════════════════════════════════════════════════════════════ */}
+      <section style={{ background: "#fff", padding: "80px 52px" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "12px" }}>
+            <div style={{ width: "30px", height: "1px", background: "#C4954A" }} />
+            <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.5em", color: "#9A7248" }}>I PIANI</p>
+            <div style={{ width: "30px", height: "1px", background: "#C4954A" }} />
+          </div>
+          <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 300, textAlign: "center", marginBottom: "52px", color: "#1C1008" }}>
+            Scegli il tuo cammino
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2px", background: "rgba(100,70,40,0.1)", borderRadius: "4px", overflow: "hidden" }}>
+            {[
+              { name: "Oblato",  price: "9",  desc: "Liturgia giornaliera, Lectio Divina, meditazioni quotidiane.", features: ["Liturgia giornaliera", "Lectio Divina", "Preghiera guidata"], dark: false },
+              { name: "Monaco",  price: "29", desc: "Tutto Oblato + Padre Benedetto AI, percorso a 40 settimane.", features: ["Tutto Oblato", "Padre Benedetto AI", "Esercizi ignaziani", "Percorso 40 settimane"], dark: true },
+              { name: "Priore",  price: "89", desc: "Tutto Monaco + sessioni mensili con un padre spirituale reale.", features: ["Tutto Monaco", "2 sessioni/mese", "Accesso prioritario"], dark: false },
+            ].map(({ name, price, desc, features, dark }) => (
+              <div key={name} style={{ padding: "40px 32px", background: dark ? "#1C1008" : "#fff" }}>
+                <p className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.4em", color: "#C4954A", marginBottom: "20px" }}>{name.toUpperCase()}</p>
+                <div className="sc-serif" style={{ fontSize: "52px", fontWeight: 300, color: dark ? "#EDE0C8" : "#1C1008", lineHeight: 1, marginBottom: "4px" }}>€{price}</div>
+                <p style={{ fontSize: "11px", color: dark ? "#9A7A5A" : "#9A7248", marginBottom: "18px" }}>/mese · annuale</p>
+                <p style={{ fontSize: "13px", lineHeight: 1.65, color: dark ? "#C8B090" : "#6B4F35", fontWeight: 300, marginBottom: "24px" }}>{desc}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "28px" }}>
+                  {features.map(f => (
+                    <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div style={{ width: "14px", height: "1px", background: dark ? "#C4954A" : "#9A7248", flexShrink: 0 }} />
+                      <span style={{ fontSize: "12px", color: dark ? "#C8B090" : "#6B4F35", fontWeight: 300 }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
+                <a href="#" className="sc-display" style={{
+                  display: "block", textAlign: "center",
+                  background: dark ? "#fff" : "#1C1008",
+                  color: dark ? "#1C1008" : "#fff",
+                  padding: "13px 0", fontSize: "9px", letterSpacing: "0.18em",
+                  textDecoration: "none"
+                }}>INIZIA CON {name.toUpperCase()}</a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ CTA FINALE — overlay pesante su foto ════════════════════════════════ */}
+      <section style={{ position: "relative", overflow: "hidden" }}>
+        <img src={`${D}/ancient-library.png`} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "saturate(0.35) brightness(0.3)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(10,5,2,0.68)" }} />
+        <div style={{ position: "relative", zIndex: 2, padding: "88px 52px", textAlign: "center" }}>
+          <div style={{ width: "1px", height: "40px", background: "rgba(196,149,74,0.6)", margin: "0 auto 28px" }} />
+          <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.55em", color: "#C4954A", marginBottom: "24px" }}>INIZIA OGGI</p>
+          <h2 className="sc-serif" style={{ fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 300, color: "#fff", marginBottom: "20px" }}>
+            Il monastero è dove<br /><em style={{ color: "#C4954A" }}>decidi di costruirlo.</em>
+          </h2>
+          <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", marginBottom: "40px", fontWeight: 300 }}>30 giorni di pratica guidata per cominciare.</p>
+          <a href="#" className="sc-display" style={{
+            display: "inline-block", background: "#fff", color: "#1C1008",
+            padding: "17px 48px", fontSize: "9px", letterSpacing: "0.22em", textDecoration: "none"
+          }}>SCOPRI I PIANI</a>
+        </div>
+      </section>
+
+      {/* ══ FOOTER ════════════════════════════════════════════════════════════ */}
+      <footer style={{ background: "#fff", padding: "40px 52px", borderTop: "1px solid rgba(100,70,40,0.1)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
             <rect x="4" y="0" width="2" height="14" fill="#C4954A" />
             <rect x="0" y="4" width="10" height="2" fill="#C4954A" />
           </svg>
-          <span className="sc-display" style={{ fontSize: "12px", letterSpacing: "0.2em", color: "#1C1008" }}>BENEDICTVS</span>
+          <span className="sc-display" style={{ fontSize: "11px", letterSpacing: "0.22em", color: "#1C1008" }}>BENEDICTVS</span>
         </div>
-        <span style={{ fontSize: "12px", color: "#9A7248" }}>Regula Humanitatis · Est. MCM</span>
+        <div style={{ display: "flex", gap: "32px" }}>
+          {["Privacy", "Termini", "Contatti"].map(v => <a key={v} href="#" className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.1em", color: "#9A7248", textDecoration: "none" }}>{v.toUpperCase()}</a>)}
+        </div>
+        <span className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.15em", color: "#C4A875" }}>REGULA HUMANITATIS · EST. MCM</span>
       </footer>
     </div>
   );

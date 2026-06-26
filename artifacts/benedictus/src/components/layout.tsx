@@ -144,6 +144,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Link href="/il-manifesto"  className="text-foreground/40 hover:text-foreground transition-colors">Il Manifesto</Link>
             <Link href="/testimonianze" className="text-foreground/40 hover:text-foreground transition-colors">Testimonianze</Link>
           </div>
+          <p className="text-[11px] text-muted-foreground/40 mb-1">
+            Made in Never Before Italia
+          </p>
           <p className="text-[11px] text-muted-foreground/60">
             &copy; {new Date().getFullYear()} Regula Humanitatis. Un cammino per il custode moderno.
           </p>

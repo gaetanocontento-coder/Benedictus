@@ -145,6 +145,26 @@ export function Caldo() {
         </div>
       </section>
 
+      {/* ══ MANOSCRITTO — Book of Hours full-bleed ═══════════════════════════ */}
+      {/* Il manoscritto come "finestra" sulla tradizione — nessun testo sopra */}
+      <section style={{ position: "relative", overflow: "hidden", height: "380px" }}>
+        <img
+          src={`${D}/manuscript-hours.jpg`}
+          alt="Book of Hours illuminato"
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%", display: "block" }}
+        />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.05) 55%)" }} />
+        <div style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: "46%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 52px" }}>
+          <p className="ca-display" style={{ fontSize: "9px", letterSpacing: "0.5em", color: "#9A7248", marginBottom: "16px" }}>LA TRADIZIONE SCRITTA</p>
+          <h3 className="ca-serif" style={{ fontSize: "clamp(26px, 3vw, 40px)", fontWeight: 400, color: "#1A0D05", lineHeight: 1.35, marginBottom: "14px" }}>
+            Ogni parola copiata<br />a mano per mille anni.
+          </h3>
+          <p style={{ fontSize: "15px", color: "#4A2E12", lineHeight: 1.7, fontWeight: 400 }}>
+            I monaci amanuensi custodivano il sapere dell'umanità trascrivendo pagina per pagina. Oggi quella stessa cura si traduce nel tuo cammino quotidiano.
+          </p>
+        </div>
+      </section>
+
       {/* ══ CITAZIONE — crema chiara ═════════════════════════════════════════ */}
       <section style={{ background: "#FBF6ED", padding: "80px 52px", textAlign: "center" }}>
         <p className="ca-display" style={{ fontSize: "10px", letterSpacing: "0.5em", color: "#9A7248", marginBottom: "24px" }}>
@@ -175,9 +195,9 @@ export function Caldo() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
             {[
-              { img: `${D}/stone-corridor.png`,  tag: "ORA ET LABORA",  title: "Preghiera e lavoro",  min: "15 min · ogni giorno" },
-              { img: `${D}/monk-manuscript.png`, tag: "LECTIO DIVINA",  title: "Lettura contemplativa", min: "20 min · ogni mattino" },
-              { img: `${D}/ancient-library.png`, tag: "SILENZIO",        title: "L'ascolto interiore",  min: "10 min · ogni sera" },
+              { img: `${D}/stone-corridor.png`,           tag: "ORA ET LABORA",  title: "Preghiera e lavoro",  min: "15 min · ogni giorno" },
+              { img: `${D}/manuscript-monastery-books.jpg`, tag: "LECTIO DIVINA",  title: "Lectio Divina",        min: "20 min · ogni mattino" },
+              { img: `${D}/ancient-library.png`,           tag: "SILENZIO",        title: "L'ascolto interiore",  min: "10 min · ogni sera" },
             ].map(({ img, tag, title, min }) => (
               <div key={tag} style={{ background: "#2A1508", borderRadius: "8px", overflow: "hidden", cursor: "pointer" }}>
                 {/* Foto in cima — nessun testo sopra */}

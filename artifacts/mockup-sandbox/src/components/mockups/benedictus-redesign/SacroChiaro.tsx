@@ -139,6 +139,50 @@ export function SacroChiaro() {
         </div>
       </section>
 
+      {/* ══ MANOSCRITTO — split Farnese Hours ════════════════════════════════ */}
+      {/* Testo a sx su crema, miniatura illuminata a dx — testo sempre leggibile */}
+      <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+        <div style={{ padding: "72px 60px", background: "#F8F3E8", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "24px" }}>
+            <div style={{ width: "28px", height: "1px", background: "#C4954A" }} />
+            <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.45em", color: "#9A7248" }}>LA TRADIZIONE SCRITTA</p>
+          </div>
+          <h3 className="sc-serif" style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 400, color: "#1C1008", marginBottom: "20px", lineHeight: 1.35 }}>
+            Ogni parola copiata<br /><em style={{ color: "#7A4E1A" }}>a mano per mille anni.</em>
+          </h3>
+          <p style={{ fontSize: "16px", lineHeight: 1.78, color: "#4A2E12", fontWeight: 400, marginBottom: "12px" }}>
+            I monaci amanuensi custodivano il sapere dell'umanità trascrivendo pagina per pagina le Scritture e i testi dei Padri.
+          </p>
+          <p style={{ fontSize: "16px", lineHeight: 1.78, color: "#4A2E12", fontWeight: 400 }}>
+            Oggi quella stessa cura paziente si traduce nel tuo cammino quotidiano di lectio e meditazione.
+          </p>
+        </div>
+        <div style={{ overflow: "hidden", minHeight: "440px" }}>
+          <img
+            src={`${D}/manuscript-farnese.jpg`}
+            alt="Farnese Hours — miniatura illuminata"
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
+          />
+        </div>
+      </section>
+
+      {/* ══ LIBRO APERTO — Book of Hours panoramico ══════════════════════════ */}
+      <section style={{ position: "relative", overflow: "hidden", height: "320px" }}>
+        <img
+          src={`${D}/manuscript-hours.jpg`}
+          alt="Book of Hours aperto"
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%", display: "block" }}
+        />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(28,16,8,0.52)" }} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+          <div style={{ width: "1px", height: "32px", background: "rgba(196,149,74,0.7)", marginBottom: "20px" }} />
+          <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.5em", color: "#C4954A", marginBottom: "16px" }}>REGULA BENEDICTI · CAP. XLVIII</p>
+          <blockquote className="sc-serif" style={{ fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 400, fontStyle: "italic", color: "#fff", maxWidth: "680px", lineHeight: 1.5 }}>
+            "L'ozio è il nemico dell'anima; perciò i fratelli devono occuparsi a certi momenti nel lavoro delle mani."
+          </blockquote>
+        </div>
+      </section>
+
       {/* ══ CITAZIONE — crema ══════════════════════════════════════════════════ */}
       <section style={{ background: "#F8F3E8", padding: "80px 52px", textAlign: "center" }}>
         <div style={{ width: "1px", height: "52px", background: "#C4954A", margin: "0 auto 28px" }} />
@@ -167,10 +211,10 @@ export function SacroChiaro() {
 
           {/* 1 grande + 2 piccole (asimmetrica come editoriale monastico) */}
           <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr", gap: "12px" }}>
-            {/* Card grande */}
+            {/* Card grande — manoscritto monastico */}
             <div style={{ background: "#2A1508", borderRadius: "4px", overflow: "hidden", gridRow: "1 / 3" }}>
               <div style={{ height: "300px", overflow: "hidden" }}>
-                <img src={`${D}/stone-corridor.png`} alt="Corridoio monastico" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <img src={`${D}/manuscript-monastery-books.jpg`} alt="Libri nel monastero" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
               </div>
               <div style={{ padding: "24px 24px 28px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>

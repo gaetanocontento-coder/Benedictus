@@ -10,104 +10,95 @@ const D = "https://cab0d778-6425-4a99-ac55-dd2f35aef268-00-1t61zyqaqdg8q.janeway
 ───────────────────────────────────────────────────────────────────────────── */
 export function SacroChiaro() {
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#fff", color: "#1C1008", minHeight: "100vh", overflowX: "hidden" }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", background: "#0D0804", color: "#fff", minHeight: "100vh", overflowX: "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
         .sc-serif  { font-family: 'Cormorant Garamond', serif; }
         .sc-display{ font-family: 'Cinzel', serif; }
       `}</style>
 
-      {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
-      <nav style={{
-        position: "sticky", top: 0, zIndex: 100,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 52px", height: "64px",
-        background: "rgba(255,255,255,0.96)",
-        backdropFilter: "blur(14px)",
-        borderBottom: "1px solid rgba(100,70,40,0.1)"
-      }}>
-        <a href="#" style={{ textDecoration: "none" }}>
-          <span className="sc-display" style={{
-            fontSize: "17px", fontWeight: 700,
-            letterSpacing: "0.24em", color: "#1C1008",
-            userSelect: "none", lineHeight: 1
-          }}>BENEDICTVS</span>
-        </a>
-        <div style={{ display: "flex", alignItems: "center", gap: "36px" }}>
-          {["Perché Benedictus?", "Corsi", "Liturgia", "Piani"].map(v => (
-            <a key={v} className="sc-display" href="#" style={{ fontSize: "9px", fontWeight: 500, letterSpacing: "0.2em", color: "#6B4F35", textDecoration: "none" }}>{v.toUpperCase()}</a>
-          ))}
-          <a href="#" className="sc-display" style={{
-            background: "#1C1008", color: "#fff",
-            padding: "11px 24px", fontSize: "9px", fontWeight: 600, letterSpacing: "0.2em",
-            textDecoration: "none"
-          }}>SCOPRI L'OFFERTA</a>
-        </div>
-      </nav>
+      {/* ══ HERO FULL-BLEED — identico al riferimento Lovable ════════════════ */}
+      <section style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
 
-      {/* ══ HERO — SPLIT: testo sx / foto dx (layout Meditopia) ═════════════ */}
-      <section style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1.15fr",
-        minHeight: "calc(100vh - 64px)",
-        background: "#F8F3E8",
-        overflow: "hidden"
-      }}>
-        {/* COLONNA SINISTRA — testo */}
-        <div style={{
-          display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "72px 56px 72px 52px"
+        {/* Foto monastica full-bleed */}
+        <img
+          src={`${D}/hero-cloister.png`}
+          alt="Chiostro benedettino"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%" }}
+        />
+        {/* Overlay scuro cinematico */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(8,4,2,0.58) 0%, rgba(6,3,1,0.35) 42%, rgba(10,5,2,0.76) 100%)" }} />
+
+        {/* ── NAV TRASPARENTE ── */}
+        <nav style={{
+          position: "absolute", top: 0, left: 0, right: 0, zIndex: 10,
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "0 52px", height: "68px"
         }}>
-          {/* Ornamento orizzontale */}
-          <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "32px" }}>
-            <div style={{ width: "32px", height: "1px", background: "#C4954A" }} />
-            <span className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.5em", color: "#9A7248" }}>REGULA HUMANITATIS · EST. MCM</span>
+          <a href="#" style={{ textDecoration: "none" }}>
+            <span className="sc-display" style={{
+              fontSize: "14px", fontWeight: 700,
+              letterSpacing: "0.30em", color: "#fff",
+              userSelect: "none", lineHeight: 1
+            }}>BENEDICTVS</span>
+          </a>
+          <div style={{ display: "flex", gap: "28px" }}>
+            {["Chi siamo", "La Regola", "Liturgia", "Lectio", "Scriptorium", "Percorso", "Piani"].map(v => (
+              <a key={v} className="sc-display" href="#" style={{ fontSize: "9px", fontWeight: 500, letterSpacing: "0.15em", color: "rgba(255,255,255,0.78)", textDecoration: "none" }}>{v.toUpperCase()}</a>
+            ))}
+          </div>
+          <a href="#" className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.18em", color: "rgba(255,255,255,0.78)", textDecoration: "none" }}>ACCEDI</a>
+        </nav>
+
+        {/* ── TESTO CENTRATO ── */}
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 5,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          textAlign: "center", padding: "0 48px"
+        }}>
+          {/* Ornamento linea + eyebrow */}
+          <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "28px" }}>
+            <div style={{ width: "36px", height: "1px", background: "#C4954A" }} />
+            <span className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.55em", color: "#C4954A" }}>REGULA HUMANITATIS &nbsp;/&nbsp; EST. MCM</span>
+            <div style={{ width: "36px", height: "1px", background: "#C4954A" }} />
           </div>
 
           <h1 className="sc-serif" style={{
-            fontSize: "clamp(44px, 5.5vw, 78px)",
-            fontWeight: 400, lineHeight: 1.1,
-            color: "#1C1008", marginBottom: "24px"
+            fontSize: "clamp(52px, 7.5vw, 100px)",
+            fontWeight: 400, lineHeight: 1.08,
+            color: "#fff", marginBottom: "22px",
+            textShadow: "0 2px 32px rgba(0,0,0,0.4)"
           }}>
             Un rifugio per<br />
-            il{" "}<em style={{ fontStyle: "italic", color: "#6B3A10", borderBottom: "2px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
-            moderno.
+            il <em style={{ fontStyle: "italic", color: "#D4A96A" }}>custode</em> moderno.
           </h1>
 
           <p style={{
-            fontSize: "17px", lineHeight: 1.78, color: "#4A2E12",
-            maxWidth: "400px", marginBottom: "40px", fontWeight: 400
+            fontSize: "16px", lineHeight: 1.72, color: "rgba(255,255,255,0.68)",
+            maxWidth: "500px", fontWeight: 300
           }}>
-            1500 anni di saggezza monastica tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.
+            1500 anni di saggezza monastica tradotti in un cammino di leadership contemplativa, silenzio e rigenerazione interiore.
           </p>
 
-          <div style={{ display: "flex", gap: "12px", marginBottom: "36px" }}>
+          {/* CTA rettangolari — identità SacroChiaro */}
+          <div style={{ display: "flex", gap: "12px", marginTop: "44px" }}>
             <a href="#" className="sc-display" style={{
-              background: "#1C1008", color: "#fff",
-              padding: "15px 32px", fontSize: "9px", letterSpacing: "0.18em",
-              textDecoration: "none"
-            }}>ASCOLTA LA CHIAMATA</a>
+              background: "#C4954A", color: "#0D0804",
+              padding: "15px 36px",
+              fontSize: "9px", fontWeight: 700, letterSpacing: "0.2em", textDecoration: "none"
+            }}>INIZIA IL CAMMINO</a>
             <a href="#" className="sc-display" style={{
-              background: "transparent", color: "#1C1008",
-              padding: "14px 32px", fontSize: "9px", letterSpacing: "0.18em",
-              textDecoration: "none", border: "1.5px solid rgba(28,16,8,0.25)"
+              background: "transparent", color: "#fff",
+              padding: "14px 36px",
+              fontSize: "9px", fontWeight: 500, letterSpacing: "0.2em", textDecoration: "none",
+              border: "1px solid rgba(255,255,255,0.38)"
             }}>VEDI I PIANI</a>
           </div>
-
-          {/* Social proof */}
-          <p style={{ fontSize: "13px", color: "#9A7248", fontWeight: 400 }}>
-            <strong style={{ color: "#5C3D1E", fontWeight: 600 }}>Oltre 3.200 persone</strong> stanno già percorrendo la Regola
-          </p>
         </div>
 
-        {/* COLONNA DESTRA — foto monastica full-height */}
-        <div style={{ position: "relative", overflow: "hidden" }}>
-          <img
-            src={`${D}/hero-cloister.png`}
-            alt="Chiostro benedettino"
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%", display: "block" }}
-          />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(248,243,232,0.38) 0%, transparent 28%)" }} />
+        {/* Scroll indicator */}
+        <div style={{ position: "absolute", bottom: "32px", left: "50%", transform: "translateX(-50%)", zIndex: 5 }}>
+          <div style={{ width: "1px", height: "40px", background: "rgba(196,149,74,0.55)" }} />
         </div>
       </section>
 

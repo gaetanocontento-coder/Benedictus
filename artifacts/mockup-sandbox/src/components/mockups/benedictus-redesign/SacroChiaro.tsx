@@ -12,9 +12,9 @@ export function SacroChiaro() {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: "#fff", color: "#1C1008", minHeight: "100vh", overflowX: "hidden" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
-        .sc-serif { font-family: 'Cormorant Garamond', serif; }
-        .sc-display { font-family: 'Cinzel', serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
+        .sc-serif  { font-family: 'Cormorant Garamond', serif; }
+        .sc-display{ font-family: 'Cinzel', serif; }
       `}</style>
 
       {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
@@ -26,21 +26,25 @@ export function SacroChiaro() {
         backdropFilter: "blur(14px)",
         borderBottom: "1px solid rgba(100,70,40,0.1)"
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {/* Croce dorata */}
-          <svg width="12" height="18" viewBox="0 0 12 18" fill="none">
-            <rect x="5" y="0" width="2" height="18" fill="#C4954A" />
-            <rect x="0" y="5" width="12" height="2" fill="#C4954A" />
+        {/* LOGO — croce più grande + Cinzel 700 */}
+        <a href="#" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "11px" }}>
+          <svg width="16" height="23" viewBox="0 0 16 23" fill="none">
+            <rect x="7" y="0"  width="2.5" height="23" fill="#C4954A"/>
+            <rect x="0" y="7"  width="16"  height="2.5" fill="#C4954A"/>
           </svg>
-          <span className="sc-display" style={{ fontSize: "12px", letterSpacing: "0.24em", color: "#1C1008" }}>BENEDICTVS</span>
-        </div>
+          <span className="sc-display" style={{
+            fontSize: "17px", fontWeight: 700,
+            letterSpacing: "0.24em", color: "#1C1008",
+            userSelect: "none", lineHeight: 1
+          }}>BENEDICTVS</span>
+        </a>
         <div style={{ display: "flex", alignItems: "center", gap: "36px" }}>
           {["Perché Benedictus?", "Corsi", "Liturgia", "Piani"].map(v => (
-            <a key={v} className="sc-display" href="#" style={{ fontSize: "9px", letterSpacing: "0.18em", color: "#6B4F35", textDecoration: "none" }}>{v.toUpperCase()}</a>
+            <a key={v} className="sc-display" href="#" style={{ fontSize: "9px", fontWeight: 500, letterSpacing: "0.2em", color: "#6B4F35", textDecoration: "none" }}>{v.toUpperCase()}</a>
           ))}
           <a href="#" className="sc-display" style={{
             background: "#1C1008", color: "#fff",
-            padding: "11px 22px", fontSize: "9px", letterSpacing: "0.18em",
+            padding: "11px 24px", fontSize: "9px", fontWeight: 600, letterSpacing: "0.2em",
             textDecoration: "none"
           }}>SCOPRI L'OFFERTA</a>
         </div>
@@ -70,18 +74,18 @@ export function SacroChiaro() {
           </div>
 
           <h1 className="sc-serif" style={{
-            fontSize: "clamp(50px, 7.5vw, 108px)",
-            fontWeight: 300, lineHeight: 1.08,
+            fontSize: "clamp(54px, 8vw, 112px)",
+            fontWeight: 400, lineHeight: 1.06,
             color: "#1C1008", margin: "0 auto 28px",
             maxWidth: "880px"
           }}>
             Un rifugio per<br />
-            il <em style={{ fontStyle: "italic", color: "#6B3A10", borderBottom: "3px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
+            il <em style={{ fontStyle: "italic", fontWeight: 300, color: "#6B3A10", borderBottom: "3px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
             moderno.
           </h1>
 
           <p style={{
-            fontSize: "18px", lineHeight: 1.72, color: "#5C3D1E",
+            fontSize: "18px", lineHeight: 1.75, color: "#4A2E12",
             maxWidth: "520px", margin: "0 auto 44px", fontWeight: 300
           }}>
             1500 anni di saggezza monastica tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.

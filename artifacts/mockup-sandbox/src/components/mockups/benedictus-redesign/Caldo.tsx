@@ -12,10 +12,10 @@ export function Caldo() {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: "#fff", color: "#1A0D05", minHeight: "100vh", overflowX: "hidden" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cinzel:wght@400;500&family=Inter:wght@300;400;500&display=swap');
-        .ca-serif { font-family: 'Cormorant Garamond', serif; }
-        .ca-display { font-family: 'Cinzel', serif; }
-        .ca-hover:hover { opacity: 0.8; }
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
+        .ca-serif  { font-family: 'Cormorant Garamond', serif; }
+        .ca-display{ font-family: 'Cinzel', serif; }
+        .ca-hover:hover { opacity: 0.78; }
       `}</style>
 
       {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
@@ -27,20 +27,31 @@ export function Caldo() {
         backdropFilter: "blur(16px)",
         borderBottom: "1px solid rgba(139,100,60,0.10)"
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "40px" }}>
-          <span className="ca-display" style={{ fontSize: "12px", letterSpacing: "0.22em", color: "#1A0D05", userSelect: "none" }}>
-            BENEDICTVS
-          </span>
-          {["Perché Benedictus?", "Corsi", "Liturgia", "Piani"].map(v => (
-            <a key={v} href="#" style={{ fontSize: "14px", color: "#6B4F35", textDecoration: "none", lineHeight: 1 }}>{v}</a>
-          ))}
+        {/* LOGO — con croce ornamentale e Cinzel 700 */}
+        <div style={{ display: "flex", alignItems: "center", gap: "44px" }}>
+          <a href="#" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
+            <svg width="13" height="19" viewBox="0 0 13 19" fill="none">
+              <rect x="5.5" y="0" width="2" height="19" fill="#C4954A"/>
+              <rect x="0"   y="6" width="13" height="2" fill="#C4954A"/>
+            </svg>
+            <span className="ca-display" style={{
+              fontSize: "16px", fontWeight: 700,
+              letterSpacing: "0.26em", color: "#1A0D05",
+              userSelect: "none", lineHeight: 1
+            }}>BENEDICTVS</span>
+          </a>
+          <div style={{ display: "flex", gap: "32px" }}>
+            {["Perché Benedictus?", "Corsi", "Liturgia", "Piani"].map(v => (
+              <a key={v} href="#" style={{ fontSize: "13px", fontWeight: 400, color: "#6B4F35", textDecoration: "none", lineHeight: 1, letterSpacing: "0.01em" }}>{v}</a>
+            ))}
+          </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <a href="#" style={{ fontSize: "14px", color: "#6B4F35", textDecoration: "none" }}>Login</a>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <a href="#" style={{ fontSize: "13px", fontWeight: 400, color: "#6B4F35", textDecoration: "none" }}>Login</a>
           <a href="#" style={{
             background: "#1A0D05", color: "#fff",
             padding: "11px 22px", borderRadius: "100px",
-            fontSize: "14px", textDecoration: "none", lineHeight: 1
+            fontSize: "13px", fontWeight: 500, textDecoration: "none", lineHeight: 1, letterSpacing: "0.02em"
           }}>
             Scopri l'offerta
           </a>
@@ -72,18 +83,17 @@ export function Caldo() {
           </p>
 
           <h1 className="ca-serif" style={{
-            fontSize: "clamp(52px, 8vw, 112px)",
-            fontWeight: 300, lineHeight: 1.08,
+            fontSize: "clamp(56px, 8.5vw, 116px)",
+            fontWeight: 400, lineHeight: 1.06,
             color: "#1A0D05",
-            marginBottom: "28px",
             maxWidth: "900px", margin: "0 auto 28px"
           }}>
-            <em style={{ fontStyle: "italic", color: "#8B5A1E" }}>Custodisci</em> la tua vita<br />
+            <em style={{ fontStyle: "italic", fontWeight: 300, color: "#8B5A1E" }}>Custodisci</em> la tua vita<br />
             con la saggezza monastica.
           </h1>
 
           <p style={{
-            fontSize: "18px", lineHeight: 1.72, color: "#5C3D1E",
+            fontSize: "18px", lineHeight: 1.75, color: "#4A2E12",
             maxWidth: "540px", margin: "0 auto 40px", fontWeight: 300
           }}>
             1500 anni di Regola benedettina tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.

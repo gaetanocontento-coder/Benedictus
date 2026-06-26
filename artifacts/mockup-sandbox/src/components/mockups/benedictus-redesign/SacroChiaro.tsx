@@ -80,13 +80,13 @@ export function SacroChiaro() {
             maxWidth: "880px"
           }}>
             Un rifugio per<br />
-            il <em style={{ fontStyle: "italic", fontWeight: 300, color: "#6B3A10", borderBottom: "3px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
+            il <em style={{ fontStyle: "italic", fontWeight: 400, color: "#6B3A10", borderBottom: "3px solid #C4954A", paddingBottom: "2px" }}>custode</em><br />
             moderno.
           </h1>
 
           <p style={{
             fontSize: "18px", lineHeight: 1.75, color: "#4A2E12",
-            maxWidth: "520px", margin: "0 auto 44px", fontWeight: 300
+            maxWidth: "520px", margin: "0 auto 44px", fontWeight: 400
           }}>
             1500 anni di saggezza monastica tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.
           </p>
@@ -129,9 +129,9 @@ export function SacroChiaro() {
           ].map(({ n, u, l }, i) => (
             <>
               <div key={n} style={{ textAlign: "center", padding: "32px 24px" }}>
-                <div className="sc-serif" style={{ fontSize: "64px", fontWeight: 300, color: "#1C1008", lineHeight: 1 }}>{n}</div>
+                <div className="sc-serif" style={{ fontSize: "64px", fontWeight: 400, color: "#1C1008", lineHeight: 1 }}>{n}</div>
                 <div className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.45em", color: "#C4954A", margin: "10px 0 6px" }}>{u.toUpperCase()}</div>
-                <div style={{ fontSize: "13px", color: "#9A7248", fontWeight: 300 }}>{l}</div>
+                <div style={{ fontSize: "13px", color: "#5C3D1E", fontWeight: 400 }}>{l}</div>
               </div>
               {i < 2 && <div key={`div-${i}`} style={{ background: "rgba(100,70,40,0.12)", width: "1px" }} />}
             </>
@@ -146,7 +146,7 @@ export function SacroChiaro() {
           REGULA BENEDICTI · PROLOGO
         </p>
         <blockquote className="sc-serif" style={{
-          fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 300, fontStyle: "italic",
+          fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 400, fontStyle: "italic",
           color: "#1C1008", maxWidth: "680px", margin: "0 auto 24px", lineHeight: 1.5
         }}>
           "Ascolta, figlio, i precetti del maestro<br />e piega l'orecchio del tuo cuore."
@@ -160,7 +160,7 @@ export function SacroChiaro() {
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "40px" }}>
             <div>
               <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.45em", color: "#C4954A", marginBottom: "10px" }}>IL CAMMINO</p>
-              <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4vw, 50px)", fontWeight: 300, color: "#EDE0C8" }}>Le pratiche quotidiane</h2>
+              <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4vw, 50px)", fontWeight: 400, color: "#EDE0C8" }}>Le pratiche quotidiane</h2>
             </div>
             <a href="#" className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.15em", color: "#9A7248", textDecoration: "none" }}>VEDI TUTTO →</a>
           </div>
@@ -178,7 +178,7 @@ export function SacroChiaro() {
                   <span className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.4em", color: "#C4954A" }}>ORA ET LABORA</span>
                 </div>
                 <h3 className="sc-serif" style={{ fontSize: "26px", fontWeight: 400, color: "#EDE0C8", marginBottom: "10px" }}>Preghiera e lavoro</h3>
-                <p style={{ fontSize: "14px", lineHeight: 1.7, color: "#9A7A5A", fontWeight: 300 }}>
+                <p style={{ fontSize: "14px", lineHeight: 1.7, color: "#D0B888", fontWeight: 400 }}>
                   Il ritmo sacro che tiene unita la vita interiore e quella operosa. Ogni ora ha il suo nome e la sua preghiera.
                 </p>
               </div>
@@ -199,7 +199,7 @@ export function SacroChiaro() {
                     <span className="sc-display" style={{ fontSize: "7px", letterSpacing: "0.38em", color: "#C4954A" }}>{tag}</span>
                   </div>
                   <h3 className="sc-serif" style={{ fontSize: "22px", fontWeight: 400, color: "#EDE0C8", marginBottom: "6px" }}>{title}</h3>
-                  <p style={{ fontSize: "12px", color: "#9A7A5A" }}>{sub}</p>
+                  <p style={{ fontSize: "12px", color: "#C4A87A", fontWeight: 400 }}>{sub}</p>
                 </div>
               </div>
             ))}
@@ -217,10 +217,10 @@ export function SacroChiaro() {
             <div style={{ width: "28px", height: "1px", background: "#C4954A" }} />
             <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.45em", color: "#9A7248" }}>PADRE BENEDETTO AI</p>
           </div>
-          <h3 className="sc-serif" style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 300, color: "#1C1008", marginBottom: "20px", lineHeight: 1.35 }}>
+          <h3 className="sc-serif" style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 400, color: "#1C1008", marginBottom: "20px", lineHeight: 1.35 }}>
             Una guida spirituale<br /><em style={{ color: "#7A4E1A" }}>sempre presente.</em>
           </h3>
-          <p style={{ fontSize: "16px", lineHeight: 1.78, color: "#5C3D1E", fontWeight: 300, marginBottom: "36px" }}>
+          <p style={{ fontSize: "16px", lineHeight: 1.78, color: "#5C3D1E", fontWeight: 400, marginBottom: "36px" }}>
             Padre Benedetto risponde alle tue domande, ti accompagna nella meditazione quotidiana e custodisce il tuo cammino spirituale — 24 ore su 24.
           </p>
           <a href="#" className="sc-display" style={{
@@ -240,7 +240,7 @@ export function SacroChiaro() {
             <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.5em", color: "#9A7248" }}>I PIANI</p>
             <div style={{ width: "30px", height: "1px", background: "#C4954A" }} />
           </div>
-          <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 300, textAlign: "center", marginBottom: "52px", color: "#1C1008" }}>
+          <h2 className="sc-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 400, textAlign: "center", marginBottom: "52px", color: "#1C1008" }}>
             Scegli il tuo cammino
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2px", background: "rgba(100,70,40,0.1)", borderRadius: "4px", overflow: "hidden" }}>
@@ -251,14 +251,14 @@ export function SacroChiaro() {
             ].map(({ name, price, desc, features, dark }) => (
               <div key={name} style={{ padding: "40px 32px", background: dark ? "#1C1008" : "#fff" }}>
                 <p className="sc-display" style={{ fontSize: "8px", letterSpacing: "0.4em", color: "#C4954A", marginBottom: "20px" }}>{name.toUpperCase()}</p>
-                <div className="sc-serif" style={{ fontSize: "52px", fontWeight: 300, color: dark ? "#EDE0C8" : "#1C1008", lineHeight: 1, marginBottom: "4px" }}>€{price}</div>
+                <div className="sc-serif" style={{ fontSize: "52px", fontWeight: 400, color: dark ? "#EDE0C8" : "#1C1008", lineHeight: 1, marginBottom: "4px" }}>€{price}</div>
                 <p style={{ fontSize: "11px", color: dark ? "#9A7A5A" : "#9A7248", marginBottom: "18px" }}>/mese · annuale</p>
-                <p style={{ fontSize: "13px", lineHeight: 1.65, color: dark ? "#C8B090" : "#6B4F35", fontWeight: 300, marginBottom: "24px" }}>{desc}</p>
+                <p style={{ fontSize: "13px", lineHeight: 1.65, color: dark ? "#D8C4A0" : "#3A1F08", fontWeight: 400, marginBottom: "24px" }}>{desc}</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "28px" }}>
                   {features.map(f => (
                     <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <div style={{ width: "14px", height: "1px", background: dark ? "#C4954A" : "#9A7248", flexShrink: 0 }} />
-                      <span style={{ fontSize: "12px", color: dark ? "#C8B090" : "#6B4F35", fontWeight: 300 }}>{f}</span>
+                      <span style={{ fontSize: "12px", color: dark ? "#D8C4A0" : "#3A1F08", fontWeight: 400 }}>{f}</span>
                     </div>
                   ))}
                 </div>
@@ -282,10 +282,10 @@ export function SacroChiaro() {
         <div style={{ position: "relative", zIndex: 2, padding: "88px 52px", textAlign: "center" }}>
           <div style={{ width: "1px", height: "40px", background: "rgba(196,149,74,0.6)", margin: "0 auto 28px" }} />
           <p className="sc-display" style={{ fontSize: "9px", letterSpacing: "0.55em", color: "#C4954A", marginBottom: "24px" }}>INIZIA OGGI</p>
-          <h2 className="sc-serif" style={{ fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 300, color: "#fff", marginBottom: "20px" }}>
+          <h2 className="sc-serif" style={{ fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 400, color: "#fff", marginBottom: "20px" }}>
             Il monastero è dove<br /><em style={{ color: "#C4954A" }}>decidi di costruirlo.</em>
           </h2>
-          <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", marginBottom: "40px", fontWeight: 300 }}>30 giorni di pratica guidata per cominciare.</p>
+          <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.88)", marginBottom: "40px", fontWeight: 400 }}>30 giorni di pratica guidata per cominciare.</p>
           <a href="#" className="sc-display" style={{
             display: "inline-block", background: "#fff", color: "#1C1008",
             padding: "17px 48px", fontSize: "9px", letterSpacing: "0.22em", textDecoration: "none"

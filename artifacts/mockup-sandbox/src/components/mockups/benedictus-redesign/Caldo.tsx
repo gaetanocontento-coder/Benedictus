@@ -88,13 +88,13 @@ export function Caldo() {
             color: "#1A0D05",
             maxWidth: "900px", margin: "0 auto 28px"
           }}>
-            <em style={{ fontStyle: "italic", fontWeight: 300, color: "#8B5A1E" }}>Custodisci</em> la tua vita<br />
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: "#8B5A1E" }}>Custodisci</em> la tua vita<br />
             con la saggezza monastica.
           </h1>
 
           <p style={{
             fontSize: "18px", lineHeight: 1.75, color: "#4A2E12",
-            maxWidth: "540px", margin: "0 auto 40px", fontWeight: 300
+            maxWidth: "540px", margin: "0 auto 40px", fontWeight: 400
           }}>
             1500 anni di Regola benedettina tradotti in un cammino quotidiano di leadership contemplativa e rigenerazione interiore.
           </p>
@@ -137,9 +137,9 @@ export function Caldo() {
             { n: "3",    u: "livelli", l: "di pratica guidata" },
           ].map(({ n, u, l }) => (
             <div key={n} style={{ textAlign: "center", padding: "32px 24px" }}>
-              <div className="ca-serif" style={{ fontSize: "64px", fontWeight: 300, color: "#1A0D05", lineHeight: 1 }}>{n}</div>
+              <div className="ca-serif" style={{ fontSize: "64px", fontWeight: 400, color: "#1A0D05", lineHeight: 1 }}>{n}</div>
               <div className="ca-display" style={{ fontSize: "9px", letterSpacing: "0.4em", color: "#C4954A", margin: "8px 0 6px" }}>{u.toUpperCase()}</div>
-              <div style={{ fontSize: "14px", color: "#9A7248", fontWeight: 300 }}>{l}</div>
+              <div style={{ fontSize: "14px", color: "#5C3D1E", fontWeight: 400 }}>{l}</div>
             </div>
           ))}
         </div>
@@ -151,7 +151,7 @@ export function Caldo() {
           REGULA BENEDICTI · PROLOGO
         </p>
         <blockquote className="ca-serif" style={{
-          fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 300, fontStyle: "italic",
+          fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 400, fontStyle: "italic",
           color: "#1A0D05", maxWidth: "680px", margin: "0 auto 24px", lineHeight: 1.5
         }}>
           "Ascolta, figlio, i precetti del maestro<br />e piega l'orecchio del tuo cuore."
@@ -167,7 +167,7 @@ export function Caldo() {
             IL CAMMINO
           </p>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "40px" }}>
-            <h2 className="ca-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 300, color: "#EDE0C8" }}>
+            <h2 className="ca-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 400, color: "#EDE0C8" }}>
               Le pratiche quotidiane
             </h2>
             <a href="#" style={{ fontSize: "14px", color: "#9A7248", textDecoration: "none" }}>Vedi tutto →</a>
@@ -193,7 +193,7 @@ export function Caldo() {
                     fontSize: "10px", letterSpacing: "0.08em", marginBottom: "10px"
                   }}>{tag}</span>
                   <h3 className="ca-serif" style={{ fontSize: "22px", fontWeight: 400, color: "#EDE0C8", marginBottom: "8px" }}>{title}</h3>
-                  <p style={{ fontSize: "13px", color: "#9A7A5A" }}>{min}</p>
+                  <p style={{ fontSize: "13px", color: "#C4A87A", fontWeight: 400 }}>{min}</p>
                 </div>
               </div>
             ))}
@@ -210,10 +210,10 @@ export function Caldo() {
           <p className="ca-display" style={{ fontSize: "10px", letterSpacing: "0.45em", color: "#9A7248", marginBottom: "24px" }}>
             PADRE BENEDETTO AI
           </p>
-          <h3 className="ca-serif" style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 300, color: "#1A0D05", marginBottom: "20px", lineHeight: 1.35 }}>
+          <h3 className="ca-serif" style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 400, color: "#1A0D05", marginBottom: "20px", lineHeight: 1.35 }}>
             Una guida spirituale<br /><em style={{ color: "#8B5A1E" }}>sempre presente.</em>
           </h3>
-          <p style={{ fontSize: "16px", lineHeight: 1.78, color: "#5C3D1E", fontWeight: 300, marginBottom: "36px" }}>
+          <p style={{ fontSize: "16px", lineHeight: 1.78, color: "#5C3D1E", fontWeight: 400, marginBottom: "36px" }}>
             Padre Benedetto risponde alle tue domande, ti accompagna nella meditazione quotidiana e custodisce il tuo cammino spirituale — 24 ore su 24.
           </p>
           <a href="#" style={{
@@ -231,7 +231,7 @@ export function Caldo() {
       <section style={{ background: "#fff", padding: "80px 52px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <p className="ca-display" style={{ fontSize: "10px", letterSpacing: "0.45em", color: "#9A7248", textAlign: "center", marginBottom: "12px" }}>I PIANI</p>
-          <h2 className="ca-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 300, textAlign: "center", marginBottom: "52px", color: "#1A0D05" }}>
+          <h2 className="ca-serif" style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 400, textAlign: "center", marginBottom: "52px", color: "#1A0D05" }}>
             Scegli il tuo cammino
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
@@ -248,15 +248,15 @@ export function Caldo() {
               }}>
                 <p className="ca-display" style={{ fontSize: "9px", letterSpacing: "0.4em", color: dark ? "#C4954A" : "#9A7248", marginBottom: "20px" }}>{name.toUpperCase()}</p>
                 <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "4px" }}>
-                  <span className="ca-serif" style={{ fontSize: "52px", fontWeight: 300, color: dark ? "#EDE0C8" : "#1A0D05", lineHeight: 1 }}>€{price}</span>
+                  <span className="ca-serif" style={{ fontSize: "52px", fontWeight: 400, color: dark ? "#EDE0C8" : "#1A0D05", lineHeight: 1 }}>€{price}</span>
                 </div>
                 <p style={{ fontSize: "12px", color: dark ? "#9A7A5A" : "#9A7248", marginBottom: "16px" }}>/mese · fatturato annualmente</p>
-                <p style={{ fontSize: "14px", lineHeight: 1.65, color: dark ? "#C8B090" : "#6B4F35", fontWeight: 300, marginBottom: "24px" }}>{desc}</p>
+                <p style={{ fontSize: "14px", lineHeight: 1.65, color: dark ? "#D8C4A0" : "#4A2E12", fontWeight: 400, marginBottom: "24px" }}>{desc}</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "28px" }}>
                   {features.map(f => (
                     <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: dark ? "#C4954A" : "#9A7248", flexShrink: 0 }} />
-                      <span style={{ fontSize: "13px", color: dark ? "#C8B090" : "#6B4F35", fontWeight: 300 }}>{f}</span>
+                      <span style={{ fontSize: "13px", color: dark ? "#D8C4A0" : "#4A2E12", fontWeight: 400 }}>{f}</span>
                     </div>
                   ))}
                 </div>
@@ -282,10 +282,10 @@ export function Caldo() {
         <div style={{ position: "absolute", inset: 0, background: "rgba(10,5,2,0.65)" }} />
         <div style={{ position: "relative", zIndex: 2, padding: "88px 52px", textAlign: "center" }}>
           <p className="ca-display" style={{ fontSize: "10px", letterSpacing: "0.5em", color: "#C4954A", marginBottom: "24px" }}>INIZIA OGGI</p>
-          <h2 className="ca-serif" style={{ fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 300, color: "#fff", marginBottom: "20px" }}>
+          <h2 className="ca-serif" style={{ fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 400, color: "#fff", marginBottom: "20px" }}>
             Il monastero è dove<br /><em style={{ color: "#C4954A" }}>decidi di costruirlo.</em>
           </h2>
-          <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", marginBottom: "40px", fontWeight: 300 }}>30 giorni di pratica guidata per cominciare.</p>
+          <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.88)", marginBottom: "40px", fontWeight: 400 }}>30 giorni di pratica guidata per cominciare.</p>
           <a href="#" style={{
             display: "inline-block", background: "#fff", color: "#1A0D05",
             padding: "18px 48px", borderRadius: "100px", fontSize: "15px", textDecoration: "none"

@@ -11,9 +11,153 @@ function todayDate(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+interface Lettura {
+  tipo: string;       // "prima_lettura" | "salmo" | "seconda_lettura" | "vangelo"
+  label: string;
+  riferimento: string;
+  intro: string;
+  testo: string;
+}
+
+interface LiturgiaFetched {
+  titoloLiturgico: string;
+  colore: string;
+  letture: Lettura[];
+}
+
+// ── ChiesaCattolica.it parser (CEI — fonte autorevole) ────────────────────────
+
+function stripHtmlToText(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<\/div>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&agrave;/g, "à")
+    .replace(/&egrave;/g, "è")
+    .replace(/&eacute;/g, "é")
+    .replace(/&igrave;/g, "ì")
+    .replace(/&ograve;/g, "ò")
+    .replace(/&ugrave;/g, "ù")
+    .replace(/&Agrave;/g, "À")
+    .replace(/&Egrave;/g, "È")
+    .replace(/&#(\d+);/g, (_, n: string) => String.fromCharCode(Number(n)))
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+const CCI_SEZIONI = ["Prima Lettura", "Seconda Lettura", "Salmo Responsoriale", "Vangelo"] as const;
+type CciSezione = (typeof CCI_SEZIONI)[number];
+
+const CCI_META: Record<CciSezione, { tipo: string; label: string; ordine: number }> = {
+  "Prima Lettura":       { tipo: "prima_lettura",   label: "Prima Lettura",       ordine: 1 },
+  "Salmo Responsoriale": { tipo: "salmo",            label: "Salmo Responsoriale", ordine: 2 },
+  "Seconda Lettura":     { tipo: "seconda_lettura",  label: "Seconda Lettura",     ordine: 3 },
+  "Vangelo":             { tipo: "vangelo",          label: "Vangelo",             ordine: 4 },
+};
+
+async function fetchCCI(data: string): Promise<LiturgiaFetched | null> {
+  try {
+    const dateStr = data.replace(/-/g, ""); // YYYY-MM-DD → YYYYMMDD
+    const url = `https://www.chiesacattolica.it/liturgia-del-giorno/?data-liturgia=${dateStr}`;
+    const resp = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (compatible; BenedictusSpirituale/1.0)",
+        "Accept": "text/html,application/xhtml+xml",
+        "Accept-Language": "it-IT,it;q=0.9",
+      },
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!resp.ok) return null;
+    const html = await resp.text();
+
+    // Verify the page has liturgical content
+    if (!html.includes("cci-liturgia-giorno-section-title")) return null;
+
+    // Liturgical title (active h3, not commented one)
+    const titleMatch = html.match(/<h3[^>]*cci_content_single_title[^>]*>\s*([\s\S]*?)\s*<\/h3>/);
+    const titoloLiturgico = titleMatch
+      ? stripHtmlToText(titleMatch[1])
+      : `Liturgia del ${data}`;
+
+    // Liturgical color (text-capitalize span)
+    const colorMatch = html.match(/Colore Liturgico[^<]*<span[^>]*text-capitalize[^>]*>\s*(\w+)\s*<\/span>/);
+    const coloreRaw = colorMatch ? colorMatch[1].toLowerCase().trim() : "verde";
+    const colore = ["verde", "rosso", "viola", "bianco"].includes(coloreRaw) ? coloreRaw : "verde";
+
+    // Split into section blocks
+    const chunks = html.split('<div class="cci-liturgia-giorno-dettagli-content cci-fontsize-dynamic">');
+
+    const letture: Lettura[] = [];
+
+    for (const chunk of chunks.slice(1)) {
+      // Section title
+      const secTitleMatch = chunk.match(/<h2[^>]*cci-liturgia-giorno-section-title[^>]*>\s*([^<]+)\s*<\/h2>/);
+      if (!secTitleMatch) continue;
+      const sectionTitle = secTitleMatch[1].trim() as CciSezione;
+      if (!CCI_SEZIONI.includes(sectionTitle)) continue;
+      const meta = CCI_META[sectionTitle];
+
+      // Reference
+      let riferimento = "";
+      if (sectionTitle === "Salmo Responsoriale") {
+        const vMatch = chunk.match(/<p[^>]*cci-liturgia-giorno-section-versetto[^>]*>\s*([^<]+)\s*<\/p>/);
+        riferimento = vMatch ? vMatch[1].trim().replace(/^Dal\s+/, "") : "";
+      } else {
+        // BibbiaEdu anchor text is the canonical reference
+        const refMatch = chunk.match(/<a[^>]*title="Leggi ([^"]+) su BibbiaEdu"[^>]*>([\s\S]*?)<\/a>/);
+        if (refMatch) {
+          // Strip any inner spans from anchor text
+          riferimento = stripHtmlToText(refMatch[2]).trim();
+        }
+      }
+
+      // Intro / subtitle
+      const subtitleMatch = chunk.match(/<h3[^>]*cci-liturgia-giorno-section-subtitle[^>]*>\s*([^<]+)\s*<\/h3>/);
+      const intro = subtitleMatch ? subtitleMatch[1].trim() : "";
+
+      // Content: extract everything inside the content div
+      const contentMatch = chunk.match(/<div[^>]*cci-liturgia-giorno-section-content[^>]*>([\s\S]*?)<\/div>/);
+      let testo = "";
+      if (contentMatch) {
+        let contentHtml = contentMatch[1];
+
+        // Strip the reference-header paragraph (contains book intro + BibbiaEdu link)
+        // It is always the first paragraph containing "bibbiaedu-linked"
+        contentHtml = contentHtml.replace(/<p[^>]*>(?:(?!<\/p>)[\s\S])*?bibbiaedu-linked(?:(?!<\/p>)[\s\S])*?<\/p>/i, "");
+
+        testo = stripHtmlToText(contentHtml);
+
+        // Also strip any leading "Dal [libro]" line that remains
+        if (riferimento) {
+          const escaped = riferimento.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          testo = testo.replace(new RegExp(`(?:Dal [^\\n]*\\n)?${escaped}\\n?`, ""), "").trim();
+        }
+      }
+
+      letture.push({ tipo: meta.tipo, label: meta.label, riferimento, intro, testo });
+    }
+
+    letture.sort((a, b) => (CCI_META[a.label as CciSezione]?.ordine ?? 9) - (CCI_META[b.label as CciSezione]?.ordine ?? 9));
+
+    if (letture.length === 0) return null;
+    return { titoloLiturgico, colore, letture };
+  } catch {
+    return null;
+  }
+}
+
+// ── Evangelizo fallback ───────────────────────────────────────────────────────
+
 interface EvangelizoReading {
   type?: string;
-  // Evangelizo uses reference_displayed + book, not reference
   reference?: string;
   reference_displayed?: string;
   book?: { code?: string; short_title?: string; full_title?: string };
@@ -36,15 +180,6 @@ interface EvangelizoResponse {
   };
 }
 
-interface Lettura {
-  tipo: string;       // "prima_lettura" | "salmo" | "seconda_lettura" | "vangelo"
-  label: string;      // "Prima Lettura" etc.
-  riferimento: string;
-  intro: string;
-  testo: string;
-}
-
-// Static map for unambiguous types
 const STATIC_TYPE_MAP: Record<string, { tipo: string; label: string; ordine: number }> = {
   first_reading:  { tipo: "prima_lettura",   label: "Prima Lettura",       ordine: 1 },
   psalm:          { tipo: "salmo",           label: "Salmo Responsoriale", ordine: 2 },
@@ -63,7 +198,7 @@ const COLOR_MAP: Record<string, string> = {
   gold:   "bianco",
 };
 
-async function fetchEvangelizo(data: string): Promise<{ titoloLiturgico: string; colore: string; letture: Lettura[] } | null> {
+async function fetchEvangelizo(data: string): Promise<LiturgiaFetched | null> {
   try {
     const url = `https://publication.evangelizo.ws/IT/days/${data}`;
     const resp = await fetch(url, {
@@ -79,53 +214,33 @@ async function fetchEvangelizo(data: string): Promise<{ titoloLiturgico: string;
     const titoloLiturgico = d.liturgic_title ?? `Liturgia del ${data}`;
     const colore = COLOR_MAP[d.color ?? "green"] ?? "verde";
 
-    // Build readings array from different possible response shapes
     const rawReadings: EvangelizoReading[] = [];
     if (Array.isArray(d.readings) && d.readings.length > 0) {
       rawReadings.push(...d.readings);
     } else {
-      // Some versions return individual fields
       if (d.first_reading)  rawReadings.push({ ...d.first_reading, type: "first_reading" });
       if (d.psalm)          rawReadings.push({ ...d.psalm,         type: "psalm" });
       if (d.second_reading) rawReadings.push({ ...d.second_reading, type: "second_reading" });
       if (d.gospel)         rawReadings.push({ ...d.gospel,        type: "gospel" });
     }
 
-    // Assign meta dynamically: Evangelizo uses type="reading" for both
-    // Prima Lettura and Seconda Lettura. The first occurrence is Prima, the second is Seconda.
     let readingCount = 0;
     const letture: Lettura[] = rawReadings
       .filter((r) => !!r.type)
-      .flatMap((r): Lettura[] => {
+      .flatMap((r): (Lettura & { ordine: number })[] => {
         let meta: { tipo: string; label: string; ordine: number } | undefined;
-
         if (r.type === "reading") {
           readingCount++;
-          if (readingCount === 1) {
-            meta = { tipo: "prima_lettura", label: "Prima Lettura", ordine: 1 };
-          } else if (readingCount === 2) {
-            meta = { tipo: "seconda_lettura", label: "Seconda Lettura", ordine: 3 };
-          }
-          // 3+ readings: ignore (shouldn't happen in standard Roman Rite)
+          if (readingCount === 1) meta = { tipo: "prima_lettura", label: "Prima Lettura", ordine: 1 };
+          else if (readingCount === 2) meta = { tipo: "seconda_lettura", label: "Seconda Lettura", ordine: 3 };
         } else {
           meta = STATIC_TYPE_MAP[r.type!];
         }
-
         if (!meta) return [];
-
-        // Build reference: prefer book.short_title + reference_displayed, fall back to reference
         const ref = r.reference_displayed
           ? [r.book?.short_title ?? r.book?.full_title, r.reference_displayed].filter(Boolean).join(" ")
           : (r.reference ?? "");
-
-        return [{
-          tipo: meta.tipo,
-          label: meta.label,
-          ordine: meta.ordine,
-          riferimento: ref,
-          intro: r.before_reading ?? r.intro ?? "",
-          testo: (r.text ?? r.content ?? "").replace(/\[\[.*?\]\]/g, "").trim(),
-        }];
+        return [{ tipo: meta.tipo, label: meta.label, ordine: meta.ordine, riferimento: ref, intro: r.before_reading ?? r.intro ?? "", testo: (r.text ?? r.content ?? "").replace(/\[\[.*?\]\]/g, "").trim() }];
       })
       .sort((a, b) => a.ordine - b.ordine);
 
@@ -143,7 +258,7 @@ router.get("/liturgia", async (req: Request, res: Response): Promise<void> => {
     ? req.query.data
     : todayDate();
 
-  // Serve from cache if available (and fresh enough — same day)
+  // Serve from cache if available
   const [cached] = await db
     .select()
     .from(bLiturgiaGiornoTable)
@@ -161,8 +276,9 @@ router.get("/liturgia", async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  // Fetch from external source
-  const fetched = await fetchEvangelizo(data);
+  // Try CCI (official CEI source) first, then fall back to Evangelizo
+  const fetched = (await fetchCCI(data)) ?? (await fetchEvangelizo(data));
+
   if (!fetched) {
     res.status(503).json({ error: "Letture non disponibili per questa data. Riprova più tardi." });
     return;
@@ -188,8 +304,26 @@ router.get("/liturgia", async (req: Request, res: Response): Promise<void> => {
   });
 });
 
+// ── DELETE /b/liturgia/cache/:data  ─────────────────────────────────────────
+// Cancella la cache per una data specifica (admin — richiede autenticazione)
+router.delete("/liturgia/cache/:data", async (req: Request, res: Response): Promise<void> => {
+  const user = await getBAuthUser(req);
+  if (!user) {
+    res.status(401).json({ error: "Accesso richiesto" });
+    return;
+  }
+
+  const data = String(req.params.data ?? "");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+    res.status(400).json({ error: "Data non valida (YYYY-MM-DD)" });
+    return;
+  }
+
+  await db.delete(bLiturgiaGiornoTable).where(eq(bLiturgiaGiornoTable.data, data));
+  res.json({ ok: true, message: `Cache eliminata per ${data}. La prossima richiesta recupererà i dati aggiornati da ChiesaCattolica.it.` });
+});
+
 // ── POST /b/pratiche  ─────────────────────────────────────────────────────────
-// Salva (upsert) una pratica spirituale per data+tipo
 router.post("/pratiche", async (req: Request, res: Response): Promise<void> => {
   const user = await getBAuthUser(req);
   if (!user) {
@@ -270,7 +404,7 @@ router.post("/pratiche", async (req: Request, res: Response): Promise<void> => {
       },
     });
 
-  // Award XP if practice appears complete for the first time today
+  // Award XP (best-effort)
   try {
     const [profilo] = await db
       .select()
@@ -307,8 +441,7 @@ router.post("/pratiche", async (req: Request, res: Response): Promise<void> => {
   res.json(saved);
 });
 
-// ── GET /b/pratiche  ──────────────────────────────────────────────────────────
-// Lista delle pratiche dell'utente (ultime 30)
+// ── GET /b/pratiche  ─────────────────────────────────────────────────────────
 router.get("/pratiche", async (req: Request, res: Response): Promise<void> => {
   const user = await getBAuthUser(req);
   if (!user) {
@@ -327,7 +460,6 @@ router.get("/pratiche", async (req: Request, res: Response): Promise<void> => {
 });
 
 // ── GET /b/pratiche/:data  ────────────────────────────────────────────────────
-// Pratiche dell'utente per una data specifica (entrambi i tipi)
 router.get("/pratiche/:data", async (req: Request, res: Response): Promise<void> => {
   const user = await getBAuthUser(req);
   if (!user) {

@@ -40,5 +40,13 @@ Unauthenticated users default to `pellegrino` tier.
 ## Frontend pages
 17 pages under `artifacts/benedictus/src/pages/`. All use real API hooks from `@workspace/api-client-react` (no mock data). AuthContext in `src/lib/auth.tsx`.
 
+## Liturgia source
+Primary: `https://www.chiesacattolica.it/liturgia-del-giorno/?data-liturgia=YYYYMMDD` (CEI official, server-side rendered HTML).
+Fallback: Evangelizo.ws JSON API (less reliable after feast days).
+Parser: `fetchCCI()` in `liturgia.ts` splits on `cci-liturgia-giorno-dettagli-content` divs, extracts BibbiaEdu anchor text for references, `section-versetto` for psalm ref.
+Cache clear: `DELETE /api/b/liturgia/cache/:data` (authenticated) or direct SQL `DELETE FROM b_liturgia_giorno WHERE data = '...'`.
+
+**Why:** Evangelizo carries forward displaced ferial readings after solemnities. CCI is the authoritative Italian CEI source and is server-side rendered (parseable without JS).
+
 ## Seed data
 Initial content seeded via `psql "$DATABASE_URL"` directly. 5 lectio, 3 episodes, 3 workshops, 4 testimonials, 5 graduates.

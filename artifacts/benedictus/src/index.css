@@ -11,85 +11,63 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-card-border: hsl(var(--card-border));
-
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
   --color-popover-border: hsl(var(--popover-border));
-
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-primary-border: var(--primary-border);
-
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
   --color-secondary-border: var(--secondary-border);
-
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-muted-border: var(--muted-border);
-
+  --color-muted-border: hsl(var(--muted-border));
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-accent-border: var(--accent-border);
-
+  --color-accent-border: hsl(var(--accent-border));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-destructive-border: var(--destructive-border);
-
+  --color-destructive-border: hsl(var(--destructive-border));
   --font-sans: var(--app-font-sans);
   --font-serif: var(--app-font-serif);
   --font-display: var(--app-font-display);
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* ── Warm cream editorial theme (Lovable reference) ─────────── */
 :root {
-  /* Crema calda — pergamena antica */
-  --background:         35 58% 93%;    /* #F7EFE2 */
-  --foreground:         22 72% 8%;     /* #1C0B03 — espresso scuro */
-
-  --card:               0 0% 100%;     /* bianco puro */
-  --card-foreground:    22 72% 8%;
-  --card-border:        33 38% 86%;    /* #EBD9C6 */
-
-  --popover:            0 0% 100%;
-  --popover-foreground: 22 72% 8%;
-  --popover-border:     33 38% 86%;
-
-  /* Primary = espresso scuro (bottone CTA, link attivi) */
-  --primary:            22 72% 8%;     /* #1C0B03 */
-  --primary-foreground: 35 58% 93%;   /* crema su scuro */
-  --primary-border:     22 72% 8%;
-
-  --secondary:          33 42% 90%;   /* #F0E3D0 */
-  --secondary-foreground: 22 50% 22%;
-  --secondary-border:   33 35% 82%;
-
-  --muted:              33 32% 88%;   /* #ECDECE */
-  --muted-foreground:   22 18% 48%;   /* grigio-bruno medio */
-  --muted-border:       33 28% 80%;
-
-  /* Accent = caldo ambra — per "custode" italico */
-  --accent:             28 58% 42%;   /* #A8591C */
-  --accent-foreground:  35 58% 93%;
-  --accent-border:      28 50% 36%;
-
+  --background:         35 58% 96%;
+  --foreground:         20 75% 8%;
+  --card:               35 50% 98%;
+  --card-foreground:    20 75% 8%;
+  --card-border:        33 40% 86%;
+  --popover:            35 50% 98%;
+  --popover-foreground: 20 75% 8%;
+  --popover-border:     33 40% 86%;
+  --primary:            20 75% 8%;
+  --primary-foreground: 35 58% 96%;
+  --primary-border:     20 75% 8%;
+  --secondary:          33 45% 90%;
+  --secondary-foreground: 20 50% 22%;
+  --secondary-border:   33 38% 82%;
+  --muted:              33 35% 88%;
+  --muted-foreground:   22 18% 48%;
+  --muted-border:       33 30% 80%;
+  --accent:             38 90% 40%;
+  --accent-foreground:  0 0% 100%;
+  --accent-border:      38 80% 34%;
   --destructive:        0 60% 42%;
-  --destructive-foreground: 35 58% 93%;
+  --destructive-foreground: 35 58% 96%;
   --destructive-border: 0 60% 42%;
-
-  --border:             33 36% 85%;   /* #EBD9C3 */
-  --input:              33 36% 85%;
-  --ring:               22 72% 8%;
-
+  --border:             33 38% 85%;
+  --input:              33 38% 85%;
+  --ring:               20 75% 8%;
   --app-font-sans:    'Inter', sans-serif;
   --app-font-serif:   'Cormorant Garamond', serif;
   --app-font-display: 'Cinzel', serif;
@@ -97,21 +75,13 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
+  * { @apply border-border; }
   body {
     @apply font-sans antialiased bg-background text-foreground
            selection:bg-primary/15 selection:text-primary;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-normal tracking-tight;
-  }
+  h1, h2, h3, h4, h5, h6 { @apply font-serif font-normal tracking-tight; }
 }
-
-/* ── Animations ────────────────────────────────────────────────── */
 
 @keyframes barDance {
   0%   { transform: scaleY(0.3); }
@@ -119,16 +89,9 @@
 }
 
 @keyframes candleGlow {
-  0%, 100% { text-shadow: 0 0 18px rgba(168, 89, 28, 0.18); }
-  50%       { text-shadow: 0 0 32px rgba(168, 89, 28, 0.34); }
+  0%, 100% { text-shadow: 0 0 18px rgba(196, 134, 10, 0.22); }
+  50%       { text-shadow: 0 0 32px rgba(196, 134, 10, 0.40); }
 }
 
-/* Font display (Cinzel) utility */
-.font-display {
-  font-family: var(--app-font-display);
-}
-
-/* Sezioni con foto sempre scure */
-.photo-section-light {
-  color: #f5ede0;
-}
+.font-display { font-family: var(--app-font-display); }
+.photo-section-light { color: #f5ede0; }

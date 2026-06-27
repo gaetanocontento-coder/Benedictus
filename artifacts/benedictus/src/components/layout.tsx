@@ -19,68 +19,58 @@ const NAV_LINKS = [
   { href: "/piani",            label: "Piani"           },
 ];
 
-
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
-
   const closeMobile = () => setMobileOpen(false);
 
   return (
     <div className="min-h-screen flex flex-col w-full relative">
-      <header className="w-full z-50 sticky top-0 bg-background/96 border-b border-border/60 backdrop-blur-sm">
-        <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between h-16">
-
-          {/* Logo */}
+      <header className="w-full z-50 sticky top-0 bg-background/90 border-b border-border/50 backdrop-blur-md">
+        <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between h-14">
           <Link
             href="/"
             onClick={closeMobile}
-            className="font-serif text-[15px] tracking-[0.28em] uppercase text-foreground hover:text-accent transition-colors"
+            className="font-display text-[13px] tracking-[0.32em] uppercase text-foreground hover:text-accent transition-colors"
           >
             Benedictvs
           </Link>
-
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8 text-[13px]">
+          <nav className="hidden md:flex items-center gap-6">
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="text-[10px] uppercase tracking-[0.18em] font-medium text-foreground/55 hover:text-foreground transition-colors"
               >
                 {label}
               </Link>
             ))}
           </nav>
-
-          {/* Desktop auth */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
-                <Link href="/oblato" className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
+                <Link href="/oblato" className="text-[10px] uppercase tracking-[0.15em] text-foreground/55 hover:text-foreground transition-colors">
                   Cursus Oblati
                 </Link>
-                <Link href="/admin" className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
+                <Link href="/admin" className="text-[10px] uppercase tracking-[0.15em] text-foreground/55 hover:text-foreground transition-colors">
                   Sanctuarium
                 </Link>
-                <button onClick={logout} className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
+                <button onClick={logout} className="text-[10px] uppercase tracking-[0.15em] text-foreground/55 hover:text-foreground transition-colors">
                   Esci
                 </button>
               </>
             ) : (
-              <Link href="/login" className="text-[13px] text-foreground/60 hover:text-foreground transition-colors">
+              <Link href="/login" className="text-[10px] uppercase tracking-[0.15em] text-foreground/55 hover:text-foreground transition-colors">
                 Accedi
               </Link>
             )}
             <Link
               href="/registrazione"
-              className="bg-primary text-primary-foreground text-[11px] uppercase tracking-[0.12em] font-medium px-5 py-2.5 rounded-full hover:bg-primary/85 transition-colors"
+              className="bg-primary text-primary-foreground text-[10px] uppercase tracking-[0.15em] font-semibold px-5 py-2 rounded-full hover:bg-primary/85 transition-colors"
             >
               Inizia Gratis
             </Link>
           </div>
-
-          {/* Hamburger — mobile only */}
           <button
             onClick={() => setMobileOpen((o) => !o)}
             aria-label={mobileOpen ? "Chiudi menu" : "Apri menu"}
@@ -89,8 +79,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
-
-        {/* Mobile drawer */}
         {mobileOpen && (
           <div className="md:hidden bg-background/98 border-t border-border/40">
             <nav className="container mx-auto px-6 py-6 flex flex-col gap-0">
@@ -134,14 +122,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         )}
       </header>
-
       <main className="flex-1 flex flex-col pb-20 md:pb-0">
         {children}
       </main>
-
       <LiturgiaOre />
       <AudioPlayer />
-
       <footer className="bg-card border-t border-border/60 pt-16 pb-28 md:pb-16 text-center">
         <div className="container mx-auto px-6">
           <div className="mb-2">
@@ -156,9 +141,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Link href="/il-manifesto"  className="text-foreground/40 hover:text-foreground transition-colors">Il Manifesto</Link>
             <Link href="/testimonianze" className="text-foreground/40 hover:text-foreground transition-colors">Testimonianze</Link>
           </div>
-          <p className="text-[11px] text-muted-foreground/40 mb-1">
-            Made in Never Before Italia
-          </p>
+          <p className="text-[11px] text-muted-foreground/40 mb-1">Made in Never Before Italia</p>
           <p className="text-[11px] text-muted-foreground/60">
             &copy; {new Date().getFullYear()} Regula Humanitatis. Un cammino per il custode moderno.
           </p>
